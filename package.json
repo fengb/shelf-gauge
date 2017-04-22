@@ -4,5 +4,12 @@
   "main": "index.js",
   "repository": "https://github.com/fengb/shelf-gauge",
   "author": "fengb",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
 }
