@@ -1,9 +1,7 @@
-import * as Koa from 'koa'
+import app from './lib/server'
 
 const PORT = Number(process.env.PORT || 12345)
 
-new Koa()
-  .use((ctx) => {
-    ctx.body = 'Hello world'
-  })
-  .listen(PORT)
+app.listen(PORT, () => {
+  console.log(`Started on port ${PORT}`)
+})
