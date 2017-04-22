@@ -6,12 +6,15 @@
   "author": "fengb",
   "license": "MIT",
   "scripts": {
-    "dev-start": "nodemon",
     "start": "node index.js",
-    "test": "mocha"
+    "start-watch": "nodemon",
+    "test": "mocha",
+    "test-watch": "mocha --watch"
   },
   "devDependencies": {
+    "@types/chai": "^3.5.1",
     "@types/koa": "^2.0.39",
+    "@types/mocha": "^2.2.41",
     "@types/node": "^7.0.13",
     "chai": "^3.5.0",
     "koa": "^2.2.0",
