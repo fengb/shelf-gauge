@@ -1,3 +1,4 @@
+import './init'
 import app from './lib/server'
 
 const PORT = Number(process.env.PORT || 12345)
