@@ -6,10 +6,12 @@
   "author": "fengb",
   "license": "MIT",
   "scripts": {
+    "start": "node index.js",
     "test": "mocha"
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "koa": "^2.2.0",
     "mocha": "^3.2.0"
   }
 }
