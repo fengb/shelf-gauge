@@ -1,4 +1,4 @@
-const Koa = require('koa')
+import * as Koa from 'koa'
 
 const PORT = Number(process.env.PORT || 12345)
 

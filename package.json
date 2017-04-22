@@ -6,12 +6,18 @@
   "author": "fengb",
   "license": "MIT",
   "scripts": {
+    "dev-start": "nodemon",
     "start": "node index.js",
     "test": "mocha"
   },
   "devDependencies": {
+    "@types/koa": "^2.0.39",
+    "@types/node": "^7.0.13",
     "chai": "^3.5.0",
     "koa": "^2.2.0",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "nodemon": "^1.11.0",
+    "ts-node": "^3.0.2",
+    "typescript": "^2.2.2"
   }
 }
