@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@types/chai": "^3.5.1",
+    "@types/es6-shim": "^0.31.33",
     "@types/koa": "^2.0.39",
     "@types/koa-router": "^7.0.22",
     "@types/mocha": "^2.2.41",
@@ -24,5 +25,10 @@
     "nodemon": "^1.11.0",
     "ts-node": "^3.0.2",
     "typescript": "^2.2.2"
+  },
+  "dependencies": {
+    "pg": "^6.1.5",
+    "reflect-metadata": "^0.1.10",
+    "typeorm": "^0.0.11"
   }
 }
