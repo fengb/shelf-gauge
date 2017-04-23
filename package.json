@@ -12,6 +12,7 @@
     "test-watch": "mocha --watch"
   },
   "devDependencies": {
+    "@types/bluebird-global": "^3.5.2",
     "@types/chai": "^3.5.1",
     "@types/dotenv": "^2.0.20",
     "@types/es6-shim": "^0.31.33",
@@ -27,6 +28,7 @@
     "typescript": "^2.2.2"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "dotenv": "^4.0.0",
     "koa": "^2.2.0",
     "koa-router": "^7.1.1",

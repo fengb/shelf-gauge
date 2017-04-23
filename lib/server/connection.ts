@@ -1,7 +1,6 @@
 import 'reflect-metadata'
 import { createConnection, ConnectionOptions } from 'typeorm'
 import Context from './context'
-import { reify } from 'lib/util/promise'
 
 const OPTIONS: ConnectionOptions = {
   driver: {
@@ -12,9 +11,9 @@ const OPTIONS: ConnectionOptions = {
   autoSchemaSync: true,
 }
 
-const CONNECTION = reify(createConnection(OPTIONS))
+const CONNECTION = createConnection(OPTIONS)
 
 export default async function (ctx: Context, next) {
-  ctx.conn = CONNECTION.value || await CONNECTION
+  ctx.conn = CONNECTION.isFulfilled() ? CONNECTION.value() : await CONNECTION
   await next()
 }

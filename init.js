@@ -8,3 +8,5 @@ process.env.NODE_PATH = [process.env.NODE_PATH, __dirname]
                         .filter((x) => x)
                         .join(':')
 require('module')._initPaths()
+
+global.Promise = require('bluebird')
