@@ -1,3 +1,5 @@
 --compilers ts:ts-node/register
---reporter dot
 --require=env-test
+--require=init
+--reporter dot
+--recursive
