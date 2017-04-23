@@ -6,7 +6,7 @@ import { Renderer } from './render'
 interface Context extends IRouterContext {
   status: HttpStatus
   conn: Connection
-  render: Renderer
+  renderJson: Renderer
 }
 
 export default Context

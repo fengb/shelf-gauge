@@ -3,10 +3,6 @@ import Suite from './suite'
 
 @Entity()
 export default class Repository {
-  constructor({name: string}) {
-    this.name = name
-  }
-
   @PrimaryGeneratedColumn()
   id: number
 
