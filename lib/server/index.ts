@@ -3,6 +3,7 @@ import connection from './connection'
 import router from './router'
 
 export { default as Context } from './context'
+export { default as HttpStatus } from './http-status'
 
 export default
   new Koa()
