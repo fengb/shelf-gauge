@@ -1,4 +1,4 @@
-import * as repository from './repository'
-import * as suite from './suite'
+import * as Repository from './repository'
+import * as Suite from './suite'
 
-export default { repository, suite }
+export { Repository, Suite }

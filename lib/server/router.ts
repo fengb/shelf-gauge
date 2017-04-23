@@ -1,10 +1,10 @@
 import * as Router from 'koa-router'
-import controller from 'lib/controller'
+import * as Controller from 'lib/controller'
 
 export default
   new Router()
-    .put( '/repo/:org/:name',       controller.repository.create)
-    .post('/repo/:org/:name',       controller.repository.create)
+    .put( '/repo/:org/:name',       Controller.Repository.upsert)
+    .post('/repo/:org/:name',       Controller.Repository.upsert)
 
-    .get( '/repo/:org/:name/suite', controller.suite.all)
-    .post('/repo/:org/:name/suite', controller.suite.create)
+    .get( '/repo/:org/:name/suite', Controller.Suite.showAll)
+    .post('/repo/:org/:name/suite', Controller.Suite.create)

@@ -1,14 +1,14 @@
 import { Context, HttpStatus } from 'lib/server'
-import Repository from 'lib/entity/repository'
+import { Repository } from 'lib/entity'
 
-export async function create (ctx: Context) {
+export async function upsert (ctx: Context) {
   const name = `${ctx.params.org}/${ctx.params.name}`
   const repo = await ctx.conn.entityManager.findOne(Repository, { name })
                || ctx.conn.entityManager.create(Repository, { name })
 
   // TODO: update data
-  ctx.status = repo.id ? HttpStatus.Ok : HttpStatus.Created
+  const status = repo.id ? HttpStatus.Ok : HttpStatus.Created
   await ctx.conn.entityManager.persist(repo)
 
-  ctx.renderJson(HttpStatus.Ok, repo)
+  ctx.renderJson(status, repo)
 }
