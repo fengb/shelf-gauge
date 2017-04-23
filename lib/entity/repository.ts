@@ -1,10 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
-export class Repository {
+export default class Repository {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column('string')
+  @Column()
   name: string
 }
