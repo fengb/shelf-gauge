@@ -15,5 +15,5 @@ const CONNECTION = createConnection(OPTIONS)
 
 export default async function (ctx: Context, next) {
   ctx.conn = CONNECTION.isFulfilled() ? CONNECTION.value() : await CONNECTION
-  await next()
+  return next()
 }

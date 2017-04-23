@@ -9,5 +9,6 @@ export async function create (ctx: Context) {
   // TODO: update data
   ctx.status = repo.id ? HttpStatus.Ok : HttpStatus.Created
   await ctx.conn.entityManager.persist(repo)
-  ctx.body = repo
+
+  ctx.renderJson(HttpStatus.Ok, repo)
 }

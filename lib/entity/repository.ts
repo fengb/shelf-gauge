@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import Suite from './suite'
 
 @Entity()
 export default class Repository {
@@ -11,4 +12,7 @@ export default class Repository {
 
   @Column()
   name: string
+
+  @OneToMany(type => Suite, suite => suite.repository)
+  suites: Suite[]
 }
