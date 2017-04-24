@@ -5,7 +5,7 @@ export async function showAll (ctx: Context) {
   const name = `${ctx.params.org}/${ctx.params.name}`
   const repo = await ctx.conn.entityManager.findOne(Repository, { name })
   if (!repo) {
-    ctx.renderJson(HttpStatus.NotFound)
+    return ctx.renderJson(HttpStatus.NotFound)
   }
 
   ctx.renderJson(HttpStatus.Ok, repo.suites)
@@ -15,7 +15,7 @@ export async function create (ctx: Context) {
   const name = `${ctx.params.org}/${ctx.params.name}`
   const repo = await ctx.conn.entityManager.findOne(Repository, { name })
   if (!repo) {
-    ctx.renderJson(HttpStatus.NotFound)
+    return ctx.renderJson(HttpStatus.NotFound)
   }
 
   const suite = ctx.conn.entityManager.create(Suite, ctx.params)

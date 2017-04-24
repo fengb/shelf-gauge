@@ -1,4 +1,4 @@
-import { connect, Entities } from 'lib/entity'
+import { connect } from 'lib/entity'
 
 export { connect }
 
