@@ -6,6 +6,7 @@ import Repository from './repository'
 import Suite from './suite'
 
 export { Repository, Suite }
+export const Entities: Function[] = [Repository, Suite]
 
 interface Connect {
   (): Promise<Connection>
@@ -18,6 +19,6 @@ connect.options = {
     type: 'postgres',
     url: process.env.SHELF_GAUGE_DB,
   },
-  entities: [Repository, Suite],
+  entities: Entities,
   autoSchemaSync: true,
 }

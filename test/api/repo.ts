@@ -1,6 +1,8 @@
-import { expect, request, HttpStatus } from 'test/support'
+import { expect, request, db, HttpStatus } from 'test/support'
 
 describe('API /repo', () => {
+  db.setup()
+
   describe('/:repoOrg/:repoName PUT', () => {
     it('returns status created', async () => {
       const response = await request()
