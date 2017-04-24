@@ -1,7 +1,7 @@
 import Context from './context'
 import HttpStatus from './http-status'
 
-export type Json = any
+export type Json = Object
 export type Renderer = (HttpStatus, Json?) => void
 
 export class RenderComplete {}

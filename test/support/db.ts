@@ -1,5 +1,7 @@
 import { connect, Entities } from 'lib/entity'
 
+export { connect }
+
 export function setup () {
   setupTruncate()
 }
