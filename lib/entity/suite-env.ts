@@ -3,19 +3,20 @@ import { autoserialize } from 'cerialize'
 import { Suite } from '.'
 
 @Typeorm.Entity()
-export default class SuiteMeta {
+export default class SuiteEnv {
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 
-  @Typeorm.ManyToOne(type => Suite, suite => suite.tests)
+  @Typeorm.OneToOne(type => Suite, suite => suite.env)
+  @Typeorm.JoinColumn()
   suite: Suite
 
   @Typeorm.Column()
   @Typeorm.Index()
   @autoserialize
-  name: string
+  source: string
 
-  @Typeorm.Column()
+  @Typeorm.Column('text')
   @autoserialize
-  value: string
+  info: string
 }

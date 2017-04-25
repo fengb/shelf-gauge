@@ -19,10 +19,10 @@ function buildFromMetadata (metadata: EntityMetadata, props?: any): any {
     entity[prop] = entity[prop] || []
   }
 
-  for (const relation of metadata.singleValueRelations) {
-    const prop = relation.propertyName
-    entity[prop] = entity[prop] || buildFromMetadata(relation.entityMetadata)
-  }
+  // for (const relation of metadata.singleValueRelations) {
+  //   const prop = relation.propertyName
+  //   entity[prop] = entity[prop] || buildFromMetadata(relation.entityMetadata)
+  // }
 
   return entity
 }

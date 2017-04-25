@@ -1,7 +1,7 @@
 import Repository from './repository'
 import Suite from './suite'
-import SuiteMetum from './suite-metum'
+import SuiteEnv from './suite-env'
 import SuiteTest from './suite-test'
 
-export { Repository, Suite, SuiteMetum, SuiteTest }
-export const Entities: Function[] = [Repository, Suite, SuiteMetum, SuiteTest]
+export { Repository, Suite, SuiteEnv, SuiteTest }
+export const Entities: Function[] = [Repository, Suite, SuiteEnv, SuiteTest]
