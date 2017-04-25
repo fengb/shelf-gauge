@@ -11,6 +11,7 @@ export default class SuiteMeta {
   suite: Suite
 
   @Typeorm.Column()
+  @Typeorm.Index()
   @autoserialize
   name: string
 

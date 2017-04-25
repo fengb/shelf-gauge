@@ -10,7 +10,7 @@ describe('API /repo', () => {
         await request()
               .put('/repo/foo/bar')
               .send({})
-      console.warn(response.body)
+      expect(response).to.have.property('status', HttpStatus.Created)
     })
 
     it('creates a record', async () => {
