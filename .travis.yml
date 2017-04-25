@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - stable
+  - 7
+before_script:
+  - 'createdb -O postgres shelf_gauge'
+env:
+  - 'SHELF_GAUGE_DB=postgresql://postgres@localhost:5432/shelf_gauge'
+addons:
+  postgresql: '9.4'
