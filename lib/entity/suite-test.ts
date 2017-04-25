@@ -1,0 +1,21 @@
+import * as Typeorm from 'typeorm'
+import { autoserialize } from 'cerialize'
+import { Suite } from '.'
+
+@Typeorm.Entity()
+export default class SuiteTest {
+  @Typeorm.PrimaryGeneratedColumn()
+  id: number
+
+  @Typeorm.ManyToOne(type => Suite, suite => suite.tests)
+  suite: Suite
+
+  @Typeorm.Column()
+  @Typeorm.Index()
+  @autoserialize
+  name: string
+
+  @Typeorm.Column()
+  @autoserialize
+  value: number
+}
