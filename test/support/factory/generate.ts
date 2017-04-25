@@ -2,35 +2,35 @@ import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata'
 import { ColumnType } from 'typeorm/metadata/types/ColumnTypes'
 import * as faker from 'faker'
 
-function generateString (): string {
+function _string (): string {
   return faker.lorem.words()
 }
 
-function generateText (): string {
+function _text (): string {
   return faker.lorem.paragraph()
 }
 
-function generateInt (): number {
+function _int (): number {
   return faker.random.number()
 }
 
-function generateDouble (): number {
+function _double (): number {
   return Math.random()
 }
 
-function generateDecimal (): string {
+function _decimal (): string {
   return faker.random.number().toString()
 }
 
-function generateDate (): Date {
+function _date (): Date {
   return faker.date.recent()
 }
 
-function generateBoolean (): boolean {
+function _boolean (): boolean {
   return faker.random.boolean()
 }
 
-function generateUuid (): string {
+function _uuid (): string {
   return faker.random.uuid()
 }
 
@@ -39,24 +39,24 @@ type MappingType = {
 }
 
 const mapping: MappingType = {
-  string: generateString,
-  number: generateDouble,
-  text: generateText,
-  boolean: generateBoolean,
-  integer: generateInt,
-  int: generateInt,
-  smallint: generateInt,
-  bigint: generateInt,
-  float: generateDouble,
-  double: generateDouble,
-  decimal: generateDecimal,
-  date: generateDate,
-  time: generateDate,
-  datetime: generateDate,
+  string: _string,
+  number: _double,
+  text: _text,
+  boolean: _boolean,
+  integer: _int,
+  int: _int,
+  smallint: _int,
+  bigint: _int,
+  float: _double,
+  double: _double,
+  decimal: _decimal,
+  date: _date,
+  time: _date,
+  datetime: _date,
   json: () => new Object,
   jsonb: () => new Object,
   simple_array: () => [],
-  uuid: generateUuid
+  uuid: _uuid
 }
 
 export default function generate (c: ColumnMetadata): any {

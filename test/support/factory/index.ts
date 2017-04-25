@@ -3,8 +3,11 @@ import { EntityMetadata } from 'typeorm/metadata/EntityMetadata'
 import { db } from '..'
 import generate from './generate'
 
-function buildFromMetadata (metadata: EntityMetadata): any {
+function buildFromMetadata (metadata: EntityMetadata, props?: any): any {
   const entity: any = metadata.create()
+  if (props) {
+    Object.assign(entity, props)
+  }
 
   for (const columnMetadata of metadata.columns) {
     const prop = columnMetadata.propertyName
@@ -24,8 +27,8 @@ function buildFromMetadata (metadata: EntityMetadata): any {
   return entity
 }
 
-export async function build<Entity> (entityClass: ObjectType<Entity>): Promise<Entity> {
+export async function build<Entity> (entityClass: ObjectType<Entity>, props?: Partial<Entity>): Promise<Entity> {
   const connection = await db.connect()
   const metadata = connection.getMetadata(entityClass)
-  return buildFromMetadata(metadata)
+  return buildFromMetadata(metadata, props)
 }
