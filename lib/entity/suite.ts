@@ -1,5 +1,5 @@
 import * as Typeorm from 'typeorm'
-import { autoserialize, autoserializeAs } from 'cerialize'
+import { autoserialize, autoserializeAs, serialize } from 'cerialize'
 import { Repository, SuiteMetum, SuiteTest } from '.'
 
 @Typeorm.Entity()
@@ -14,6 +14,14 @@ export default class Suite {
   @Typeorm.Column()
   @autoserialize
   ref: string
+
+  @Typeorm.Column(Date)
+  @autoserialize
+  ranAt: Date
+
+  @Typeorm.Column(Date)
+  @serialize
+  createdAt: Date
 
   @Typeorm.OneToMany(type => SuiteMetum, metum => metum.suite)
   @autoserializeAs(() => SuiteMetum)

@@ -1,36 +1,37 @@
 import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata'
 import { ColumnType } from 'typeorm/metadata/types/ColumnTypes'
+import * as faker from 'faker'
 
 function generateString (): string {
-  return ''
+  return faker.lorem.words()
 }
 
 function generateText (): string {
-  return ''
+  return faker.lorem.paragraph()
 }
 
 function generateInt (): number {
-  return 0
+  return faker.random.number()
 }
 
 function generateDouble (): number {
-  return 0
+  return Math.random()
 }
 
 function generateDecimal (): string {
-  return ''
+  return faker.random.number().toString()
 }
 
 function generateDate (): Date {
-  return new Date()
+  return faker.date.recent()
 }
 
 function generateBoolean (): boolean {
-  return false
+  return faker.random.boolean()
 }
 
 function generateUuid (): string {
-  return '3498239487'
+  return faker.random.uuid()
 }
 
 type MappingType = {
