@@ -15,6 +15,10 @@ export default class Suite {
   @autoserialize
   ref: string
 
+  @Typeorm.Column()
+  @autoserialize
+  name: string
+
   @Typeorm.Column(Date)
   @autoserialize
   ranAt: Date

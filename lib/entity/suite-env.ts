@@ -2,6 +2,8 @@ import * as Typeorm from 'typeorm'
 import { autoserialize } from 'cerialize'
 import { Suite } from '.'
 
+export type EnvSource = 'travis' | 'circle' | 'misc'
+
 @Typeorm.Entity()
 export default class SuiteEnv {
   @Typeorm.PrimaryGeneratedColumn()
@@ -14,7 +16,7 @@ export default class SuiteEnv {
   @Typeorm.Column()
   @Typeorm.Index()
   @autoserialize
-  source: string
+  source: EnvSource
 
   @Typeorm.Column('text')
   @autoserialize

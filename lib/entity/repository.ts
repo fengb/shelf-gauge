@@ -7,6 +7,7 @@ export default class Repository {
   id: number
 
   @Typeorm.Column()
+  @Typeorm.Index({ unique: true })
   name: string
 
   @Typeorm.OneToMany(type => Suite, suite => suite.repository)
