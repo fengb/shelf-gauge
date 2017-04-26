@@ -1,6 +1,7 @@
-import { Context, HttpStatus, passport } from 'lib/server'
+import { Context, HttpStatus, Middleware, passport } from 'lib/server'
+import { AuthenticateOptions } from 'passport'
 
-const CALLBACK_REDIRECTS = {
+const CALLBACK_REDIRECTS: AuthenticateOptions = {
   successRedirect: '/',
   failureRedirect: '/',
 }
@@ -10,5 +11,6 @@ export async function signOut (ctx: Context) {
   ctx.redirect('/')
 }
 
-export const githubShow = passport.authenticate('github')
-export const githubCallback = passport.authenticate('github', CALLBACK_REDIRECTS)
+export function oauthFor (strategy: string): Middleware {
+  return passport.authenticate(strategy, CALLBACK_REDIRECTS)
+}

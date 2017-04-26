@@ -3,8 +3,7 @@ import * as C from 'lib/controller'
 
 export default
   new Router()
-    .get( '/auth/github',           C.Auth.githubShow)
-    .get( '/auth/github/callback',  C.Auth.githubCallback)
+    .get( '/auth/github',           C.Auth.oauthFor('github'))
 
     .put( '/repo/:org/:name',       C.Repository.upsert)
     .post('/repo/:org/:name',       C.Repository.upsert)
