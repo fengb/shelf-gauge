@@ -1,4 +1,5 @@
+import * as Auth from './auth'
 import * as Repository from './repository'
 import * as Suite from './suite'
 
-export { Repository, Suite }
+export { Auth, Repository, Suite }

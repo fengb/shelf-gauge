@@ -1,10 +1,10 @@
 import * as Koa from 'koa'
 import * as bodyParser from 'koa-bodyparser'
-import * as passport from 'koa-passport'
 const convert = require('koa-convert')
 const error = require('koa-error')
 const session = require('koa-generic-session')
 
+import passport from './passport'
 import connection from './connection'
 import router from './router'
 import render from './render'

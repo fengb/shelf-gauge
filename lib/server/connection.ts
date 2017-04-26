@@ -16,6 +16,10 @@ connect.options = {
     type: 'postgres',
     url: process.env.SHELF_GAUGE_DB,
   },
+  logging: {
+    logQueries: true,
+    logSchemaCreation: true,
+  },
   entities: Entities,
   autoSchemaSync: true,
 }
