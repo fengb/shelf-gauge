@@ -39,6 +39,7 @@
     "typescript": "^2.2.2"
   },
   "dependencies": {
+    "app-module-path": "^2.2.0",
     "bluebird": "^3.5.0",
     "cerialize": "^0.1.14",
     "dotenv": "^4.0.0",

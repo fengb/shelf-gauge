@@ -1,9 +1,6 @@
 const path = require('path')
 const PROJECT_DIR = path.resolve(__dirname, '..')
-process.env.NODE_PATH = [process.env.NODE_PATH, PROJECT_DIR]
-                        .filter((x) => x)
-                        .join(':')
-require('module')._initPaths()
+require('app-module-path').addPath(PROJECT_DIR)
 
 require('reflect-metadata')
 
