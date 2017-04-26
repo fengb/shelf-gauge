@@ -9,8 +9,8 @@ import connection from './connection'
 import router from './router'
 import render from './render'
 
-export default
-  new Koa()
+const app
+  = new Koa()
     .use(error())
     .use(bodyParser())
     .use(convert(session()))
@@ -20,3 +20,7 @@ export default
     .use(render)
     .use(router.routes())
     .use(router.allowedMethods())
+
+app.keys = ['12346567890']
+
+export default app
