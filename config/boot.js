@@ -1,6 +1,4 @@
-const path = require('path')
-const PROJECT_DIR = path.resolve(__dirname, '..')
-require('app-module-path').addPath(PROJECT_DIR)
+require('app-module-path').addPath(__dirname + '/..')
 
 require('reflect-metadata')
 
