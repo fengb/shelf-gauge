@@ -21,6 +21,6 @@ const app
     .use(router.routes())
     .use(router.allowedMethods())
 
-app.keys = ['12346567890']
+app.keys = process.env.SHELF_GAUGE_SECRET_KEYS.split(' ')
 
 export default app
