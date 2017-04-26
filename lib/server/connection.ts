@@ -31,8 +31,8 @@ connect.options = {
     type: driverType(env.db.url),
   },
   logging: {
-    logQueries: true,
-    logSchemaCreation: true,
+    logQueries: env.db.logging,
+    logSchemaCreation: env.db.logging,
   },
   entities: Entities,
   autoSchemaSync: true,

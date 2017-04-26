@@ -1,6 +1,6 @@
 import './boot'
 
-function get<T> (key: string, coerce: (value: string) => T, defawlt?: T): T {
+function get<T> (key: string, defawlt: T | undefined, coerce: (str: string) => T): T {
   const value: string = process.env[key]
   if (value != null) {
     return coerce(value)
@@ -14,15 +14,15 @@ function get<T> (key: string, coerce: (value: string) => T, defawlt?: T): T {
 }
 
 function str (key: string, defawlt?: string): string {
-  return get(key, String, defawlt)
+  return get(key, defawlt, String)
 }
 
 function num (key: string, defawlt?: number): number {
-  return get(key, parseInt, defawlt)
+  return get(key, defawlt, parseInt)
 }
 
 function bool (key: string, defawlt?: boolean): boolean {
-  return get(key, Boolean, defawlt)
+  return get(key, defawlt, (str) => ('tTyY'.includes(str[0])))
 }
 
 export default {
@@ -33,6 +33,7 @@ export default {
 
   db: {
     url:                str('DB_URL'),
+    logging:            bool('DB_LOGGING', false),
   },
 
   githubClient: {
