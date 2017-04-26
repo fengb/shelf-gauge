@@ -4,6 +4,7 @@ const convert = require('koa-convert')
 const error = require('koa-error')
 const session = require('koa-generic-session')
 
+import env from 'config/env'
 import passport from './passport'
 import connection from './connection'
 import router from './router'
@@ -21,6 +22,6 @@ const app
     .use(router.routes())
     .use(router.allowedMethods())
 
-app.keys = process.env.SHELF_GAUGE_SECRET_KEYS.split(' ')
+app.keys = env.server.secretKeys
 
 export default app

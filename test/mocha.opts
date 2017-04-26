@@ -1,5 +1,5 @@
 test/**/*.test.ts
 --compilers ts:ts-node/register
 --require=env-test
---require=init
+--require=config/boot
 --reporter dot

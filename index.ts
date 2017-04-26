@@ -1,8 +1,8 @@
-import './init'
+import './config/boot'
+
+import env from './config/env'
 import app from './lib/server'
 
-const PORT = Number(process.env.PORT || 12345)
-
-app.listen(PORT, () => {
-  console.log(`Started on port ${PORT}`)
+app.listen(env.server.port, () => {
+  console.log(`Started on port ${env.server.port}`)
 })

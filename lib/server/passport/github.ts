@@ -1,12 +1,13 @@
 import { Profile, Strategy, StrategyOption } from 'passport-github'
 
+import env from 'config/env'
 import { connect } from '../connection'
 import { User } from 'lib/entity'
 
 const OPTIONS: StrategyOption = {
-  clientID: process.env.GITHUB_CLIENT_ID,
-  clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  callbackURL: process.env.GITHUB_CLIENT_CALLBACK
+  clientID: env.githubClient.id,
+  clientSecret: env.githubClient.secret,
+  callbackURL: env.githubClient.callback,
 }
 
 export async function verify (accessToken: string, refreshToken: string, profile: Profile): Promise<any> {
