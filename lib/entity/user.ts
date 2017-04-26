@@ -8,7 +8,7 @@ export default class User {
 
   @Typeorm.Column()
   @Typeorm.Index({ unique: true })
-  githubId: number
+  githubId: string
 
   @Typeorm.Column()
   @Typeorm.Index({ unique: true })

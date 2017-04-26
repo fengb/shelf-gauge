@@ -1,3 +1,4 @@
+import { once } from 'lodash'
 import * as Koa from 'koa'
 import * as bodyParser from 'koa-bodyparser'
 const convert = require('koa-convert')
@@ -10,8 +11,10 @@ import connection from './connection'
 import router from './router'
 import render from './render'
 
-const app
-  = new Koa()
+const app = new Koa()
+app.keys = env.server.secretKeys
+
+export default app
     .use(error())
     .use(bodyParser())
     .use(convert(session()))
@@ -21,7 +24,3 @@ const app
     .use(render)
     .use(router.routes())
     .use(router.allowedMethods())
-
-app.keys = env.server.secretKeys
-
-export default app
