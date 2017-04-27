@@ -1,16 +1,24 @@
 import { connect } from 'lib/server/connection'
-import { beforeAll } from './mocha'
+import { beforeAll, afterAll } from './mocha'
 
 export { connect }
 
 export function setup () {
   setupTruncate()
+  setupDisconnect()
 }
 
-export function setupSync () {
+export function setupSchema () {
   beforeAll(async () => {
     const connection = await connect()
     await connection.syncSchema()
+  })
+}
+
+export function setupDisconnect () {
+  afterAll(async () => {
+    const connection = await connect()
+    await connection.close()
   })
 }
 
