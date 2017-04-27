@@ -7,8 +7,8 @@ export default factory(Suite, {
   repository: null,
   ref: () => faker.random.uuid(),
   name: () => faker.lorem.slug(),
-  ranAt: () => faker.date.recent(),
-  createdAt: () => faker.date.recent(),
+  ranAt: (suite: Suite) => suite.createdAt,
+  createdAt: (suite: Suite) => faker.date.recent(),
   env: (suite: Suite) => dependent.suiteEnv({ suite }),
   tests: (suite: Suite) => [
     dependent.suiteTest({ suite }),
