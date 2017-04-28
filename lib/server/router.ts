@@ -10,3 +10,5 @@ export default
 
     .get( '/repo/:org/:name/suite', C.Suite.showAll)
     .post('/repo/:org/:name/suite', C.Suite.create)
+
+    .get('/user/repo',              C.UserRepo.showAll)

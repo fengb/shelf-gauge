@@ -43,6 +43,7 @@
     "bluebird": "^3.5.0",
     "cerialize": "^0.1.14",
     "dotenv": "^4.0.0",
+    "github": "^9.2.0",
     "koa": "^2.2.0",
     "koa-bodyparser": "^4.2.0",
     "koa-convert": "^1.2.0",

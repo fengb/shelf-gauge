@@ -10,6 +10,9 @@ const OPTIONS: StrategyOption = {
 }
 
 export default new Strategy(OPTIONS, (accessToken, refreshToken, profile, done) => {
-  fetch({ githubId: profile.id }, { username: profile.username })
+  fetch({ githubId: profile.id }, {
+    username: profile.username,
+    githubToken: accessToken,
+  })
   .asCallback(done)
 })

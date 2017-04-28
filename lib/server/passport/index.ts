@@ -1,5 +1,6 @@
 import * as passport from 'koa-passport'
-import { once } from 'lodash'
+
+import Context from '../context'
 
 import github from './github'
 import { toSession, fromSession } from './user'

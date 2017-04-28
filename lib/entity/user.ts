@@ -11,6 +11,9 @@ export default class User {
   githubId: string
 
   @Typeorm.Column()
+  githubToken: string
+
+  @Typeorm.Column()
   @Typeorm.Index({ unique: true })
   username: string
 }
