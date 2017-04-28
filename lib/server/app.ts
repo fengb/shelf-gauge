@@ -1,9 +1,7 @@
-import { once } from 'lodash'
 import * as Koa from 'koa'
 import * as bodyParser from 'koa-bodyparser'
-const convert = require('koa-convert')
 const error = require('koa-error')
-const session = require('koa-generic-session')
+const session = require('koa-session')
 
 import env from 'config/env'
 import passport from './passport'
@@ -17,7 +15,7 @@ app.keys = env.server.secretKeys
 export default app
     .use(error())
     .use(bodyParser())
-    .use(convert(session()))
+    .use(session(app))
     .use(passport.initialize())
     .use(passport.session())
     .use(connection)
