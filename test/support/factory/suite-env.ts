@@ -1,7 +1,7 @@
-import { factory, sequence, randomize, faker } from './helper'
+import { define, sequence, randomize, faker } from './helper'
 import SuiteEnv, { EnvSource } from 'lib/entity/suite-env'
 
-export default factory(SuiteEnv, {
+export default define(SuiteEnv, {
   id: sequence(),
   suite: null,
   source: randomize<EnvSource>('travis', 'circle', 'misc'),

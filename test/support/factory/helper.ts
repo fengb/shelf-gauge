@@ -12,27 +12,33 @@ export function sequence (val = 0) {
 }
 
 type Builder<T> = {
-  [K in keyof T]: null | ((instance?: T) => T[K])
+  [K in keyof T]: null | (() => T[K])
 }
 
-function cachedBuilder<T> (attrs: Partial<T>, builder: Builder<T>): T {
+type ContextBuilder<T> = (instance: T) => Builder<T>
+
+function scaffold<T> (attrs: Partial<T>, builder: Builder<T> | ContextBuilder<T>): T {
   const cache = {} as T
+
+  if (typeof builder === 'function') {
+    builder = builder(cache)
+  }
 
   for (const key in builder) {
     const build = builder[key]
     Object.defineProperty(cache, key, {
       enumerable: true,
-      get: once(() => attrs[key] || build && build(cache))
+      get: once(() => attrs[key] || build && build())
     })
   }
 
   return cache
 }
 
-export function factory<T> (constructor: new () => T, builder: Builder<T>) {
+export function define<T> (constructor: new () => T, builder: Builder<T> | ContextBuilder<T>) {
   return function (attrs: Partial<T> = {}): T {
     const obj = new constructor()
-    const c = cachedBuilder(attrs, builder)
-    return Object.assign(obj, c)
+    const buildout = scaffold(attrs, builder)
+    return Object.assign(obj, buildout)
   }
 }
