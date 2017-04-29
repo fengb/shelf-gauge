@@ -1,5 +1,5 @@
 import * as Typeorm from 'typeorm'
-import Suite from './suite'
+import { RepositorySecret, Suite } from '.'
 
 @Typeorm.Entity()
 export default class Repository {
@@ -10,6 +10,6 @@ export default class Repository {
   @Typeorm.Index({ unique: true })
   name: string
 
-  @Typeorm.OneToMany(type => Suite, suite => suite.repository)
-  suites: Suite[]
+  @Typeorm.OneToMany(type => RepositorySecret, secret => secret.repository)
+  secrets: Suite[]
 }

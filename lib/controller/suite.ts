@@ -1,5 +1,5 @@
 import { Context, HttpStatus } from 'lib/server'
-import { Repository, Suite } from 'lib/entity'
+import { Repository, RepositorySecret, Suite } from 'lib/entity'
 
 export async function showAll (ctx: Context) {
   const name = `${ctx.params.org}/${ctx.params.name}`
@@ -8,7 +8,12 @@ export async function showAll (ctx: Context) {
     return ctx.renderJson(HttpStatus.NotFound)
   }
 
-  ctx.renderJson(HttpStatus.Ok, repo.suites)
+  const suites = await ctx.conn.entityManager
+                       .createQueryBuilder(Suite, 'suite')
+                       .innerJoin(RepositorySecret, 'secret')
+                       .where('secret.repository=:repository', { repository: repo.id})
+
+  ctx.renderJson(HttpStatus.Ok, suites)
 }
 
 export async function create (ctx: Context) {
@@ -19,7 +24,7 @@ export async function create (ctx: Context) {
   }
 
   const suite = ctx.conn.entityManager.create(Suite, ctx.params)
-  suite.repository = repo
+  // suite.repository = repo
   await ctx.conn.entityManager.persist(suite)
 
   ctx.renderJson(HttpStatus.Created, suite)

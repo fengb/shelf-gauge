@@ -4,7 +4,7 @@ import * as dependent from '.'
 
 export default factory(Suite, {
   id: sequence(),
-  repository: null,
+  repositorySecret: null,
   ref: () => faker.random.uuid(),
   name: () => faker.lorem.slug(),
   ranAt: (suite: Suite) => suite.createdAt,

@@ -1,5 +1,4 @@
 import * as Typeorm from 'typeorm'
-import Suite from './suite'
 
 @Typeorm.Entity()
 export default class User {
