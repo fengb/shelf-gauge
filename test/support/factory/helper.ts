@@ -14,13 +14,14 @@ export function sequence (val = 0) {
 type Constructor<T> = new () => T
 type Factory<T> = (attrs?: Partial<T>) => T
 
-type Builder<T> = {
+type SimpleBuilder<T> = {
   [K in keyof T]: null | (() => T[K])
 }
 
-type ContextBuilder<T> = (instance: T) => Builder<T>
+type ContextBuilder<T> = (instance: T) => SimpleBuilder<T>
+type Builder<T> = SimpleBuilder<T> | ContextBuilder<T>
 
-function scaffold<T> (attrs: Partial<T>, builder: Builder<T> | ContextBuilder<T>): T {
+function scaffold<T> (attrs: Partial<T>, builder: Builder<T>): T {
   const cache = {} as T
 
   if (typeof builder === 'function') {
@@ -40,7 +41,7 @@ function scaffold<T> (attrs: Partial<T>, builder: Builder<T> | ContextBuilder<T>
 
 const FACTORIES = new Map<Constructor<any>, Factory<any>>()
 
-export function define<T> (constructor: Constructor<T>, builder: Builder<T> | ContextBuilder<T>) {
+export function define<T> (constructor: Constructor<T>, builder: Builder<T>): Factory<T> {
   const factory = function (attrs: Partial<T> = {}): T {
     const obj = new constructor()
     const buildout = scaffold(attrs, builder)
