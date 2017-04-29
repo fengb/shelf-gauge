@@ -1,9 +1,9 @@
-import { define, sequence, faker } from './helper'
-import SuiteTest from 'lib/entity/suite-test'
+import { build, define, sequence, faker } from './helper'
+import { Suite, SuiteTest } from 'lib/entity'
 
-export default define(SuiteTest, {
+export default define(SuiteTest, (suiteTest) => ({
   id: sequence(),
-  suite: null,
-  name: () => faker.database.column(),
-  value: () => faker.random.number(),
-})
+  suite: () => build(Suite, { tests: [suiteTest] }),
+  name: faker.database.column,
+  value: faker.random.number,
+}))

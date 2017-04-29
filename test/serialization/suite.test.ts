@@ -4,7 +4,7 @@ import { Serialize } from 'cerialize'
 
 describe('serialization Suite', () => {
   it('does stuff', () => {
-    const suite: Suite = factory.suite()
+    const suite: Suite = factory.build(Suite)
     console.warn(Serialize(suite))
   })
 })

@@ -1,17 +1,16 @@
-import { define, sequence, faker } from './helper'
-import Suite from 'lib/entity/suite'
-import * as factory from '.'
+import { build, define, sequence, faker } from './helper'
+import { Suite, SuiteEnv, SuiteTest } from 'lib/entity'
 
 export default define(Suite, (suite) => ({
   id: sequence(),
   repositorySecret: null,
-  ref: () => faker.random.uuid(),
-  name: () => faker.lorem.slug(),
+  ref: faker.random.uuid,
+  name: faker.lorem.slug,
+  createdAt: faker.date.recent,
   ranAt: () => suite.createdAt,
-  createdAt: () => faker.date.recent(),
-  env: () => factory.suiteEnv({ suite }),
+  env: () => build(SuiteEnv, { suite }),
   tests: () => [
-    factory.suiteTest({ suite }),
-    factory.suiteTest({ suite }),
+    build(SuiteTest, { suite }),
+    build(SuiteTest, { suite }),
   ],
 }))
