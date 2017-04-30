@@ -1,5 +1,5 @@
 import * as Typeorm from 'typeorm'
-import { RepositorySecret, Suite } from '.'
+import { RepositorySecret, User } from '.'
 
 @Typeorm.Entity()
 export default class Repository {
@@ -11,5 +11,8 @@ export default class Repository {
   name: string
 
   @Typeorm.OneToMany(type => RepositorySecret, secret => secret.repository)
-  secrets: Suite[]
+  secrets: RepositorySecret[]
+
+  @Typeorm.ManyToMany(type => User, user => user.repositories)
+  users: User[]
 }

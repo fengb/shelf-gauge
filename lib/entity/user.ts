@@ -1,4 +1,5 @@
 import * as Typeorm from 'typeorm'
+import { Repository } from '.'
 
 @Typeorm.Entity()
 export default class User {
@@ -15,4 +16,8 @@ export default class User {
   @Typeorm.Column()
   @Typeorm.Index({ unique: true })
   username: string
+
+  @Typeorm.ManyToMany(type => Repository, repo => repo.users)
+  @Typeorm.JoinTable()
+  repositories: Repository[]
 }

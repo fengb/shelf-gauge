@@ -55,5 +55,8 @@ export function define<T> (constructor: Constructor<T>, builder: Builder<T>): Fa
 
 export function build<T> (constructor: Constructor<T>, attrs: Partial<T> = {}): T {
   const factory = FACTORIES.get(constructor)
+  if (!factory) {
+    throw new Error(`factory '${constructor.name}' not defined`)
+  }
   return factory(attrs)
 }

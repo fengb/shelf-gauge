@@ -7,7 +7,7 @@ export default class RepositorySecret {
   id: number
 
   @Typeorm.ManyToOne(type => Repository, repo => repo.secrets)
-  repository: Repository[]
+  repository: Repository
 
   @Typeorm.Column()
   @Typeorm.Index()
