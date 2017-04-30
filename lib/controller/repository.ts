@@ -6,9 +6,9 @@ export async function upsert (ctx: Context) {
   const repo = await ctx.conn.entityManager.findOne(Repository, { name })
                || ctx.conn.entityManager.create(Repository, { name })
 
+  ctx.status = repo.id ? HttpStatus.Ok : HttpStatus.Created
   // TODO: update data
-  const status = repo.id ? HttpStatus.Ok : HttpStatus.Created
   await ctx.conn.entityManager.persist(repo)
 
-  ctx.renderJson(status, repo)
+  ctx.body = repo
 }

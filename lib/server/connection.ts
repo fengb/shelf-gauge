@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import { createConnection, Connection, ConnectionOptions } from 'typeorm'
 import { DriverType } from 'typeorm/driver/DriverOptions'
 import { once } from 'lodash'
