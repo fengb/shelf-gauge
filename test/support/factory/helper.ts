@@ -14,22 +14,17 @@ export function sequence (val = 0) {
 type Constructor<T> = new () => T
 type Factory<T> = (attrs?: Partial<T>) => T
 
-type SimpleBuilder<T> = {
+type Builder<T> = (instance: T) => {
   [K in keyof T]: null | (() => T[K])
 }
-
-type ContextBuilder<T> = (instance: T) => SimpleBuilder<T>
-type Builder<T> = SimpleBuilder<T> | ContextBuilder<T>
 
 function scaffold<T> (attrs: Partial<T>, builder: Builder<T>): T {
   const cache = {} as T
 
-  if (typeof builder === 'function') {
-    builder = builder(cache)
-  }
+  const builderContext = builder(cache)
 
-  for (const key in builder) {
-    const build = builder[key]
+  for (const key in builderContext) {
+    const build = builderContext[key]
     Object.defineProperty(cache, key, {
       enumerable: true,
       get: once(() => attrs[key] || build && build())
