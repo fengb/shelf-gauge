@@ -25,6 +25,7 @@ function bool (key: string, defawlt?: boolean): boolean {
   return get(key, defawlt, (str) => ('tTyY'.includes(str[0])))
 }
 
+// TODO: report all errors at once
 export default {
   server: {
     port:               num('PORT', 12345),
