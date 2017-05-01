@@ -25,9 +25,9 @@ export function setupDisconnect () {
 export function setupTruncate () {
   beforeEach(async () => {
     const connection = await connect()
-    await Promise.map(connection.entityMetadatas, (metadata) => {
-      const sql = `TRUNCATE "${metadata.table.name}" RESTART IDENTITY CASCADE`
-      return connection.entityManager.query(sql)
-    })
+    const names = connection.entityMetadatas.map((m) => `"${m.table.name}"`)
+    return connection.entityManager.query(
+      `TRUNCATE ${names.join(', ')} RESTART IDENTITY CASCADE`
+    )
   })
 }
