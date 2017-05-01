@@ -1,3 +1,4 @@
+import { Deserialize } from 'cerialize'
 import { Context, HttpStatus } from 'lib/server'
 import { Repository, RepositorySecret, Suite } from 'lib/entity'
 
@@ -23,7 +24,8 @@ export async function create (ctx: Context) {
     return ctx.throw(HttpStatus.NotFound)
   }
 
-  const suite = ctx.conn.entityManager.create(Suite, ctx.params)
+  const suite = Deserialize(ctx.request.body, Suite) as Suite
+  suite.createdAt = new Date()
   // suite.repository = repo
   await ctx.conn.entityManager.persist(suite)
 

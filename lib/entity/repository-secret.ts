@@ -1,5 +1,5 @@
 import * as Typeorm from 'typeorm'
-import { Repository } from '.'
+import { Repository, User } from '.'
 
 @Typeorm.Entity()
 export default class RepositorySecret {

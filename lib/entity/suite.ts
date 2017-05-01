@@ -11,9 +11,6 @@ export default class Suite {
   @Typeorm.ManyToOne(type => RepositorySecret)
   repositorySecret: RepositorySecret
 
-  @Typeorm.ManyToOne(type => User)
-  uploadedBy: User
-
   @Typeorm.Column()
   @autoserialize
   ref: string
