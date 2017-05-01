@@ -1,7 +1,5 @@
 import * as passport from 'koa-passport'
 
-import Context from '../context'
-
 import github from './github'
 import { toSession, fromSession } from './user'
 

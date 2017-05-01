@@ -37,6 +37,12 @@ connect.options = {
   autoSchemaSync: true,
 }
 
+declare module 'koa' {
+  interface Context {
+    conn: Connection
+  }
+}
+
 export default async function (ctx: Context, next: () => Promise<any>) {
   ctx.conn = await connect()
   return next()
