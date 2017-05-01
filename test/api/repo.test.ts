@@ -1,30 +1,29 @@
-import { expect, request, db, HttpStatus } from 'test/support'
+import { expect, request, db, factory, HttpStatus } from 'test/support'
 import { Repository } from 'lib/entity'
 
 describe('API /repo', () => {
   db.setup()
 
-  describe('/:repoOrg/:repoName PUT', () => {
-    it('returns status created', async () => {
-      const response =
-        await request()
-              .put('/repo/foo/bar')
-              .send({})
-      expect(response).to.have.property('status', HttpStatus.Created)
-    })
-
-    it('creates a record', async () => {
-      const response =
-        await request()
-              .put('/repo/foo/bar')
-              .send({})
-
+  describe('/:repoOrg/:repoName GET', () => {
+    it('returns the repo data', async () => {
+      const repo = factory.repository()
       const connection = await db.connect()
-      const repos = await connection.entityManager.find(Repository)
-      expect(repos).to.have.lengthOf(1)
-      expect(repos[0]).to.containSubset({
-        name: 'foo/bar'
-      })
+      await connection.entityManager.persist(repo)
+
+      const response =
+        await request()
+              .get(`/repo/${repo.name}`)
+              .send({})
+      expect(response.status).to.equal(HttpStatus.Ok)
+      expect(response.body).to.deep.equal({ name: repo.name })
+    })
+  })
+
+  describe('/:repoOrg/:repoName/suite POST', () => {
+    it('returns status created', async () => {
+      const repo = factory.repository()
+      const connection = await db.connect()
+      await connection.entityManager.persist(repo)
     })
   })
 })

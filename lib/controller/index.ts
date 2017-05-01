@@ -1,6 +1,5 @@
 import * as Auth from './auth'
-import * as Repository from './repository'
-import * as Suite from './suite'
+import * as Repo from './repo'
 import * as UserRepo from './user-repo'
 
-export { Auth, Repository, Suite, UserRepo }
+export { Auth, Repo, UserRepo }

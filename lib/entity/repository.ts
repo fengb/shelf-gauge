@@ -1,4 +1,5 @@
 import * as Typeorm from 'typeorm'
+import { serialize } from 'cerialize'
 import { RepositorySecret, User } from '.'
 
 @Typeorm.Entity()
@@ -8,6 +9,7 @@ export default class Repository {
 
   @Typeorm.Column()
   @Typeorm.Index({ unique: true })
+  @serialize
   name: string
 
   @Typeorm.OneToMany(type => RepositorySecret, secret => secret.repository)

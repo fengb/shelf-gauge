@@ -5,10 +5,9 @@ export default
   new Router()
     .get( '/auth/github',           C.Auth.oauthFor('github'))
 
-    .put( '/repo/:org/:name',       C.Repository.upsert)
-    .post('/repo/:org/:name',       C.Repository.upsert)
+    .get( '/repo/:org/:name',       C.Repo.show)
 
-    .get( '/repo/:org/:name/suite', C.Suite.showAll)
-    .post('/repo/:org/:name/suite', C.Suite.create)
+    .get( '/repo/:org/:name/suite', C.Repo.Suite.showAll)
+    .post('/repo/:org/:name/suite', C.Repo.Suite.create)
 
     .get('/user/repo',              C.UserRepo.showAll)
