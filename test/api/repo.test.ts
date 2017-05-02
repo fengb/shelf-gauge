@@ -1,14 +1,14 @@
 import { Serialize } from 'cerialize'
 import { expect, request, db, factory, HttpStatus } from 'test/support'
-import { Repository } from 'lib/entity'
+import { Repository, RepositorySecret } from 'lib/entity'
 
 describe('API /repo', () => {
   db.setup()
 
   beforeEach(async function () {
     this.repo = factory.repository()
-    const connection = await db.connect()
-    await connection.entityManager.persist(this.repo)
+    const conn = await db.connect()
+    await conn.entityManager.persist(this.repo)
   })
 
   describe('/:repoOrg/:repoName GET', () => {
@@ -23,8 +23,12 @@ describe('API /repo', () => {
     })
   })
 
-  describe('/:repoOrg/:repoName/suite POST', () => {
+  describe.only('/:repoOrg/:repoName/suite POST', () => {
     it('creates a suite', async function () {
+      const secret = factory.repositorySecret({ repository: this.repo })
+      const conn = await db.connect()
+      await this.conn.entityManager.persist(secret)
+
       const data = {
         ref: 'abc123',
         name: 'master',

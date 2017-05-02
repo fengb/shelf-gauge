@@ -1,4 +1,4 @@
-import { connect } from 'lib/server/connection'
+import { connect, Connection } from 'lib/server/connection'
 import { beforeAll, afterAll } from './mocha'
 
 export { connect }
@@ -23,10 +23,10 @@ export function setupDisconnect () {
 }
 
 export function setupTruncate () {
-  beforeEach(async () => {
-    const connection = await connect()
-    const names = connection.entityMetadatas.map((m) => `"${m.table.name}"`)
-    return connection.entityManager.query(
+  beforeEach(async function () {
+    const conn = await connect()
+    const names = conn.entityMetadatas.map((m) => `"${m.table.name}"`)
+    return conn.entityManager.query(
       `TRUNCATE ${names.join(', ')} RESTART IDENTITY CASCADE`
     )
   })

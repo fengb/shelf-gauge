@@ -23,6 +23,8 @@ function driverType (url: string): DriverType {
   throw new Error(`DB type cannot be found: ${url}`)
 }
 
+export { Connection }
+
 export const connect: Connect = once(() => createConnection(connect.options))
 connect.options = {
   driver: {

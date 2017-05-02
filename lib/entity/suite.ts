@@ -8,7 +8,7 @@ export default class Suite {
   @autoserialize
   id: number
 
-  @Typeorm.ManyToOne(type => RepositorySecret)
+  @Typeorm.ManyToOne(type => RepositorySecret, {nullable: false})
   repositorySecret: RepositorySecret
 
   @Typeorm.Column()

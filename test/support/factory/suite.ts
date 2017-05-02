@@ -2,7 +2,7 @@ import { build, define, sequence, faker } from './helper'
 import { RepositorySecret, Suite, SuiteEnv, SuiteTest, User } from 'lib/entity'
 
 export default define(Suite, (suite: Suite) => ({
-  id: sequence(),
+  id: null,
   repositorySecret: () => build(RepositorySecret),
   ref: faker.random.uuid,
   name: faker.lorem.slug,

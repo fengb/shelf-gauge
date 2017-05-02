@@ -6,7 +6,8 @@ export default class RepositorySecret {
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 
-  @Typeorm.ManyToOne(type => Repository, repo => repo.secrets)
+  // Default nullable: false
+  @Typeorm.ManyToOne(type => Repository, repo => repo.secrets, { nullable: false })
   repository: Repository
 
   @Typeorm.Column()
