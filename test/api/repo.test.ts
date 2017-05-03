@@ -18,8 +18,8 @@ describe('API /repo', () => {
     })
   })
 
-  describe.only('/:repoOrg/:repoName/suite POST', () => {
-    xit('returns 422 on failed', async function () {
+  describe('/:repoOrg/:repoName/suite POST', () => {
+    it('returns 422 on failed', async function () {
       const secret = await factory.create(RepositorySecret)
 
       const data = {
