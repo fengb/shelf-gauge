@@ -1,7 +1,7 @@
 import { build, define, sequence, faker } from './helper'
-import { Repository } from 'lib/entity'
+import { Repo } from 'lib/entity'
 
-export default define(Repository, () => ({
+export default define(Repo, () => ({
   id: null,
   name: () => faker.internet.domainWord() + '/' + faker.internet.domainWord(),
   secrets: null,

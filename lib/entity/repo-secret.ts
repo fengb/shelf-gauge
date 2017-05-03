@@ -1,14 +1,14 @@
 import * as Typeorm from 'typeorm'
-import { Repository, User } from '.'
+import { Repo, User } from '.'
 
 @Typeorm.Entity()
-export default class RepositorySecret {
+export default class RepoSecret {
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 
   // Default nullable: false
-  @Typeorm.ManyToOne(type => Repository, repo => repo.secrets, { nullable: false, cascadeAll: true })
-  repository: Repository
+  @Typeorm.ManyToOne(type => Repo, repo => repo.secrets, { nullable: false, cascadeAll: true })
+  repo: Repo
 
   @Typeorm.Column()
   @Typeorm.Index()

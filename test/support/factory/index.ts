@@ -1,8 +1,8 @@
 import { build as factoryBuild, Constructor } from './helper'
 import { connect } from '../db'
 
-export { default as repository } from './repository'
-export { default as repositorySecret } from './repository-secret'
+export { default as repo } from './repo'
+export { default as repoSecret } from './repo-secret'
 export { default as suite } from './suite'
 export { default as suiteEnv } from './suite-env'
 export { default as suiteTest } from './suite-test'

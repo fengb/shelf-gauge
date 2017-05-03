@@ -1,6 +1,6 @@
 import * as Typeorm from 'typeorm'
 import { autoserialize, autoserializeAs, serialize } from 'cerialize'
-import { RepositorySecret, SuiteEnv, SuiteTest, User } from '.'
+import { RepoSecret, SuiteEnv, SuiteTest, User } from '.'
 
 @Typeorm.Entity()
 export default class Suite {
@@ -8,8 +8,8 @@ export default class Suite {
   @autoserialize
   id: number
 
-  @Typeorm.ManyToOne(type => RepositorySecret, {nullable: false})
-  repositorySecret: RepositorySecret
+  @Typeorm.ManyToOne(type => RepoSecret, {nullable: false})
+  repoSecret: RepoSecret
 
   @Typeorm.Column()
   @autoserialize

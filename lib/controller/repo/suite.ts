@@ -1,25 +1,25 @@
 import { Deserialize } from 'cerialize'
 import { Context, HttpStatus } from 'lib/server'
-import { Repository, RepositorySecret, Suite } from 'lib/entity'
+import { Repo, RepoSecret, Suite } from 'lib/entity'
 
 export async function showAll (ctx: Context) {
   const name = `${ctx.params.org}/${ctx.params.name}`
-  const repo = await ctx.conn.entityManager.findOne(Repository, { name })
+  const repo = await ctx.conn.entityManager.findOne(Repo, { name })
   if (!repo) {
     return ctx.throw(HttpStatus.NotFound)
   }
 
   const suites = await ctx.conn.entityManager
                        .createQueryBuilder(Suite, 'suite')
-                       .innerJoin(RepositorySecret, 'secret')
-                       .where('secret.repository=:repository', { repository: repo.id })
+                       .innerJoin(RepoSecret, 'secret')
+                       .where('secret.repo=:repo', { repo: repo.id })
 
   ctx.body = suites
 }
 
 export async function create (ctx: Context) {
   const name = `${ctx.params.org}/${ctx.params.name}`
-  const repo = await ctx.conn.entityManager.findOne(Repository, { name })
+  const repo = await ctx.conn.entityManager.findOne(Repo, { name })
   if (!repo) {
     return ctx.throw(HttpStatus.NotFound)
   }
@@ -29,14 +29,14 @@ export async function create (ctx: Context) {
     return ctx.throw(HttpStatus.UnprocessableEntity)
   }
 
-  const secret = await ctx.conn.entityManager.findOne(RepositorySecret, { repository: repo.id, key: secretValue })
+  const secret = await ctx.conn.entityManager.findOne(RepoSecret, { repo: repo.id, key: secretValue })
   if (!secret) {
     return ctx.throw(HttpStatus.UnprocessableEntity)
   }
 
   const suite = Deserialize(ctx.request.body, Suite) as Suite
   suite.createdAt = new Date()
-  suite.repositorySecret = secret
+  suite.repoSecret = secret
   await ctx.conn.entityManager.persist(suite)
 
   ctx.status = HttpStatus.Created

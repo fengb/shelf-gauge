@@ -1,9 +1,9 @@
 import * as Typeorm from 'typeorm'
 import { serialize } from 'cerialize'
-import { RepositorySecret, User } from '.'
+import { RepoSecret, User } from '.'
 
 @Typeorm.Entity()
-export default class Repository {
+export default class Repo {
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 
@@ -12,8 +12,8 @@ export default class Repository {
   @serialize
   name: string
 
-  @Typeorm.OneToMany(type => RepositorySecret, secret => secret.repository)
-  secrets: RepositorySecret[]
+  @Typeorm.OneToMany(type => RepoSecret, secret => secret.repo)
+  secrets: RepoSecret[]
 
   @Typeorm.ManyToMany(type => User, user => user.repositories)
   users: User[]
