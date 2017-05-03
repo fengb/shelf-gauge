@@ -11,10 +11,10 @@ export function sequence (val = 0) {
   return () => val++
 }
 
-type Constructor<T> = new () => T
-type Factory<T> = (attrs?: Partial<T>) => T
+export type Constructor<T> = new () => T
+export type Factory<T> = (attrs?: Partial<T>) => T
 
-type Builder<T> = (instance: T) => {
+export type Builder<T> = (instance: T) => {
   [K in keyof T]: null | (() => T[K])
 }
 

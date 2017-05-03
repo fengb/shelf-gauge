@@ -5,32 +5,23 @@ import { Repository, RepositorySecret } from 'lib/entity'
 describe('API /repo', () => {
   db.setup()
 
-  beforeEach(async function () {
-    this.repo = factory.repository()
-    const conn = await db.connect()
-    await conn.entityManager.persist(this.repo)
-  })
-
   describe('/:repoOrg/:repoName GET', () => {
     it('returns the repo data', async function () {
+      const repo = await factory.create(Repository)
       const response =
         await request()
-              .get(`/repo/${this.repo.name}`)
+              .get(`/repo/${repo.name}`)
               .send({})
 
       expect(response.status).to.equal(HttpStatus.Ok)
-      expect(response.body).to.deep.equal({ name: this.repo.name })
+      expect(response.body).to.deep.equal({ name: repo.name })
     })
   })
 
   describe.only('/:repoOrg/:repoName/suite POST', () => {
-    beforeEach(async function () {
-      this.secret = factory.repositorySecret({ repository: this.repo })
-      const conn = await db.connect()
-      await conn.entityManager.persist(this.secret)
-    })
-
     xit('returns 422 on failed', async function () {
+      const secret = await factory.create(RepositorySecret)
+
       const data = {
         ref: 'abc123',
         name: 'master',
@@ -38,13 +29,15 @@ describe('API /repo', () => {
       }
       const response =
         await request()
-              .post(`/repo/${this.repo.name}/suite`)
+              .post(`/repo/${secret.repository.name}/suite`)
               .send(data)
 
       expect(response.status).to.equal(HttpStatus.UnprocessableEntity)
     })
 
     it('creates a suite', async function () {
+      const secret = await factory.create(RepositorySecret)
+
       const data = {
         ref: 'abc123',
         name: 'master',
@@ -52,8 +45,8 @@ describe('API /repo', () => {
       }
       const response =
         await request()
-              .post(`/repo/${this.repo.name}/suite`)
-              .send({...data, secret: this.secret.key})
+              .post(`/repo/${secret.repository.name}/suite`)
+              .send({...data, secret: secret.key})
 
       expect(response.status).to.equal(HttpStatus.Created)
       expect(response.body).to.containSubset(Serialize(data))

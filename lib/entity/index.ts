@@ -6,4 +6,5 @@ import SuiteTest from './suite-test'
 import User from './user'
 
 export { Repository, RepositorySecret, Suite, SuiteEnv, SuiteTest, User }
+export type Entity = Repository | RepositorySecret | Suite | SuiteEnv | SuiteTest | User
 export const Entities: Function[] = [Repository, RepositorySecret, Suite, SuiteEnv, SuiteTest, User]
