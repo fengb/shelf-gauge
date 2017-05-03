@@ -1,8 +1,8 @@
 import './config/boot'
 
-import env from './config/env'
+import ENV from './config/env'
 import server from './lib/server'
 
-server.listen(env.server.port, () => {
-  console.log(`Started on port ${env.server.port}`)
+server.listen(ENV.server.port, () => {
+  console.log(`Started on port ${ENV.server.port}`)
 })

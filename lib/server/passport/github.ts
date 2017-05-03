@@ -1,12 +1,12 @@
 import { Strategy, StrategyOption } from 'passport-github'
 
-import env from 'config/env'
+import ENV from 'config/env'
 import { fetch } from './user'
 
 const OPTIONS: StrategyOption = {
-  clientID: env.githubClient.id,
-  clientSecret: env.githubClient.secret,
-  callbackURL: env.githubClient.callback,
+  clientID: ENV.oauth.github.id,
+  clientSecret: ENV.oauth.github.secret,
+  callbackURL: ENV.oauth.github.callback,
 }
 
 export default new Strategy(OPTIONS, (accessToken, refreshToken, profile, done) => {

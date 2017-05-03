@@ -1,4 +1,9 @@
-import './boot'
+import { config } from 'dotenv'
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+
+config({ path: '.env' })
+config({ path: `.env.${process.env.NODE_ENV}` })
 
 function get<T> (key: string, defawlt: T | undefined, coerce: (str: string) => T): T {
   const value: string = process.env[key]
@@ -32,14 +37,20 @@ export default {
     secretKeys:         str('SECRET_KEY').split(' '),
   },
 
-  db: {
-    url:                str('DB_URL'),
-    logging:            bool('DB_LOGGING', false),
+  database: {
+    url:                str('DATABASE_URL'),
+    logging:            bool('DATABASE_LOGGING', false),
   },
 
-  githubClient: {
-    id:                 str('GITHUB_CLIENT_ID'),
-    secret:             str('GITHUB_CLIENT_SECRET'),
-    callback:           str('GITHUB_CLIENT_CALLBACK'),
-  }
+  oauth: {
+    github: {
+      id:               str('OAUTH_GITHUB_ID'),
+      secret:           str('OAUTH_GITHUB_SECRET'),
+      callback:         str('OAUTH_GITHUB_CALLBACK'),
+    },
+  },
+
+  promise: {
+    stacktrace:         bool('PROMISE_STACKTRACE', false),
+  },
 }

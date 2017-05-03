@@ -3,13 +3,13 @@ import * as bodyParser from 'koa-bodyparser'
 const error = require('koa-error')
 const session = require('koa-session')
 
-import env from 'config/env'
+import ENV from 'config/env'
 import passport from './passport'
 import connection from './connection'
 import router from './router'
 
 const app = new Koa()
-app.keys = env.server.secretKeys
+app.keys = ENV.server.secretKeys
 
 export default app
     .use(error())

@@ -5,6 +5,6 @@ node_js:
 before_script:
   - 'createdb -O postgres shelf_gauge'
 env:
-  - 'DB_URL=postgresql://postgres@localhost:5432/shelf_gauge'
+  - 'DATABASE_URL=postgresql://postgres@localhost:5432/shelf_gauge'
 addons:
   postgresql: '9.4'

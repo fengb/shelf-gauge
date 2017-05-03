@@ -2,7 +2,7 @@ import { createConnection, Connection, ConnectionOptions } from 'typeorm'
 import { DriverType } from 'typeorm/driver/DriverOptions'
 import { once } from 'lodash'
 
-import env from 'config/env'
+import ENV from 'config/env'
 import { Entities } from 'lib/entity'
 import { Context } from '.'
 
@@ -28,12 +28,12 @@ export { Connection }
 export const connect: Connect = once(() => createConnection(connect.options))
 connect.options = {
   driver: {
-    url: env.db.url,
-    type: driverType(env.db.url),
+    url: ENV.database.url,
+    type: driverType(ENV.database.url),
   },
   logging: {
-    logQueries: env.db.logging,
-    logSchemaCreation: env.db.logging,
+    logQueries: ENV.database.logging,
+    logSchemaCreation: ENV.database.logging,
   },
   entities: Entities,
   autoSchemaSync: true,
