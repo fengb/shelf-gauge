@@ -12,7 +12,7 @@ export async function showAll (ctx: Context) {
   const suites = await ctx.conn.entityManager
                        .createQueryBuilder(Suite, 'suite')
                        .innerJoin(RepositorySecret, 'secret')
-                       .where('secret.repository=:repository', { repository: repo.id})
+                       .where('secret.repository=:repository', { repository: repo.id })
 
   ctx.body = suites
 }
@@ -24,9 +24,19 @@ export async function create (ctx: Context) {
     return ctx.throw(HttpStatus.NotFound)
   }
 
+  const secretValue = ctx.request.body.secret
+  if (!secretValue) {
+    return ctx.throw(HttpStatus.UnprocessableEntity)
+  }
+
+  const secret = await ctx.conn.entityManager.findOne(RepositorySecret, { repository: repo.id, key: secretValue })
+  if (!secret) {
+    return ctx.throw(HttpStatus.UnprocessableEntity)
+  }
+
   const suite = Deserialize(ctx.request.body, Suite) as Suite
   suite.createdAt = new Date()
-  // suite.repository = repo
+  suite.repositorySecret = secret
   await ctx.conn.entityManager.persist(suite)
 
   ctx.status = HttpStatus.Created

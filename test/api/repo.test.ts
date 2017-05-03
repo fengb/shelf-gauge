@@ -24,11 +24,13 @@ describe('API /repo', () => {
   })
 
   describe.only('/:repoOrg/:repoName/suite POST', () => {
-    it('creates a suite', async function () {
-      const secret = factory.repositorySecret({ repository: this.repo })
+    beforeEach(async function () {
+      this.secret = factory.repositorySecret({ repository: this.repo })
       const conn = await db.connect()
-      await this.conn.entityManager.persist(secret)
+      await conn.entityManager.persist(this.secret)
+    })
 
+    xit('returns 422 on failed', async function () {
       const data = {
         ref: 'abc123',
         name: 'master',
@@ -38,6 +40,20 @@ describe('API /repo', () => {
         await request()
               .post(`/repo/${this.repo.name}/suite`)
               .send(data)
+
+      expect(response.status).to.equal(HttpStatus.UnprocessableEntity)
+    })
+
+    it('creates a suite', async function () {
+      const data = {
+        ref: 'abc123',
+        name: 'master',
+        ranAt: new Date(),
+      }
+      const response =
+        await request()
+              .post(`/repo/${this.repo.name}/suite`)
+              .send({...data, secret: this.secret.key})
 
       expect(response.status).to.equal(HttpStatus.Created)
       expect(response.body).to.containSubset(Serialize(data))
