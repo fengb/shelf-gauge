@@ -26,11 +26,11 @@ export default class Suite {
   @serialize
   createdAt: Date
 
-  @Typeorm.OneToOne(type => SuiteEnv, env => env.suite)
+  @Typeorm.OneToOne(type => SuiteEnv, env => env.suite, { nullable: false, cascadeAll: true })
   @autoserialize
   env: SuiteEnv
 
-  @Typeorm.OneToMany(type => SuiteTest, test => test.suite)
+  @Typeorm.OneToMany(type => SuiteTest, test => test.suite, { cascadeInsert: true })
   @autoserialize
   tests: SuiteTest[]
 }
