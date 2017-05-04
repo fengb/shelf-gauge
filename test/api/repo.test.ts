@@ -2,6 +2,10 @@ import { Serialize } from 'cerialize'
 import { expect, request, db, factory, HttpStatus } from 'test/support'
 import { Repo, RepoSecret } from 'lib/entity'
 
+function asJson (obj: any): any {
+  return JSON.parse(JSON.stringify(obj))
+}
+
 describe('API /repo', () => {
   db.setup()
 
@@ -42,6 +46,11 @@ describe('API /repo', () => {
         ref: 'abc123',
         name: 'master',
         ranAt: new Date(),
+        env: { source: 'travis', info: 'nooooooo' },
+        tests: [
+          { name: 'index', value: 13.5 },
+          { name: 'haste', value: 0.125 },
+        ]
       }
       const response =
         await request()
@@ -49,7 +58,7 @@ describe('API /repo', () => {
               .send({...data, secret: secret.key})
 
       expect(response.status).to.equal(HttpStatus.Created)
-      expect(response.body).to.containSubset(Serialize(data))
+      expect(response.body).to.containSubset(asJson(data))
     })
   })
 })

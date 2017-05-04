@@ -1,11 +1,10 @@
 import * as Typeorm from 'typeorm'
-import { autoserialize, autoserializeAs, serialize } from 'cerialize'
+import { autoserialize, serialize } from 'cerialize'
 import { RepoSecret, SuiteEnv, SuiteTest, User } from '.'
 
 @Typeorm.Entity()
 export default class Suite {
   @Typeorm.PrimaryGeneratedColumn()
-  @autoserialize
   id: number
 
   @Typeorm.ManyToOne(type => RepoSecret, {nullable: false})
@@ -28,10 +27,10 @@ export default class Suite {
   createdAt: Date
 
   @Typeorm.OneToOne(type => SuiteEnv, env => env.suite)
-  @autoserializeAs(() => SuiteEnv)
+  @autoserialize
   env: SuiteEnv
 
   @Typeorm.OneToMany(type => SuiteTest, test => test.suite)
-  @autoserializeAs(() => SuiteTest)
+  @autoserialize
   tests: SuiteTest[]
 }

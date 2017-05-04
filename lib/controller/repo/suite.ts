@@ -1,4 +1,4 @@
-import { Deserialize } from 'cerialize'
+import { Deserialize, Serialize } from 'cerialize'
 import { Context, HttpStatus } from 'lib/server'
 import { Repo, RepoSecret, Suite } from 'lib/entity'
 
@@ -40,5 +40,5 @@ export async function create (ctx: Context) {
   await ctx.conn.entityManager.persist(suite)
 
   ctx.status = HttpStatus.Created
-  ctx.body = suite
+  ctx.body = Serialize(suite)
 }
