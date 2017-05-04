@@ -5,6 +5,8 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 config({ path: '.env' })
 config({ path: `.env.${process.env.NODE_ENV}` })
 
+const MISSING = [] as string[]
+
 function get<T> (key: string, defawlt: T | undefined, coerce: (str: string) => T): T {
   const value: string = process.env[key]
   if (value != null) {
@@ -15,7 +17,8 @@ function get<T> (key: string, defawlt: T | undefined, coerce: (str: string) => T
     return defawlt
   }
 
-  throw new Error(`${key} not defined`)
+  MISSING.push(key)
+  return null as any
 }
 
 function str (key: string, defawlt?: string): string {
@@ -30,7 +33,6 @@ function bool (key: string, defawlt?: boolean): boolean {
   return get(key, defawlt, (str) => ('tTyY'.includes(str[0])))
 }
 
-// TODO: report all errors at once
 export default {
   server: {
     port:               num('PORT', 12345),
@@ -53,4 +55,8 @@ export default {
   promise: {
     stacktrace:         bool('PROMISE_STACKTRACE', false),
   },
+}
+
+if (MISSING.length > 0) {
+  throw new Error(`ENV variables not defined: ${MISSING.join(', ')}`)
 }
