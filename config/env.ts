@@ -33,6 +33,19 @@ function bool (key: string, defawlt?: boolean): boolean {
   return get(key, defawlt, (str) => ('tTyY'.includes(str[0])))
 }
 
+function testEnv () {
+  if (process.env.NODE_ENV !== 'test') {
+    return
+  }
+
+  return {
+    auth: {
+      callback:         str('TEST_AUTH_CALLBACK'),
+      github:           str('TEST_AUTH_GITHUB'),
+    }
+  }
+}
+
 export default {
   server: {
     port:               num('PORT', 12345),
@@ -55,6 +68,8 @@ export default {
   promise: {
     stacktrace:         bool('PROMISE_STACKTRACE', false),
   },
+
+  test: testEnv()
 }
 
 if (MISSING.length > 0) {

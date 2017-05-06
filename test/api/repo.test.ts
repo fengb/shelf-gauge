@@ -15,7 +15,6 @@ describe('API /repo', () => {
       const response =
         await request()
               .get(`/repo/${repo.name}`)
-              .send({})
 
       expect(response.status).to.equal(HttpStatus.Ok)
       expect(response.body).to.deep.equal({ url: repo.url, name: repo.name })
