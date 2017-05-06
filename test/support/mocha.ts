@@ -1,3 +1,5 @@
+import * as sinon from 'sinon'
+
 type Async<T> = () => Promise<T>
 
 export function beforeAll (callback: Async<any>) {
@@ -13,3 +15,7 @@ before(() => Promise.map(beforeAllCallbacks, (cb) => cb()))
 
 const afterAllCallbacks = [] as Async<any>[]
 after(() => Promise.map(afterAllCallbacks, (cb) => cb()))
+
+beforeEach(function () {
+  this.sandbox = sinon.sandbox.create()
+})
