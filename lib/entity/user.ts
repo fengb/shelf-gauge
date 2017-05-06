@@ -19,5 +19,5 @@ export default class User {
 
   @Typeorm.ManyToMany(type => Repo, repo => repo.users)
   @Typeorm.JoinTable()
-  repositories: Repo[]
+  repos: Repo[]
 }

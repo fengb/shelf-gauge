@@ -18,7 +18,7 @@ describe('API /repo', () => {
               .send({})
 
       expect(response.status).to.equal(HttpStatus.Ok)
-      expect(response.body).to.deep.equal({ name: repo.name })
+      expect(response.body).to.deep.equal({ url: repo.url, name: repo.name })
     })
   })
 

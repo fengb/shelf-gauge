@@ -23,7 +23,7 @@ export function setupDisconnect () {
 }
 
 export function setupTruncate () {
-  beforeEach(async function () {
+  afterEach(async function () {
     const conn = await connect()
     const names = conn.entityMetadatas.map((m) => `"${m.table.name}"`)
     return conn.entityManager.query(
