@@ -11,37 +11,29 @@ declare module 'mocha' {
   interface ITestCallbackContext extends MochaExtensions {}
 }
 
-type HookCallback = (this: Mocha.IHookCallbackContext) => Promise<any>
+type HookCallback = (this: Mocha.IHookCallbackContext) => Promise<any> | any
 
-let BEFORE_ALL_CALLED = false
+function callbackAll (trigger: (callback: HookCallback) => any) {
+  let called = false
 
-export function beforeAll (callback: HookCallback) {
-  if (BEFORE_ALL_CALLED) {
-    throw new Error('beforeAll() already triggered')
+  const callbacks = [] as HookCallback[]
+
+  trigger(function () {
+    called = true
+    return Promise.map(callbacks, (cb) => cb.call(this))
+  })
+
+  return function (callback: HookCallback) {
+    if (called) {
+      throw new Error('already called')
+    }
+
+    callbacks.push(callback)
   }
-  beforeAllCallbacks.push(callback)
 }
 
-let AFTER_ALL_CALLED = false
-
-export function afterAll (callback: HookCallback) {
-  if (AFTER_ALL_CALLED) {
-    throw new Error('afterAll() already triggered')
-  }
-  afterAllCallbacks.push(callback)
-}
-
-const beforeAllCallbacks = [] as HookCallback[]
-before(function () {
-  BEFORE_ALL_CALLED = true
-  return Promise.map(beforeAllCallbacks, (cb) => cb.call(this))
-})
-
-const afterAllCallbacks = [] as HookCallback[]
-after(function () {
-  AFTER_ALL_CALLED = true
-  return Promise.map(afterAllCallbacks, (cb) => cb.call(this))
-})
+export const beforeAll = callbackAll(before)
+export const afterAll = callbackAll(after)
 
 beforeEach(function () {
   this.sandbox = sinon.sandbox.create()
