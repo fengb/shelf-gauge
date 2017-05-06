@@ -3,7 +3,7 @@ import * as GithubApi from 'github'
 import { Context, HttpStatus } from 'lib/server'
 import { Repo } from 'lib/entity'
 
-const github = new GithubApi()
+export const github = new GithubApi()
 
 interface GithubRepo {
   id: number

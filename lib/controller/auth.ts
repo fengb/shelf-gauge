@@ -2,7 +2,7 @@ import { Context, HttpStatus, Middleware, passport } from 'lib/server'
 import { AuthenticateOptions } from 'passport'
 
 const CALLBACK_REDIRECTS: AuthenticateOptions = {
-  successRedirect: '/user/repo',
+  successRedirect: '/user',
   failureRedirect: '/',
 }
 
