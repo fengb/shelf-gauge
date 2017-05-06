@@ -64,17 +64,16 @@ describe('API /repo', () => {
               .post(`/repo/${secret.repo.name}/suite`)
               .send({...data, secret: secret.key})
 
-      const conn = await db.connect()
-      const suite = await conn.entityManager.findOne(Suite)
+      const suite = await this.conn!.entityManager.findOne(Suite)
       expect(suite!).to.containSubset({
         ref: data.ref,
         name: data.name,
       })
 
-      const env = await conn.entityManager.findOne(SuiteEnv)
+      const env = await this.conn!.entityManager.findOne(SuiteEnv)
       expect(env!).to.containSubset(data.env)
 
-      const tests = await conn.entityManager.find(SuiteTest)
+      const tests = await this.conn!.entityManager.find(SuiteTest)
       expect(tests).to.containSubset(data.tests)
     })
   })

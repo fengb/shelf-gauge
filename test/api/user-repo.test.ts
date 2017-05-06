@@ -5,7 +5,7 @@ describe('API /user/repo', () => {
   db.setup()
 
   describe('GET', () => {
-    it('returns the repo data', async function () {
+    it('returns repo data from github', async function () {
       stubApi.github(this.sandbox)
 
       const agent = await authRequest()
