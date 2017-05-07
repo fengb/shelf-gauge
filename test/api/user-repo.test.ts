@@ -15,4 +15,18 @@ describe('API /user/repo', () => {
       expect(response.body).to.deep.equal([])
     })
   })
+
+  describe('/:repoOrg/:repoName/secret POST', () => {
+    it('returns a new secret', async function () {
+      const repo = await factory.create(Repo)
+
+      const agent = await authRequest()
+      const response = await agent.post(`/user/repo/${repo.name}/secret`)
+
+      expect(response.status).to.equal(HttpStatus.Created)
+
+      const secret = await this.conn!.entityManager.findOne(RepoSecret)
+      expect(response.body).to.containSubset({ key: secret!.key })
+    })
+  })
 })

@@ -5,14 +5,15 @@ import ENV from 'config/env'
 
 const router =
   new Router()
-    .get( '/auth/github',            C.Auth.oauthFor('github'))
+    .get( '/auth/github',                 C.Auth.oauthFor('github'))
 
-    .get( '/repo/:org/:name',        C.Repo.show)
+    .get( '/repo/:org/:name',             C.Repo.show)
 
-    .get( '/repo/:org/:name/suite',  C.Repo.Suite.showAll)
-    .post('/repo/:org/:name/suite',  C.Repo.Suite.create)
+    .get( '/repo/:org/:name/suite',       C.Repo.Suite.showAll)
+    .post('/repo/:org/:name/suite',       C.Repo.Suite.create)
 
-    .get('/user/repo',               C.UserRepo.showAll)
+    .get( '/user/repo',                   C.UserRepo.showAll)
+    .post('/user/repo/:org/:name/secret', C.UserRepo.createSecret)
 
 if (ENV.test) {
   router.get(ENV.test.auth.callback, C.Auth.oauthFor('mock'))

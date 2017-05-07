@@ -1,7 +1,9 @@
 import { filter } from 'lodash'
 import * as GithubApi from 'github'
+
 import { Context, HttpStatus } from 'lib/server'
-import { Repo } from 'lib/entity'
+import { Repo, RepoSecret } from 'lib/entity'
+import * as secureRandom from 'lib/util/secure-random'
 
 export const github = new GithubApi()
 
@@ -56,4 +58,26 @@ export async function create (ctx: Context) {
   await ctx.conn.entityManager.persist(repo)
 
   ctx.body = repo
+}
+
+export async function createSecret (ctx: Context) {
+  if (!ctx.state.user) {
+    return ctx.redirect('/')
+  }
+
+  const name = `${ctx.params.org}/${ctx.params.name}`
+  const repo = await ctx.conn.entityManager.findOne(Repo, { name })
+
+  if (!repo) {
+    return ctx.throw(HttpStatus.NotFound)
+  }
+
+  const secret = ctx.conn.entityManager.create(RepoSecret)
+  secret.key = await secureRandom.base64(40)
+  secret.repo = repo
+
+  await ctx.conn.entityManager.persist(secret)
+
+  ctx.status = HttpStatus.Created
+  ctx.body = secret
 }
