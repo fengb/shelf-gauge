@@ -11,7 +11,7 @@ describe('API /repo', () => {
 
   describe('/:repoOrg/:repoName GET', () => {
     it('returns the repo data', async function () {
-      const repo = await factory.create(Repo)
+      const repo = await factory.repo.create()
       const response =
         await request()
               .get(`/repo/${repo.name}`)
@@ -34,7 +34,7 @@ describe('API /repo', () => {
     }
 
     it('returns 422 on failed', async function () {
-      const secret = await factory.create(RepoSecret)
+      const secret = await factory.repoSecret.create()
 
       const response =
         await request()
@@ -45,7 +45,7 @@ describe('API /repo', () => {
     })
 
     it('returns the suite data', async function () {
-      const secret = await factory.create(RepoSecret)
+      const secret = await factory.repoSecret.create()
 
       const response =
         await request()
@@ -57,7 +57,7 @@ describe('API /repo', () => {
     })
 
     it('saves the objects', async function () {
-      const secret = await factory.create(RepoSecret)
+      const secret = await factory.repoSecret.create()
 
       const response =
         await request()

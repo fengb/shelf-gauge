@@ -20,7 +20,7 @@ describe('API /user/repo', () => {
     it('rejects unaffiliated user', async function () {
       const agent = await authRequest()
 
-      const repo = await factory.create(Repo)
+      const repo = await factory.repo.create()
 
       const response = await agent.post(`/user/repo/${repo.name}/secret`)
 
@@ -30,7 +30,7 @@ describe('API /user/repo', () => {
     it('returns a new secret', async function () {
       const agent = await authRequest()
 
-      const repo = await factory.create(Repo, { users: [agent.user] })
+      const repo = await factory.repo.create({ users: [agent.user] })
 
       const response = await agent.post(`/user/repo/${repo.name}/secret`)
 
