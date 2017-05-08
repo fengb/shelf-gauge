@@ -17,10 +17,21 @@ describe('API /user/repo', () => {
   })
 
   describe('/:repoOrg/:repoName/secret POST', () => {
-    it('returns a new secret', async function () {
+    it('rejects unaffiliated user', async function () {
+      const agent = await authRequest()
+
       const repo = await factory.create(Repo)
 
+      const response = await agent.post(`/user/repo/${repo.name}/secret`)
+
+      expect(response.status).to.equal(HttpStatus.NotFound)
+    })
+
+    it('returns a new secret', async function () {
       const agent = await authRequest()
+
+      const repo = await factory.create(Repo, { users: [agent.user] })
+
       const response = await agent.post(`/user/repo/${repo.name}/secret`)
 
       expect(response.status).to.equal(HttpStatus.Created)

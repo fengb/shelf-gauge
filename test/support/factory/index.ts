@@ -9,11 +9,11 @@ export { default as suiteTest } from './suite-test'
 
 import { Entity } from 'lib/entity'
 
-export function build<T> (constructor: Constructor<Entity & T>, attrs: Partial<T> = {}): T {
+export function build<T extends Entity> (constructor: Constructor<T>, attrs: Partial<T> = {}): T {
   return factoryBuild(constructor, attrs)
 }
 
-export async function create<T> (constructor: Constructor<Entity & T>, attrs: Partial<T> = {}): Promise<T> {
+export async function create<T extends Entity> (constructor: Constructor<T>, attrs: Partial<T> = {}): Promise<T> {
   const conn = await connect()
   const instance = build(constructor, attrs)
   await conn.entityManager.persist(instance)

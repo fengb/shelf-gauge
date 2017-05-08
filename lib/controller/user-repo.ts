@@ -66,7 +66,10 @@ export async function createSecret (ctx: Context) {
   }
 
   const name = `${ctx.params.org}/${ctx.params.name}`
-  const repo = await ctx.conn.entityManager.findOne(Repo, { name })
+  const repo = await ctx.conn.entityManager
+               .createQueryBuilder(Repo, 'repo')
+               .innerJoin('repo.users', 'user')
+               .getOne()
 
   if (!repo) {
     return ctx.throw(HttpStatus.NotFound)

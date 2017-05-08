@@ -1,7 +1,7 @@
 import * as sinon from 'sinon'
 export { sinon }
 
-export { expect } from './chai'
+export { default as chai, expect } from './chai'
 export { request, authRequest, app, HttpStatus } from './server'
 
 import * as db from './db'
