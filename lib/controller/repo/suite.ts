@@ -42,12 +42,11 @@ export async function create (ctx: Context) {
     return ctx.throw(HttpStatus.NotFound)
   }
 
-  const secretValue = ctx.request.body.secret
-  if (!secretValue) {
-    return ctx.throw(HttpStatus.UnprocessableEntity)
-  }
+  const secret = await ctx.conn.entityManager.findOne(RepoSecret, {
+    repo: repo.id,
+    key: ctx.request.body.secret,
+  })
 
-  const secret = await ctx.conn.entityManager.findOne(RepoSecret, { repo: repo.id, key: secretValue })
   if (!secret) {
     return ctx.throw(HttpStatus.UnprocessableEntity)
   }
