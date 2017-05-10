@@ -1,5 +1,4 @@
 import * as Typeorm from 'typeorm'
-import { autoserialize } from 'cerialize'
 import { Suite } from '.'
 
 @Typeorm.Entity()
@@ -12,10 +11,8 @@ export default class SuiteTest {
 
   @Typeorm.Column()
   @Typeorm.Index()
-  @autoserialize
   name: string
 
   @Typeorm.Column()
-  @autoserialize
   value: number
 }

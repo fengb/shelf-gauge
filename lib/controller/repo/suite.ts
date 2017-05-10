@@ -1,6 +1,24 @@
-import { Deserialize, Serialize } from 'cerialize'
 import { Context, HttpStatus } from 'lib/server'
-import { Repo, RepoSecret, Suite, SuiteEnv } from 'lib/entity'
+import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'lib/entity'
+
+import Serializer from 'lib/util/serializer'
+
+const suiteSerializer = new Serializer(Suite, {
+  ref: String,
+  name: String,
+  ranAt: Date,
+  createdAt: Date,
+
+  env: new Serializer(SuiteEnv, {
+    source: String,
+    info: String,
+  }),
+
+  tests: new Serializer.Array(SuiteTest, {
+    name: String,
+    value: Number,
+  })
+})
 
 export async function showAll (ctx: Context) {
   const name = ctx.params.name
@@ -34,11 +52,11 @@ export async function create (ctx: Context) {
     return ctx.throw(HttpStatus.UnprocessableEntity)
   }
 
-  const suite = Deserialize(ctx.request.body, Suite) as Suite
+  const suite = suiteSerializer.deserialize(ctx.request.body)
   suite.createdAt = new Date()
   suite.repoSecret = secret
   await ctx.conn.entityManager.persist(suite)
 
   ctx.status = HttpStatus.Created
-  ctx.body = Serialize(suite)
+  ctx.body = suiteSerializer.serialize(suite)
 }
