@@ -1,4 +1,3 @@
-import { Serialize } from 'cerialize'
 import { expect, request, db, factory, HttpStatus } from 'test/support'
 import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'lib/entity'
 

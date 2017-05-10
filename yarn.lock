@@ -335,12 +335,6 @@ caseless@~0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
 
-cerialize@^0.1.14:
-  version "0.1.14"
-  resolved "https://registry.yarnpkg.com/cerialize/-/cerialize-0.1.14.tgz#42d14cfbe7f3228e0b5da4307f68f64856e8a7cb"
-  dependencies:
-    typescript "^2.1.6"
-
 "chai-http@https://github.com/chaijs/chai-http#3ea4524":
   version "3.0.0"
   resolved "https://github.com/chaijs/chai-http#3ea4524"
@@ -2231,7 +2225,7 @@ typeorm@^0.0.11:
     yargonaut "^1.1.2"
     yargs "^6.6.0"
 
-typescript@^2.1.6, typescript@^2.2.2:
+typescript@^2.2.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.3.2.tgz#f0f045e196f69a72f06b25fd3bd39d01c3ce9984"
 

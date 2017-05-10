@@ -1,9 +1,14 @@
-import { Serialize } from 'cerialize'
 import { Context, HttpStatus } from 'lib/server'
 import { Repo } from 'lib/entity'
+import Serializer from 'lib/util/serializer'
 
 import * as Suite from './suite'
 export { Suite }
+
+const repoSerializer = new Serializer(Repo, {
+  url: String,
+  name: String,
+})
 
 export async function show (ctx: Context) {
   const name = ctx.params.name
@@ -13,5 +18,5 @@ export async function show (ctx: Context) {
     return ctx.throw(HttpStatus.NotFound)
   }
 
-  ctx.body = Serialize(repo)
+  ctx.body = repoSerializer.serialize(repo)
 }
