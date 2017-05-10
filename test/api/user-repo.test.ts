@@ -12,7 +12,8 @@ describe('API /user/repo', () => {
       const response = await agent.get('/user/repo')
 
       expect(response.status).to.equal(HttpStatus.Ok)
-      expect(response.body).to.deep.equal([])
+      expect(response.body).to.containSubset([
+      ])
     })
   })
 

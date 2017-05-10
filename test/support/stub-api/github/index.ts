@@ -10,7 +10,7 @@ const REPOS: { [key: string]: any } = {
 
 export default function stub (sinon: { stub: sinon.SinonStubStatic }) {
   sinon.stub(github.repos, 'getAll')
-       .returns(values(REPOS))
+       .returns(Promise.resolve({ data: values(REPOS) }))
   sinon.stub(github.repos, 'get')
        .callsFake((owner: string, repo: string) => REPOS[`${owner}/${repo}`])
 }

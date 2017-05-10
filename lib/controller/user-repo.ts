@@ -7,6 +7,10 @@ import * as secureRandom from 'lib/util/secure-random'
 
 export const github = new GithubApi()
 
+interface Success<T> {
+  data: T
+}
+
 interface GithubRepo {
   id: number
   name: string
@@ -33,9 +37,12 @@ export async function showAll (ctx: Context) {
     return ctx.redirect('/')
   }
   github.authenticate({ type: 'oauth', token: ctx.state.user.githubToken })
-  const githubRepos = await github.repos.getAll({}) as GithubRepo[]
+  const githubRepos = await github.repos.getAll({
+    sort: "updated",
+    per_page: 100
+  }) as Success<GithubRepo[]>
 
-  ctx.body = filter(githubRepos, 'permissions.admin')
+  ctx.body = filter(githubRepos.data, 'permissions.admin')
 }
 
 export async function create (ctx: Context) {
