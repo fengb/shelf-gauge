@@ -8,22 +8,36 @@ type Constructor<T> = {
   new (): T
 }
 
-type Transform = StringConstructor | BooleanConstructor | NumberConstructor | DateConstructor
-
-interface ISerializer<T> {
-  serialize (instance: T): JsonField
+interface Serializer<T> {
+  serialize (value: T): JsonField
   deserialize (json: JsonField): T
 }
 
-function isSerializer(obj: any): obj is ISerializer<any>{
-  return typeof obj.serialize === 'function' && typeof obj.deserialize === 'function'
+export const STRING: Serializer<string> = {
+  serialize: String,
+  deserialize: String,
 }
 
-class ArraySerializer<T> implements ISerializer<Array<T>> {
-  private serializer: Serializer<T>
+export const BOOLEAN: Serializer<boolean> = {
+  serialize: Boolean,
+  deserialize: Boolean,
+}
 
-  constructor (type: Constructor<T>, transforms: { [P in keyof T]?: Transform | ISerializer<T[P]> }) {
-    this.serializer = new Serializer(type, transforms)
+export const NUMBER: Serializer<number> = {
+  serialize: Number,
+  deserialize: Number,
+}
+
+export const DATE: Serializer<Date> = {
+  serialize: (value) => value.toISOString(),
+  deserialize: (json) => new Date(json as string),
+}
+
+class ArraySerializer<T> implements Serializer<Array<T>> {
+  private serializer: ObjectSerializer<T>
+
+  constructor (type: Constructor<T>, transforms: { [P in keyof T]?: Serializer<T[P]> }) {
+    this.serializer = new ObjectSerializer(type, transforms)
   }
 
   serialize(instances: Array<T>): JsonField {
@@ -35,10 +49,14 @@ class ArraySerializer<T> implements ISerializer<Array<T>> {
   }
 }
 
-class Serializer<T> implements ISerializer<T> {
+export default class ObjectSerializer<T> implements Serializer<T> {
   static Array = ArraySerializer
+  static String = STRING
+  static Boolean = BOOLEAN
+  static Number = NUMBER
+  static Date = DATE
 
-  constructor (private type: Constructor<T>, private transforms: { [P in keyof T]?: Transform | ISerializer<T[P]> }) {
+  constructor (private type: Constructor<T>, private transforms: { [P in keyof T]?: Serializer<T[P]> }) {
   }
 
   serialize (instance: T): Json {
@@ -55,27 +73,11 @@ class Serializer<T> implements ISerializer<T> {
     return json
   }
 
-  serializeField (field: any, transform: Transform | ISerializer<any>): JsonField {
+  serializeField (field: any, transform: Serializer<any>): JsonField {
     if (field == null) {
       return null
     }
-    if (isSerializer(transform)) {
-      return transform.serialize(field)
-    }
-    if (transform === String) {
-      return String(field)
-    }
-    if (transform === Boolean) {
-      return Boolean(field)
-    }
-    if (transform === Number) {
-      return Number(field)
-    }
-    if (transform === Date) {
-      return (field as Date).toISOString()
-    }
-
-    throw new Error(`${this.type.name} ${JSON.stringify(field)}`)
+    return transform.serialize(field as Json)
   }
 
   deserialize (json: Json): T {
@@ -92,32 +94,10 @@ class Serializer<T> implements ISerializer<T> {
     return instance
   }
 
-  deserializeField (field: JsonField, transform: Transform | ISerializer<any>): any {
+  deserializeField (field: JsonField, transform: Serializer<any>): any {
     if (field == null) {
       return null
     }
-    if (isSerializer(transform)) {
-      return transform.deserialize(field as Json)
-    }
-    if (transform === String) {
-      return String(field)
-    }
-    if (transform === Boolean) {
-      return Boolean(field)
-    }
-    if (transform === Number) {
-      return Number(field)
-    }
-    if (transform === Date) {
-      return new Date(field as string)
-    }
-
-    throw new Error(`${this.type.name} ${JSON.stringify(field)}`)
+    return transform.deserialize(field as Json)
   }
 }
-
-declare module Serializer {
-  type Array<T> = ArraySerializer<T>
-}
-
-export default Serializer

@@ -6,8 +6,8 @@ import * as Suite from './suite'
 export { Suite }
 
 const repoSerializer = new Serializer(Repo, {
-  url: String,
-  name: String,
+  url: Serializer.String,
+  name: Serializer.String,
 })
 
 export async function show (ctx: Context) {

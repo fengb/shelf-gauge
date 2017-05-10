@@ -4,19 +4,19 @@ import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'lib/entity'
 import Serializer from 'lib/util/serializer'
 
 const suiteSerializer = new Serializer(Suite, {
-  ref: String,
-  name: String,
-  ranAt: Date,
-  createdAt: Date,
+  ref: Serializer.String,
+  name: Serializer.String,
+  ranAt: Serializer.Date,
+  createdAt: Serializer.Date,
 
   env: new Serializer(SuiteEnv, {
-    source: String,
-    info: String,
+    source: <Serializer<any>>Serializer.String,
+    info: Serializer.String,
   }),
 
   tests: new Serializer.Array(SuiteTest, {
-    name: String,
-    value: Number,
+    name: Serializer.String,
+    value: Serializer.Number,
   })
 })
 
