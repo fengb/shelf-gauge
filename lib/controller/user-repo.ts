@@ -65,7 +65,7 @@ export async function createSecret (ctx: Context) {
     return ctx.redirect('/')
   }
 
-  const name = `${ctx.params.org}/${ctx.params.name}`
+  const name = ctx.params.name
   const repo = await ctx.conn.entityManager
                .createQueryBuilder(Repo, 'repo')
                .innerJoin('repo.users', 'user')

@@ -1,9 +1,9 @@
 import { Deserialize, Serialize } from 'cerialize'
 import { Context, HttpStatus } from 'lib/server'
-import { Repo, RepoSecret, Suite } from 'lib/entity'
+import { Repo, RepoSecret, Suite, SuiteEnv } from 'lib/entity'
 
 export async function showAll (ctx: Context) {
-  const name = `${ctx.params.org}/${ctx.params.name}`
+  const name = ctx.params.name
   const repo = await ctx.conn.entityManager.findOne(Repo, { name })
   if (!repo) {
     return ctx.throw(HttpStatus.NotFound)
@@ -18,7 +18,7 @@ export async function showAll (ctx: Context) {
 }
 
 export async function create (ctx: Context) {
-  const name = `${ctx.params.org}/${ctx.params.name}`
+  const name = ctx.params.name
   const repo = await ctx.conn.entityManager.findOne(Repo, { name })
   if (!repo) {
     return ctx.throw(HttpStatus.NotFound)
