@@ -62,22 +62,15 @@ export default class ObjectSerializer<T> implements Serializer<T> {
   serialize (instance: T): Json {
     const json = {} as Json
     for (const key in this.transforms) {
-      const field = instance[key]
+      const prop = instance[key]
       const transform = this.transforms[key]
-      if (field === undefined || transform == null) {
+      if (prop === undefined || transform == null) {
         continue
       }
 
-      json[key] = this.serializeField(field, transform)
+      json[key] = transform.serialize(prop)
     }
     return json
-  }
-
-  serializeField (field: any, transform: Serializer<any>): JsonField {
-    if (field == null) {
-      return null
-    }
-    return transform.serialize(field as Json)
   }
 
   deserialize (json: Json): T {
@@ -89,15 +82,8 @@ export default class ObjectSerializer<T> implements Serializer<T> {
         continue
       }
 
-      instance[key] = this.deserializeField(field, transform)
+      instance[key] = transform.deserialize(field)
     }
     return instance
-  }
-
-  deserializeField (field: JsonField, transform: Serializer<any>): any {
-    if (field == null) {
-      return null
-    }
-    return transform.deserialize(field as Json)
   }
 }
