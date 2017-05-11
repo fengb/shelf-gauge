@@ -5,6 +5,9 @@
   "repository": "https://github.com/fengb/shelf-gauge",
   "author": "fengb",
   "license": "MIT",
+  "engines": {
+    "node": "7.6.0"
+  },
   "scripts": {
     "start": "node index.js",
     "start-watch": "nodemon index.ts",
