@@ -14,13 +14,13 @@ describe('API /user/repo', () => {
       expect(response.status).to.equal(Http.Success.Ok)
       expect(response.body).to.deep.equal({
         data: [
-          { name: 'shelfgauge/shelfgauge', url: "https://github.com/shelfgauge/shelfgauge" }
+          { name: 'shelfgauge~shelfgauge', url: "https://github.com/shelfgauge/shelfgauge" }
         ]
       })
     })
   })
 
-  describe('/:repoOrg/:repoName/secret POST', () => {
+  describe('/:repoName/secret POST', () => {
     it('rejects unaffiliated user', async function () {
       const agent = await authRequest()
 

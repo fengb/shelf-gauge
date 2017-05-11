@@ -31,7 +31,7 @@ interface GithubRepo {
 
 function asRepo (github: GithubRepo): Repo {
   const repo = new Repo()
-  repo.name = github.full_name
+  repo.name = github.full_name.replace(/\//g, '~')
   repo.url = github.html_url
   return repo
 }

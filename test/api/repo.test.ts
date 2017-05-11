@@ -8,7 +8,7 @@ function asJson (obj: any): any {
 describe('API /repo', () => {
   db.setup()
 
-  describe('/:repoOrg/:repoName GET', () => {
+  describe('/:repoName GET', () => {
     it('returns the repo data', async function () {
       const repo = await factory.repo.create()
       const response =
@@ -20,7 +20,7 @@ describe('API /repo', () => {
     })
   })
 
-  describe('/:repoOrg/:repoName/suite POST', () => {
+  describe('/:repoName/suite POST', () => {
     const data = {
       ref: 'abc123',
       name: 'master',
