@@ -14,7 +14,8 @@ export function setup () {
 export const setupConn = once(() => {
   beforeAll(async function () {
     this.conn = await connect()
-    // await this.conn.syncSchema()
+    await this.conn.dropDatabase()
+    await this.conn.syncSchema()
   })
 })
 
