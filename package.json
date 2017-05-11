@@ -9,6 +9,8 @@
     "node": "7.6.0"
   },
   "scripts": {
+    "build": "tsc",
+    "clobber": "git ls-files -z -i -x '*.ts' | xargs -0 rm",
     "start": "node index.js",
     "start-watch": "nodemon index.ts",
     "test": "mocha",
