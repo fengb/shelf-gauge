@@ -7,7 +7,7 @@ import server from 'lib/server'
 
 import { chai, db } from '.'
 
-export { HttpStatus } from 'lib/server'
+export { Http } from 'lib/server'
 
 export const app = once(() => server.callback())
 

@@ -1,22 +1,17 @@
-import { Context, HttpStatus } from 'lib/server'
+import { Context } from 'lib/server'
 import { Repo } from 'lib/entity'
-import Serializer from 'lib/util/serializer'
+import repoSerializer from 'lib/serializer/repo'
 
 import * as Suite from './suite'
 export { Suite }
-
-const repoSerializer = new Serializer(Repo, {
-  url: Serializer.String,
-  name: Serializer.String,
-})
 
 export async function show (ctx: Context) {
   const name = ctx.params.name
   const repo = await ctx.conn.entityManager.findOne(Repo, { name })
 
   if (!repo) {
-    return ctx.throw(HttpStatus.NotFound)
+    return ctx.renderError('UnprocessableEntity')
   }
 
-  ctx.body = repoSerializer.serialize(repo)
+  ctx.renderSuccess('Ok', repoSerializer.serialize(repo))
 }

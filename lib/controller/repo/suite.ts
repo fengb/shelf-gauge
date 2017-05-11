@@ -1,4 +1,4 @@
-import { Context, HttpStatus } from 'lib/server'
+import { Context } from 'lib/server'
 import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'lib/entity'
 
 import Serializer from 'lib/util/serializer'
@@ -24,7 +24,7 @@ export async function showAll (ctx: Context) {
   const name = ctx.params.name
   const repo = await ctx.conn.entityManager.findOne(Repo, { name })
   if (!repo) {
-    return ctx.throw(HttpStatus.NotFound)
+    return ctx.renderError('NotFound')
   }
 
   const suites = await ctx.conn.entityManager
@@ -39,7 +39,7 @@ export async function create (ctx: Context) {
   const name = ctx.params.name
   const repo = await ctx.conn.entityManager.findOne(Repo, { name })
   if (!repo) {
-    return ctx.throw(HttpStatus.NotFound)
+    return ctx.renderError('NotFound')
   }
 
   const secret = await ctx.conn.entityManager.findOne(RepoSecret, {
@@ -48,14 +48,13 @@ export async function create (ctx: Context) {
   })
 
   if (!secret) {
-    return ctx.throw(HttpStatus.UnprocessableEntity)
+    return ctx.renderError('UnprocessableEntity')
   }
 
-  const suite = suiteSerializer.deserialize(ctx.request.body)
+  const suite = suiteSerializer.deserialize(ctx.request.body.data)
   suite.createdAt = new Date()
   suite.repoSecret = secret
   await ctx.conn.entityManager.persist(suite)
 
-  ctx.status = HttpStatus.Created
-  ctx.body = suiteSerializer.serialize(suite)
+  ctx.renderSuccess('Created', suiteSerializer.serialize(suite))
 }

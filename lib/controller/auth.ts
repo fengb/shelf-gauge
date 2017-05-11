@@ -1,4 +1,4 @@
-import { Context, HttpStatus, Middleware, passport } from 'lib/server'
+import { Context, Middleware, passport } from 'lib/server'
 import { AuthenticateOptions } from 'passport'
 
 const CALLBACK_REDIRECTS: AuthenticateOptions = {

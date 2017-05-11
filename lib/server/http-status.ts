@@ -1,8 +1,10 @@
-enum HttpStatus {
+export enum Information {
   Continue = 100,
   SwitchingProtocols = 101,
   Processing = 102,
+}
 
+export enum Success {
   Ok = 200,
   Created = 201,
   Accepted = 202,
@@ -13,7 +15,9 @@ enum HttpStatus {
   MultiStatus = 207,
   AlreadyReported = 208,
   ImUsed = 226,
+}
 
+export enum Redirect {
   MultipleChoices = 300,
   MovedPermanently = 301,
   Found = 302,
@@ -23,7 +27,9 @@ enum HttpStatus {
   SwitchProxy = 306,
   TemporaryRedirect = 307,
   PermanentRedirect = 308,
+}
 
+export enum Error {
   BadRequest = 400,
   Unauthorized = 401,
   PaymentRequired = 402,
@@ -52,7 +58,9 @@ enum HttpStatus {
   TooManyRequests = 429,
   RequestHeaderFieldsTooLarge = 431,
   UnavailableForLegalReasons = 451,
+}
 
+export enum Fatal {
   InternalServerError = 500,
   NotImplemented = 501,
   BadGateway = 502,
@@ -66,4 +74,4 @@ enum HttpStatus {
   NetworkAuthenticationRequired = 511,
 }
 
-export default HttpStatus
+export type Status = Information | Success | Redirect | Error | Fatal

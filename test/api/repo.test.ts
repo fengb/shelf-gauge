@@ -1,4 +1,4 @@
-import { expect, request, db, factory, HttpStatus } from 'test/support'
+import { expect, request, db, factory, Http } from 'test/support'
 import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'lib/entity'
 
 function asJson (obj: any): any {
@@ -15,8 +15,8 @@ describe('API /repo', () => {
         await request()
               .get(`/repo/${repo.name}`)
 
-      expect(response.status).to.equal(HttpStatus.Ok)
-      expect(response.body).to.deep.equal({ url: repo.url, name: repo.name })
+      expect(response.status).to.equal(Http.Success.Ok)
+      expect(response.body.data).to.deep.equal({ url: repo.url, name: repo.name })
     })
   })
 
@@ -38,9 +38,9 @@ describe('API /repo', () => {
       const response =
         await request()
               .post(`/repo/${secret.repo.name}/suite`)
-              .send(data)
+              .send({ data })
 
-      expect(response.status).to.equal(HttpStatus.UnprocessableEntity)
+      expect(response.status).to.equal(Http.Error.UnprocessableEntity)
     })
 
     it('returns the suite data', async function () {
@@ -49,10 +49,13 @@ describe('API /repo', () => {
       const response =
         await request()
               .post(`/repo/${secret.repo.name}/suite`)
-              .send({...data, secret: secret.key})
+              .send({
+                data,
+                secret: secret.key,
+              })
 
-      expect(response.status).to.equal(HttpStatus.Created)
-      expect(response.body).to.containSubset(asJson(data))
+      expect(response.status).to.equal(Http.Success.Created)
+      expect(response.body.data).to.containSubset(asJson(data))
     })
 
     it('saves the objects', async function () {
@@ -61,7 +64,10 @@ describe('API /repo', () => {
       const response =
         await request()
               .post(`/repo/${secret.repo.name}/suite`)
-              .send({...data, secret: secret.key})
+              .send({
+                data,
+                secret: secret.key,
+              })
 
       const suite = await this.conn!.entityManager.findOne(Suite)
       expect(suite!).to.containSubset({
