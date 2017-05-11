@@ -55,6 +55,7 @@ export default {
   database: {
     url:                str('DATABASE_URL'),
     logging:            bool('DATABASE_LOGGING', false),
+    autoSync:           bool('DATABASE_AUTOSYNC', false),
   },
 
   oauth: {

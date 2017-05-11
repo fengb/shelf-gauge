@@ -36,7 +36,7 @@ connect.options = {
     logSchemaCreation: ENV.database.logging,
   },
   entities: Entities,
-  autoSchemaSync: true,
+  autoSchemaSync: ENV.database.autoSync,
 }
 
 declare module 'koa' {
