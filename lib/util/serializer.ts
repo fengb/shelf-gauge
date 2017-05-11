@@ -1,14 +1,14 @@
-interface Json {
+export interface Json {
   [key: string]: null | string | boolean | number | Array<Json> | Json
 }
 
-type JsonField = null | string | boolean | number | Array<Json> | Json
+export type JsonField = null | string | boolean | number | Array<Json> | Json
 
 type Constructor<T> = {
   new (): T
 }
 
-interface Serializer<T> {
+export interface Serializer<T> {
   serialize (value: T): JsonField
   deserialize (json: JsonField): T
 }

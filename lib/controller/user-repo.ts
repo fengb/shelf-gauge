@@ -101,5 +101,5 @@ export async function createSecret (ctx: Context) {
 
   await ctx.conn.entityManager.persist(secret)
 
-  ctx.renderSuccess('Created', secret)
+  ctx.renderSuccess('Created', { secret: secret.key })
 }
