@@ -97,9 +97,10 @@ export async function createSecret (ctx: Context) {
     return ctx.renderError('Forbidden')
   }
 
-  const secret = ctx.conn.entityManager.create(RepoSecret)
-  secret.key = await secureRandom.base64(40)
-  secret.repo = repo
+  const secret = ctx.conn.entityManager.create(RepoSecret, {
+    key: await secureRandom.base64(40),
+    repo: repo,
+  })
 
   await ctx.conn.entityManager.persist(secret)
 
