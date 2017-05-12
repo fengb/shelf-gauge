@@ -37,7 +37,7 @@ function asRepo (github: GithubRepo): Repo {
   })
 }
 
-export async function showAll (ctx: Context) {
+export async function githubShowAll (ctx: Context) {
   if (!ctx.state.user) {
     return ctx.redirect('/')
   }
@@ -55,21 +55,19 @@ export async function showAll (ctx: Context) {
   ctx.renderSuccess('Ok', repoSerializer.serializeMany(repos))
 }
 
-export async function create (ctx: Context) {
+export async function githubCreate (ctx: Context) {
   if (!ctx.state.user) {
     return ctx.redirect('/')
   }
   github.authenticate({ type: 'oauth', token: ctx.state.user.githubToken })
-  const githubRepo = await github.repos.get({ owner: ctx.params.org, repo: ctx.params.name }) as GithubRepo
+  const [owner, name] = ctx.params.name.split('~')
+  const githubRepo = await github.repos.get({ owner, repo: name }) as GithubRepo
 
   if (!githubRepo || !githubRepo.permissions.admin) {
     return ctx.renderError('UnprocessableEntity')
   }
 
-  const repo = ctx.conn.entityManager.create(Repo)
-
-  repo.name = githubRepo.full_name
-  repo.url = githubRepo.url
+  const repo = asRepo(githubRepo)
   repo.users = [ctx.state.user]
 
   await ctx.conn.entityManager.persist(repo)

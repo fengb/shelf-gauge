@@ -12,7 +12,8 @@ const router =
     .get( '/repo/:source/:name/suite',       C.Repo.Suite.showAll)
     .post('/repo/:source/:name/suite',       C.Repo.Suite.create)
 
-    .get( '/user/repo',                      C.UserRepo.showAll)
+    .get( '/user/repo/github',               C.UserRepo.githubShowAll)
+    .post('/user/repo/github/:name',         C.UserRepo.githubCreate)
     .post('/user/repo/:source/:name/secret', C.UserRepo.createSecret)
 
 if (ENV.test) {

@@ -4,12 +4,12 @@ import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'lib/entity'
 describe('API /user/repo', () => {
   db.setup()
 
-  describe('GET', () => {
+  describe('/github GET', () => {
     it('returns repo data from github', async function () {
       stubApi.github(this.sandbox)
 
       const agent = await authRequest()
-      const response = await agent.get('/user/repo')
+      const response = await agent.get('/user/repo/github')
 
       expect(response.status).to.equal(Http.Success.Ok)
       expect(response.body).to.deep.equal({
