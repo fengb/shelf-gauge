@@ -1,4 +1,4 @@
-import { chain } from 'lodash'
+import { chain, some } from 'lodash'
 import * as GithubApi from 'github'
 
 import repoSerializer from 'lib/serializer/repo'
@@ -80,14 +80,21 @@ export async function createSecret (ctx: Context) {
     return ctx.redirect('/')
   }
 
-  const name = ctx.params.name
   const repo = await ctx.conn.entityManager
                .createQueryBuilder(Repo, 'repo')
-               .innerJoin('repo.users', 'user')
+               .leftJoinAndSelect('repo.users', 'user')
+               .where('repo.source=:source AND repo.name=:name', {
+                 source: ctx.params.source,
+                 name: ctx.params.name,
+               })
                .getOne()
 
   if (!repo) {
     return ctx.renderError('NotFound')
+  }
+
+  if (!some(repo.users, { id: ctx.state.user.id })) {
+    return ctx.renderError('Forbidden')
   }
 
   const secret = ctx.conn.entityManager.create(RepoSecret)

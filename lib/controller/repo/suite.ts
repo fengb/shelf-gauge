@@ -40,8 +40,11 @@ export async function showAll (ctx: Context) {
 }
 
 export async function create (ctx: Context) {
-  const name = ctx.params.name
-  const repo = await ctx.conn.entityManager.findOne(Repo, { name })
+  const repo = await ctx.conn.entityManager.findOne(Repo, {
+    source: ctx.params.source,
+    name: ctx.params.name,
+  })
+
   if (!repo) {
     return ctx.renderError('NotFound')
   }

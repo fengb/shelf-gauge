@@ -28,7 +28,7 @@ describe('API /user/repo', () => {
 
       const response = await agent.post(`/user/repo/${repo.source}/${repo.name}/secret`)
 
-      expect(response.status).to.equal(Http.Error.NotFound)
+      expect(response.status).to.equal(Http.Error.Forbidden)
     })
 
     it('returns a new secret', async function () {
