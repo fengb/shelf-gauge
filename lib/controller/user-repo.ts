@@ -50,12 +50,12 @@ export async function showAll (ctx: Context) {
     per_page: 100
   }) as Success<GithubRepo[]>
 
-  ctx.renderSuccess('Ok',
-    chain(githubRepos.data)
-    .filter('permissions.admin')
-    .map((github) => repoSerializer.serialize(asRepo(github)))
-    .value()
-  )
+  const repos = chain(githubRepos.data)
+                .filter('permissions.admin')
+                .map(asRepo)
+                .value()
+
+  ctx.renderSuccess('Ok', repoSerializer.serializeMany(repos))
 }
 
 export async function create (ctx: Context) {
@@ -77,7 +77,7 @@ export async function create (ctx: Context) {
 
   await ctx.conn.entityManager.persist(repo)
 
-  ctx.body = repo
+  ctx.renderSuccess('Ok', repoSerializer.serialize(repo))
 }
 
 export async function createSecret (ctx: Context) {

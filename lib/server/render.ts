@@ -22,7 +22,7 @@ function renderError (this: Context, status: HttpErrorName, error?: JsonField) {
 }
 
 export default async function (ctx: Context, next: () => Promise<any>) {
-  ctx.renderSuccess = renderSuccess.bind(ctx)
-  ctx.renderError = renderError.bind(ctx)
+  ctx.renderSuccess = renderSuccess
+  ctx.renderError = renderError
   return next()
 }

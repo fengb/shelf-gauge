@@ -31,8 +31,9 @@ export async function showAll (ctx: Context) {
                        .createQueryBuilder(Suite, 'suite')
                        .innerJoin(RepoSecret, 'secret')
                        .where('secret.repo=:repo', { repo: repo.id })
+                       .getMany()
 
-  ctx.body = suites
+  ctx.renderSuccess('Ok', suiteSerializer.serializeMany(suites))
 }
 
 export async function create (ctx: Context) {

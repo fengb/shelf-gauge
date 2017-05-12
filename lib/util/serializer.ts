@@ -73,6 +73,10 @@ export default class ObjectSerializer<T> implements Serializer<T> {
     return json
   }
 
+  serializeMany (instances: T[]): Json[] {
+    return instances.map((instance) => this.serialize(instance))
+  }
+
   deserialize (json: Json): T {
     const instance = new this.type()
     for (const key in this.transforms) {
@@ -85,5 +89,9 @@ export default class ObjectSerializer<T> implements Serializer<T> {
       instance[key] = transform.deserialize(field)
     }
     return instance
+  }
+
+  deserializeMany (json: Json[]): T[] {
+    return json.map((j) => this.deserialize(j))
   }
 }
