@@ -14,19 +14,19 @@ describe('API /user/repo', () => {
       expect(response.status).to.equal(Http.Success.Ok)
       expect(response.body).to.deep.equal({
         data: [
-          { name: 'shelfgauge~shelfgauge', url: "https://github.com/shelfgauge/shelfgauge" }
+          { source: 'github', name: 'shelfgauge~shelfgauge', url: "https://github.com/shelfgauge/shelfgauge" }
         ]
       })
     })
   })
 
-  describe('/:repoName/secret POST', () => {
+  describe('/:source/:name/secret POST', () => {
     it('rejects unaffiliated user', async function () {
       const agent = await authRequest()
 
       const repo = await factory.repo.create()
 
-      const response = await agent.post(`/user/repo/${repo.name}/secret`)
+      const response = await agent.post(`/user/repo/${repo.source}/${repo.name}/secret`)
 
       expect(response.status).to.equal(Http.Error.NotFound)
     })
@@ -36,7 +36,7 @@ describe('API /user/repo', () => {
 
       const repo = await factory.repo.create({ users: [agent.user] })
 
-      const response = await agent.post(`/user/repo/${repo.name}/secret`)
+      const response = await agent.post(`/user/repo/${repo.source}/${repo.name}/secret`)
 
       expect(response.status).to.equal(Http.Success.Created)
 

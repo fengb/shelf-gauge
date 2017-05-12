@@ -8,19 +8,19 @@ function asJson (obj: any): any {
 describe('API /repo', () => {
   db.setup()
 
-  describe('/:repoName GET', () => {
+  describe('/:source/:name GET', () => {
     it('returns the repo data', async function () {
       const repo = await factory.repo.create()
       const response =
         await request()
-              .get(`/repo/${repo.name}`)
+              .get(`/repo/${repo.source}/${repo.name}`)
 
       expect(response.status).to.equal(Http.Success.Ok)
-      expect(response.body.data).to.deep.equal({ url: repo.url, name: repo.name })
+      expect(response.body.data).to.deep.equal({ url: repo.url, source: repo.source, name: repo.name })
     })
   })
 
-  describe('/:repoName/suite POST', () => {
+  describe('/:source/:name/suite POST', () => {
     const data = {
       ref: 'abc123',
       name: 'master',
@@ -37,7 +37,7 @@ describe('API /repo', () => {
 
       const response =
         await request()
-              .post(`/repo/${secret.repo.name}/suite`)
+              .post(`/repo/${secret.repo.source}/${secret.repo.name}/suite`)
               .send({ data })
 
       expect(response.status).to.equal(Http.Error.UnprocessableEntity)
@@ -48,7 +48,7 @@ describe('API /repo', () => {
 
       const response =
         await request()
-              .post(`/repo/${secret.repo.name}/suite`)
+              .post(`/repo/${secret.repo.source}/${secret.repo.name}/suite`)
               .send({
                 data,
                 secret: secret.key,
@@ -63,7 +63,7 @@ describe('API /repo', () => {
 
       const response =
         await request()
-              .post(`/repo/${secret.repo.name}/suite`)
+              .post(`/repo/${secret.repo.source}/${secret.repo.name}/suite`)
               .send({
                 data,
                 secret: secret.key,

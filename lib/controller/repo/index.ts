@@ -6,11 +6,13 @@ import * as Suite from './suite'
 export { Suite }
 
 export async function show (ctx: Context) {
-  const name = ctx.params.name
-  const repo = await ctx.conn.entityManager.findOne(Repo, { name })
+  const repo = await ctx.conn.entityManager.findOne(Repo, {
+    source: ctx.params.source,
+    name: ctx.params.name,
+  })
 
   if (!repo) {
-    return ctx.renderError('UnprocessableEntity')
+    return ctx.renderError('NotFound')
   }
 
   ctx.renderSuccess('Ok', repoSerializer.serialize(repo))

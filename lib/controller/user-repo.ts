@@ -30,17 +30,14 @@ interface GithubRepo {
 }
 
 function asRepo (github: GithubRepo): Repo {
-  const repo = new Repo()
-  repo.name = github.full_name.replace(/\//g, '~')
-  repo.url = github.html_url
-  return repo
+  return Object.assign(new Repo(), {
+    source: 'github',
+    name: github.full_name.replace(/\//g, '~'),
+    url: github.html_url,
+  })
 }
 
 export async function showAll (ctx: Context) {
-  // TODO: why doesn't ctx.user work?
-  console.log(ctx.authInfo)
-  console.log(ctx.user)
-
   if (!ctx.state.user) {
     return ctx.redirect('/')
   }

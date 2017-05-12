@@ -1,6 +1,8 @@
 import * as Typeorm from 'typeorm'
 import { RepoSecret, User } from '.'
 
+export type RepoSource = 'github' | 'manual'
+
 @Typeorm.Entity()
 export default class Repo {
   @Typeorm.PrimaryGeneratedColumn()
@@ -11,7 +13,9 @@ export default class Repo {
   url: string
 
   @Typeorm.Column()
-  @Typeorm.Index({ unique: true })
+  source: RepoSource
+
+  @Typeorm.Column()
   name: string
 
   @Typeorm.OneToMany(type => RepoSecret, secret => secret.repo)
