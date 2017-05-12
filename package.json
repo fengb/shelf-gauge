@@ -1,8 +1,8 @@
 {
-  "name": "shelf-gauge",
+  "name": "shelfgauge",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/fengb/shelf-gauge",
+  "repository": "https://github.com/shelfgauge/shelfgauge",
   "author": "fengb",
   "license": "MIT",
   "engines": {

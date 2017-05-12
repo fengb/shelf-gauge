@@ -4,8 +4,8 @@ import { values } from 'lodash'
 import { github } from 'lib/controller/user-repo'
 
 const REPOS: { [key: string]: any } = {
-  'octocat/Hello-World': require('./octocat--Hello-World.json'),
-  'shelf-gauge/shelf-gauge': require('./shelf-gauge--shelf-gauge.json'),
+  'octocat/Hello-World': require('./octocat~Hello-World.json'),
+  'shelfgauge/shelfgauge': require('./shelfgauge~shelfgauge.json'),
 }
 
 export default function stub (sinon: { stub: sinon.SinonStubStatic }) {
