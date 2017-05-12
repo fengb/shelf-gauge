@@ -1,4 +1,4 @@
-import { expect, sinon, authRequest, db, factory, stubApi, Http } from 'test/support'
+import { expect, sinon, authRequest, db, factory, stubService, Http } from 'test/support'
 import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'lib/entity'
 
 describe('API /user/repo', () => {
@@ -6,7 +6,7 @@ describe('API /user/repo', () => {
 
   describe('/github GET', () => {
     it('returns repo data from github', async function () {
-      stubApi.github(this.sandbox)
+      stubService.github(this.sandbox)
 
       const agent = await authRequest()
       const response = await agent.get('/user/repo/github')
