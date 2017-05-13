@@ -1,4 +1,4 @@
-import { expect, request, db, factory, Http } from 'test/support'
+import { expect, request, db, factory, HttpStatus } from 'test/support'
 import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'lib/entity'
 
 function asJson (obj: any): any {
@@ -15,7 +15,7 @@ describe('API /repo', () => {
         await request()
               .get(`/repo/${repo.source}/${repo.name}`)
 
-      expect(response.status).to.equal(Http.Success.Ok)
+      expect(response.status).to.equal(HttpStatus.Success.Ok)
       expect(response.body.data).to.deep.equal({ url: repo.url, source: repo.source, name: repo.name })
     })
   })
@@ -40,7 +40,7 @@ describe('API /repo', () => {
               .post(`/repo/${secret.repo.source}/${secret.repo.name}/suite`)
               .send({ data })
 
-      expect(response.status).to.equal(Http.Error.UnprocessableEntity)
+      expect(response.status).to.equal(HttpStatus.Error.UnprocessableEntity)
     })
 
     it('returns the suite data', async function () {
@@ -54,7 +54,7 @@ describe('API /repo', () => {
                 secret: secret.key,
               })
 
-      expect(response.status).to.equal(Http.Success.Created)
+      expect(response.status).to.equal(HttpStatus.Success.Created)
       expect(response.body.data).to.containSubset(asJson(data))
     })
 

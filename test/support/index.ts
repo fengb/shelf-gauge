@@ -2,7 +2,7 @@ import * as sinon from 'sinon'
 export { sinon }
 
 export { default as chai, expect } from './chai'
-export { request, authRequest, app, Http } from './server'
+export { request, authRequest, app, HttpStatus } from './server'
 
 import * as db from './db'
 import * as factory from './factory'

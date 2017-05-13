@@ -1,4 +1,4 @@
-import { expect, sinon, authRequest, db, factory, stubService, Http } from 'test/support'
+import { expect, sinon, authRequest, db, factory, stubService, HttpStatus } from 'test/support'
 import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'lib/entity'
 
 describe('API /user/repo', () => {
@@ -11,7 +11,7 @@ describe('API /user/repo', () => {
       const agent = await authRequest()
       const response = await agent.get('/user/repo/github')
 
-      expect(response.status).to.equal(Http.Success.Ok)
+      expect(response.status).to.equal(HttpStatus.Success.Ok)
       expect(response.body).to.deep.equal({
         data: [
           { source: 'github', name: 'shelfgauge~shelfgauge', url: "https://github.com/shelfgauge/shelfgauge" }
@@ -28,7 +28,7 @@ describe('API /user/repo', () => {
 
       const response = await agent.post(`/user/repo/${repo.source}/${repo.name}/secret`)
 
-      expect(response.status).to.equal(Http.Error.Forbidden)
+      expect(response.status).to.equal(HttpStatus.Error.Forbidden)
     })
 
     it('returns a new secret', async function () {
@@ -38,7 +38,7 @@ describe('API /user/repo', () => {
 
       const response = await agent.post(`/user/repo/${repo.source}/${repo.name}/secret`)
 
-      expect(response.status).to.equal(Http.Success.Created)
+      expect(response.status).to.equal(HttpStatus.Success.Created)
 
       const secret = await this.conn!.entityManager.findOne(RepoSecret)
       expect(response.body.data).to.containSubset({ secret: secret!.key })

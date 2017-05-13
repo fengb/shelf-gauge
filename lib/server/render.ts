@@ -1,23 +1,24 @@
-import { Context, Http } from '.'
+import { Context } from '.'
+import * as HttpStatus from 'lib/util/http-status'
 import { JsonField } from 'lib/util/serializer'
 
-type HttpSuccessName = keyof typeof Http.Success
-type HttpErrorName = keyof typeof Http.Error
+type HttpSuccess = keyof typeof HttpStatus.Success
+type HttpError = keyof typeof HttpStatus.Error
 
 declare module 'koa' {
   interface Context {
-    renderSuccess: (status: HttpSuccessName, data: JsonField) => void
-    renderError: (status: HttpErrorName, error?: JsonField) => void
+    renderSuccess: (status: HttpSuccess, data: JsonField) => void
+    renderError: (status: HttpError, error?: JsonField) => void
   }
 }
 
-function renderSuccess (this: Context, status: HttpSuccessName, data: JsonField) {
-  this.status = Http.Success[status]
+function renderSuccess (this: Context, status: HttpSuccess, data: JsonField) {
+  this.status = HttpStatus.Success[status]
   this.body = { data }
 }
 
-function renderError (this: Context, status: HttpErrorName, error?: JsonField) {
-  this.status = Http.Error[status]
+function renderError (this: Context, status: HttpError, error?: JsonField) {
+  this.status = HttpStatus.Error[status]
   this.body = { error }
 }
 

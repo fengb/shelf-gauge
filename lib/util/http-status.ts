@@ -1,4 +1,4 @@
-export enum Information {
+export enum Info {
   Continue = 100,
   SwitchingProtocols = 101,
   Processing = 102,
@@ -74,4 +74,4 @@ export enum Fatal {
   NetworkAuthenticationRequired = 511,
 }
 
-export type Status = Information | Success | Redirect | Error | Fatal
+export type Any = Info | Success | Redirect | Error | Fatal
