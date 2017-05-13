@@ -1,4 +1,4 @@
-import { once } from 'lodash'
+import { once, union } from 'lodash'
 
 export interface Constructor<T> {
    new (): T
@@ -10,7 +10,7 @@ export interface Factory<T> {
 
 export interface Builder<T> {
   (instance: T): {
-    [K in keyof T]: null | (() => T[K])
+    [K in keyof T]?: () => T[K]
   }
 }
 
@@ -19,7 +19,9 @@ function scaffold<T> (attrs: Partial<T>, builder: Builder<T>): T {
 
   const builderContext = builder(cache)
 
-  for (const key in builderContext) {
+  const keys = union(Object.keys(attrs), Object.keys(builderContext))
+
+  for (const key of keys) {
     const build = builderContext[key]
     Object.defineProperty(cache, key, {
       enumerable: true,
