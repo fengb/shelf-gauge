@@ -11,7 +11,9 @@ declare module 'mocha' {
   interface ITestCallbackContext extends MochaExtensions {}
 }
 
-type HookCallback = (this: Mocha.IHookCallbackContext) => Promise<any> | any
+interface HookCallback {
+  (this: Mocha.IHookCallbackContext): Promise<any> | any
+}
 
 function callbackAll (trigger: (callback: HookCallback) => any) {
   let called = false

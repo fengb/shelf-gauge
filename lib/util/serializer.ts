@@ -4,8 +4,12 @@ export interface Json {
 
 export type JsonField = null | string | boolean | number | Array<Json> | Json
 
-type Constructor<T> = {
+interface Constructor<T> {
   new (): T
+}
+
+type ObjectTransform<T> = {
+  [P in keyof T]?: Serializer<T[P]>
 }
 
 export interface Serializer<T> {
@@ -36,7 +40,7 @@ export const DATE: Serializer<Date> = {
 class ArraySerializer<T> implements Serializer<Array<T>> {
   private serializer: ObjectSerializer<T>
 
-  constructor (type: Constructor<T>, transforms: { [P in keyof T]?: Serializer<T[P]> }) {
+  constructor (type: Constructor<T>, transforms: ObjectTransform<T>) {
     this.serializer = new ObjectSerializer(type, transforms)
   }
 
@@ -56,7 +60,7 @@ export default class ObjectSerializer<T> implements Serializer<T> {
   static Number = NUMBER
   static Date = DATE
 
-  constructor (private type: Constructor<T>, private transforms: { [P in keyof T]?: Serializer<T[P]> }) {
+  constructor (private type: Constructor<T>, private transforms: ObjectTransform<T>) {
   }
 
   serialize (instance: T): Json {

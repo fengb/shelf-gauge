@@ -1,10 +1,17 @@
 import { once } from 'lodash'
 
-export type Constructor<T> = new () => T
-export type Factory<T> = (attrs?: Partial<T>) => T
+export interface Constructor<T> {
+   new (): T
+}
 
-export type Builder<T> = (instance: T) => {
-  [K in keyof T]: null | (() => T[K])
+export interface Factory<T> {
+  (attrs?: Partial<T>): T
+}
+
+export interface Builder<T> {
+  (instance: T): {
+    [K in keyof T]: null | (() => T[K])
+  }
 }
 
 function scaffold<T> (attrs: Partial<T>, builder: Builder<T>): T {

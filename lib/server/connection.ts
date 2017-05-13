@@ -6,11 +6,6 @@ import ENV from 'config/env'
 import { Entities } from 'lib/entity'
 import { Context } from '.'
 
-interface Connect {
-  (): Promise<Connection>
-  options?: ConnectionOptions
-}
-
 const TYPES: DriverType[] = ['mysql', 'postgres', 'mariadb', 'sqlite', 'oracle', 'mssql', 'websql']
 
 function driverType (url: string): DriverType {
@@ -23,10 +18,7 @@ function driverType (url: string): DriverType {
   throw new Error(`DB type cannot be found: ${url}`)
 }
 
-export { Connection }
-
-export const connect: Connect = once(() => createConnection(connect.options))
-connect.options = {
+const OPTIONS = {
   driver: {
     url: ENV.database.url,
     type: driverType(ENV.database.url),
@@ -38,6 +30,10 @@ connect.options = {
   entities: Entities,
   autoSchemaSync: ENV.database.autoSync,
 }
+
+export { Connection }
+
+export const connect = once(() => createConnection(OPTIONS))
 
 declare module 'koa' {
   interface Context {
