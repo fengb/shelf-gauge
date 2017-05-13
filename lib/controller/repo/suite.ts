@@ -1,3 +1,4 @@
+import { find } from 'lodash'
 import { Context } from 'lib/server'
 import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'lib/entity'
 
@@ -40,22 +41,22 @@ export async function showAll (ctx: Context) {
 }
 
 export async function create (ctx: Context) {
-  const repo = await ctx.conn.entityManager.findOne(Repo, {
-    source: ctx.params.source,
-    name: ctx.params.name,
-  })
+  const repo = await ctx.conn.entityManager
+               .createQueryBuilder(Repo, 'repo')
+               .leftJoinAndSelect('repo.secrets', 'secret')
+               .where('repo.source=:source AND repo.name=:name', {
+                 source: ctx.params.source,
+                 name: ctx.params.name,
+               })
+               .getOne()
 
   if (!repo) {
     return ctx.renderError('NotFound')
   }
 
-  const secret = await ctx.conn.entityManager.findOne(RepoSecret, {
-    repo: repo.id,
-    key: ctx.request.body.secret,
-  })
-
+  const secret = find(repo.secrets, { key: ctx.request.body.secret })
   if (!secret) {
-    return ctx.renderError('UnprocessableEntity')
+    return ctx.renderError('Forbidden')
   }
 
   const suite = suiteSerializer.deserialize(ctx.request.body.data)

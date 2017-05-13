@@ -32,7 +32,7 @@ describe('API /repo', () => {
       ]
     }
 
-    it('returns 422 on failed', async function () {
+    it('returns 403 on missing secret', async function () {
       const secret = await factory.repoSecret.create()
 
       const response =
@@ -40,7 +40,7 @@ describe('API /repo', () => {
               .post(`/repo/${secret.repo.source}/${secret.repo.name}/suite`)
               .send({ data })
 
-      expect(response.status).to.equal(HttpStatus.Error.UnprocessableEntity)
+      expect(response.status).to.equal(HttpStatus.Error.Forbidden)
     })
 
     it('returns the suite data', async function () {

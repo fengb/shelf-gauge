@@ -1,4 +1,4 @@
-import { assign, once } from 'lodash'
+import { once } from 'lodash'
 
 import ENV from 'config/env'
 
