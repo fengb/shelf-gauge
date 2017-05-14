@@ -5,6 +5,10 @@ const KEY_PREFIX_LENGTH = 6
 
 @Typeorm.Entity()
 export default class RepoSecret {
+  constructor (attrs: Partial<RepoSecret> = {}) {
+    Object.assign(this, attrs)
+  }
+
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 
@@ -25,7 +29,7 @@ export default class RepoSecret {
     return this._key
   }
   set key (value: string) {
-    this.keyPrefix = value.substr(0, 6)
+    this.keyPrefix = value.substr(0, KEY_PREFIX_LENGTH)
     this.encryptedKey = value
     this._key = value
   }

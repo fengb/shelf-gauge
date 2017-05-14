@@ -61,7 +61,7 @@ export async function createSecret (ctx: Context) {
     return ctx.renderError('Forbidden')
   }
 
-  const secret = Object.assign(new RepoSecret(), {
+  const secret = new RepoSecret({
     key: await secureRandom.base64(40),
     repo: repo,
   })
