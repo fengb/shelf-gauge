@@ -1,4 +1,7 @@
 import * as Typeorm from 'typeorm'
+import * as bcrypt from 'bcryptjs'
+
+import ENV from 'config/env'
 import { Repo, User } from '.'
 
 const KEY_PREFIX_LENGTH = 6
@@ -30,12 +33,13 @@ export default class RepoSecret {
   }
   set key (value: string) {
     this.keyPrefix = value.substr(0, KEY_PREFIX_LENGTH)
-    this.encryptedKey = value
+    this.encryptedKey = bcrypt.hashSync(value, ENV.server.bcryptRounds)
     this._key = value
   }
 
   matches (value: string) {
-    return value.startsWith(this.keyPrefix) && this.encryptedKey === value
+    return value.startsWith(this.keyPrefix)
+        && bcrypt.compareSync(value, this.encryptedKey)
   }
 
   @Typeorm.Column({ nullable: true })

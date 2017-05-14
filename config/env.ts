@@ -50,6 +50,7 @@ export default {
   server: {
     port:               num('PORT', 12345),
     secretKeys:         str('SECRET_KEY').split(' '),
+    bcryptRounds:       num('BCRYPT_ROUNDS'),
   },
 
   database: {

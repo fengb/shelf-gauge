@@ -19,11 +19,11 @@ describe('lib/entity/repo-secret', () => {
     })
 
     describe('encryptedKey', function () {
-      // it('is different from key', function () {
-      //   const secret = new RepoSecret({ key: 'foo' })
-      //   expect(secret.encryptedKey).to.be.ok
-      //   expect(secret.encryptedKey).not.to.equal(secret.key)
-      // })
+      it('is different from key', function () {
+        const secret = new RepoSecret({ key: 'foo' })
+        expect(secret.encryptedKey).to.be.ok
+        expect(secret.encryptedKey).not.to.equal(secret.key)
+      })
 
       it('matches key', function () {
         const secret = new RepoSecret({ key: 'foo' })
