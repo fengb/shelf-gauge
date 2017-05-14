@@ -54,7 +54,9 @@ export async function create (ctx: Context) {
     return ctx.renderError('NotFound')
   }
 
-  const secret = find(repo.secrets, { key: ctx.request.body.secret })
+  const requestSecret = String(ctx.request.body.secret)
+  const secret = find(repo.secrets, (secret) => secret.matches(requestSecret))
+
   if (!secret) {
     return ctx.renderError('Forbidden')
   }

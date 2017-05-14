@@ -41,7 +41,8 @@ describe('API /user/repo', () => {
       expect(response.status).to.equal(HttpStatus.Success.Created)
 
       const secret = await this.conn!.entityManager.findOne(RepoSecret)
-      expect(response.body.data).to.containSubset({ secret: secret!.key })
+      expect(response.body.data).to.have.property('secret')
+      expect(secret!.matches(response.body.data.secret)).to.be.true
     })
   })
 })
