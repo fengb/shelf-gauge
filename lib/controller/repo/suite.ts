@@ -55,15 +55,15 @@ export async function create (ctx: Context) {
   }
 
   const requestSecret = String(ctx.request.body.secret)
-  const secret = find(repo.secrets, (secret) => secret.matches(requestSecret))
+  const matching = await Promise.filter(repo.secrets, (secret) => secret.matches(requestSecret))
 
-  if (!secret) {
+  if (!matching.length) {
     return ctx.renderError('Forbidden')
   }
 
   const suite = suiteSerializer.deserialize(ctx.request.body.data)
   suite.createdAt = new Date()
-  suite.repoSecret = secret
+  suite.repoSecret = matching[0]
   await ctx.conn.entityManager.persist(suite)
 
   ctx.renderSuccess('Created', suiteSerializer.serialize(suite))

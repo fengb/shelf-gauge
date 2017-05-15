@@ -66,6 +66,8 @@ export async function createSecret (ctx: Context) {
     repo: repo,
   })
 
+  await secret.settled()
+
   await ctx.conn.entityManager.persist(secret)
 
   ctx.renderSuccess('Created', { secret: secret.key })

@@ -3,6 +3,7 @@ import * as bcrypt from 'bcryptjs'
 
 import ENV from 'config/env'
 import { Repo, User } from '.'
+import * as promise from 'lib/util/promise'
 
 const KEY_PREFIX_LENGTH = 6
 
@@ -33,13 +34,18 @@ export default class RepoSecret {
   }
   set key (value: string) {
     this.keyPrefix = value.substr(0, KEY_PREFIX_LENGTH)
-    this.encryptedKey = bcrypt.hashSync(value, ENV.server.bcryptRounds)
     this._key = value
+    this.settled.set('encryptedKey',
+       bcrypt.hash(value, ENV.server.bcryptRounds)
+       .then((encrypted) => this.encryptedKey = encrypted)
+    )
   }
 
-  matches (value: string) {
+  settled = promise.resolver()
+
+  async matches (value: string) {
     return value.startsWith(this.keyPrefix)
-        && bcrypt.compareSync(value, this.encryptedKey)
+        && bcrypt.compare(value, this.encryptedKey)
   }
 
   @Typeorm.Column({ nullable: true })
