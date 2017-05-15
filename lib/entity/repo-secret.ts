@@ -4,7 +4,7 @@ import * as bcrypt from 'bcryptjs'
 import ENV from 'config/env'
 import { Repo, User } from '.'
 
-const KEY_PREFIX_LENGTH = 6
+const KEY_PREFIX_LENGTH = 4
 
 @Typeorm.Entity()
 export default class RepoSecret {
