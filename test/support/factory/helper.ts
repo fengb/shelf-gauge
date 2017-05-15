@@ -14,15 +14,34 @@ export function sequence (val = 0) {
   return () => val++
 }
 
-export function define<T> (constructor: Constructor<T>, builder: Builder<T>) {
-  const build = factoryDefine(constructor, builder)
+interface OptionalSettled {
+  settled? (): Promise<any>
+}
 
-  async function create (attrs: Partial<T> = {}) {
-    const conn = await connect()
-    const instance = build(attrs)
+export function define<T extends OptionalSettled> (constructor: Constructor<T>, builder: Builder<T>) {
+  const _build = factoryDefine(constructor, builder)
+
+  function build (attrs: Partial<T> = {}): T {
+    const instance = _build(attrs)
+    if (instance.settled) {
+      console.warn('Built a settleable object. Did you mean to use buildAsync?')
+    }
+    return instance
+  }
+
+  async function buildAsync (attrs: Partial<T> = {}): Promise<T> {
+    const instance = _build(attrs)
+    if (instance.settled) {
+      await instance.settled()
+    }
+    return instance
+  }
+
+  async function create (attrs: Partial<T> = {}): Promise<T> {
+    const [conn, instance] = await Promise.all([connect(), buildAsync(attrs)])
     await conn.entityManager.persist(instance)
     return instance
   }
 
-  return { build, create }
+  return { build, buildAsync, create }
 }

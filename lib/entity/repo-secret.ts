@@ -25,7 +25,7 @@ export default class RepoSecret {
   keyPrefix: string
 
   @Typeorm.Column()
-  encryptedKey: string
+  encryptedKey?: string
 
   private _key: string
 
@@ -35,6 +35,8 @@ export default class RepoSecret {
   set key (value: string) {
     this.keyPrefix = value.substr(0, KEY_PREFIX_LENGTH)
     this._key = value
+    this.encryptedKey = undefined
+
     this.settled.set('encryptedKey',
        bcrypt.hash(value, ENV.server.bcryptRounds)
        .then((encrypted) => this.encryptedKey = encrypted)
@@ -43,8 +45,9 @@ export default class RepoSecret {
 
   settled = promise.resolver()
 
-  async matches (value: string) {
+  async matches (value: string): Promise<boolean> {
     return value.startsWith(this.keyPrefix)
+        && this.encryptedKey !== undefined
         && bcrypt.compare(value, this.encryptedKey)
   }
 
