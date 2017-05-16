@@ -1,5 +1,5 @@
 import { expect } from 'test/support'
-import * as iter from 'lib/util/iter'
+import * as iter from 'src/util/iter'
 
 describe('util/iter', () => {
   describe('needsMerge', () => {

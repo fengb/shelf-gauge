@@ -1,6 +1,6 @@
 import { build, define, sequence, randomize, faker } from './helper'
-import { Suite, SuiteEnv } from 'lib/entity'
-import { EnvSource } from 'lib/entity/suite-env'
+import { Suite, SuiteEnv } from 'src/entity'
+import { EnvSource } from 'src/entity/suite-env'
 
 export default define(SuiteEnv, (env) => ({
   suite: () => build(Suite, { env }),

@@ -1,6 +1,6 @@
 import { assign } from 'lodash'
-import { needsAssign } from 'lib/util/iter'
-import { User } from 'lib/entity'
+import { needsAssign } from 'src/util/iter'
+import { User } from 'src/entity'
 import { connect } from '../connection'
 
 export async function fetch (identifier: Partial<User>, updates?: Partial<User>): Promise<User> {

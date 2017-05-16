@@ -1,7 +1,7 @@
 import * as sinon from 'sinon'
 import { values } from 'lodash'
 
-import { API } from 'lib/service/github'
+import { API } from 'src/service/github'
 
 const REPOS: { [key: string]: any } = {
   'octocat/Hello-World': require('./octocat~Hello-World.json'),

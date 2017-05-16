@@ -1,6 +1,6 @@
 import { expect } from 'test/support'
 
-import * as secureRandom from 'lib/util/secure-random'
+import * as secureRandom from 'src/util/secure-random'
 
 describe('util/secure-random', () => {
   describe('base64', () => {

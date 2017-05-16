@@ -1,7 +1,7 @@
 import { expect, db, factory } from 'test/support'
-import RepoSecret from 'lib/entity/repo-secret'
+import RepoSecret from 'src/entity/repo-secret'
 
-describe('lib/entity/repo-secret', () => {
+describe('src/entity/repo-secret', () => {
   describe('key=', () => {
     db.setup()
 

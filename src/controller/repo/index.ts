@@ -1,6 +1,6 @@
-import { Context } from 'lib/server'
-import { Repo } from 'lib/entity'
-import repoSerializer from 'lib/serializer/repo'
+import { Context } from 'src/server'
+import { Repo } from 'src/entity'
+import repoSerializer from 'src/serializer/repo'
 
 import * as Suite from './suite'
 export { Suite }

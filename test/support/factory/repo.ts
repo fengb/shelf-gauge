@@ -1,6 +1,6 @@
 import { build, define, randomize, sequence, faker } from './helper'
-import { Repo } from 'lib/entity'
-import { RepoSource } from 'lib/entity/repo'
+import { Repo } from 'src/entity'
+import { RepoSource } from 'src/entity/repo'
 
 export default define(Repo, () => ({
   url: faker.internet.url,

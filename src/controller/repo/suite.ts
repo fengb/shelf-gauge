@@ -1,8 +1,8 @@
 import { find } from 'lodash'
-import { Context } from 'lib/server'
-import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'lib/entity'
+import { Context } from 'src/server'
+import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'src/entity'
 
-import Serializer from 'lib/util/serializer'
+import Serializer from 'src/util/serializer'
 
 const suiteSerializer = new Serializer(Suite, {
   ref: Serializer.String,

@@ -2,12 +2,12 @@ import { once } from 'lodash'
 
 import ENV from 'config/env'
 
-import { User } from 'lib/entity'
-import server from 'lib/server'
+import { User } from 'src/entity'
+import server from 'src/server'
 
 import { chai, db } from '.'
 
-import * as HttpStatus from 'lib/util/http-status'
+import * as HttpStatus from 'src/util/http-status'
 export { HttpStatus }
 
 export const app = once(() => server.callback())

@@ -1,6 +1,6 @@
 import { Context } from '.'
-import * as HttpStatus from 'lib/util/http-status'
-import { JsonField } from 'lib/util/serializer'
+import * as HttpStatus from 'src/util/http-status'
+import { JsonField } from 'src/util/serializer'
 
 type HttpSuccess = keyof typeof HttpStatus.Success
 type HttpError = keyof typeof HttpStatus.Error

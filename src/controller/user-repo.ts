@@ -1,10 +1,10 @@
 import { chain, some } from 'lodash'
 
-import * as github from 'lib/service/github'
-import repoSerializer from 'lib/serializer/repo'
-import { Context } from 'lib/server'
-import { Repo, RepoSecret } from 'lib/entity'
-import * as secureRandom from 'lib/util/secure-random'
+import * as github from 'src/service/github'
+import repoSerializer from 'src/serializer/repo'
+import { Context } from 'src/server'
+import { Repo, RepoSecret } from 'src/entity'
+import * as secureRandom from 'src/util/secure-random'
 
 export async function githubShowAll (ctx: Context) {
   if (!ctx.state.user) {

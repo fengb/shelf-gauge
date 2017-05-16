@@ -1,5 +1,5 @@
 import * as Github from 'github'
-import { Repo } from 'lib/entity'
+import { Repo } from 'src/entity'
 
 export const API = new Github()
 

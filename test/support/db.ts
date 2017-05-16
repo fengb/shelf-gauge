@@ -1,6 +1,6 @@
 import { once } from 'lodash'
 
-import { connect } from 'lib/server/connection'
+import { connect } from 'src/server/connection'
 import { beforeAll, afterAll } from './mocha'
 
 export { connect }

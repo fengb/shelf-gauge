@@ -1,5 +1,5 @@
 import * as Router from 'koa-router'
-import * as C from 'lib/controller'
+import * as C from 'src/controller'
 
 import ENV from 'config/env'
 

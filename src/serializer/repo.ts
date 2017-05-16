@@ -1,5 +1,5 @@
-import { Repo } from 'lib/entity'
-import Serializer from 'lib/util/serializer'
+import { Repo } from 'src/entity'
+import Serializer from 'src/util/serializer'
 
 export default new Serializer(Repo, {
   url: Serializer.String,

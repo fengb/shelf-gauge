@@ -1,5 +1,5 @@
 import { expect, sinon, authRequest, db, factory, stubService, HttpStatus } from 'test/support'
-import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'lib/entity'
+import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'src/entity'
 
 describe('API /user/repo', () => {
   db.setup()

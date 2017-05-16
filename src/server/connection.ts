@@ -3,7 +3,7 @@ import { DriverType } from 'typeorm/driver/DriverOptions'
 import { once } from 'lodash'
 
 import ENV from 'config/env'
-import { Entities } from 'lib/entity'
+import { Entities } from 'src/entity'
 import { Context } from '.'
 
 const TYPES: DriverType[] = ['mysql', 'postgres', 'mariadb', 'sqlite', 'oracle', 'mssql', 'websql']
