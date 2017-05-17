@@ -5,6 +5,10 @@ import { Repo } from '.'
 
 @Typeorm.Entity()
 export default class RepoCommit {
+  constructor (attrs: Partial<RepoCommit> = {}) {
+    Object.assign(this, attrs)
+  }
+
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 

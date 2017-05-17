@@ -3,6 +3,10 @@ import { RepoSecret, SuiteEnv, SuiteTest, User } from '.'
 
 @Typeorm.Entity()
 export default class Suite {
+  constructor (attrs: Partial<Suite> = {}) {
+    Object.assign(this, attrs)
+  }
+
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 

@@ -5,6 +5,10 @@ export type EnvSource = 'travis' | 'circle' | 'misc'
 
 @Typeorm.Entity()
 export default class SuiteEnv {
+  constructor (attrs: Partial<SuiteEnv> = {}) {
+    Object.assign(this, attrs)
+  }
+
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 

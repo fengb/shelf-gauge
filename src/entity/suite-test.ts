@@ -3,6 +3,10 @@ import { Suite } from '.'
 
 @Typeorm.Entity()
 export default class SuiteTest {
+  constructor (attrs: Partial<SuiteTest> = {}) {
+    Object.assign(this, attrs)
+  }
+
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 

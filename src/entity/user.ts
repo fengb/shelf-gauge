@@ -3,6 +3,10 @@ import { Repo } from '.'
 
 @Typeorm.Entity()
 export default class User {
+  constructor (attrs: Partial<User> = {}) {
+    Object.assign(this, attrs)
+  }
+
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 

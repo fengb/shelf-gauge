@@ -5,6 +5,10 @@ export type RepoSource = 'github' | 'manual'
 
 @Typeorm.Entity()
 export default class Repo {
+  constructor (attrs: Partial<Repo> = {}) {
+    Object.assign(this, attrs)
+  }
+
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 

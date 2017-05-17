@@ -57,7 +57,7 @@ interface GithubCommit extends GithubCommitSummary {
 }
 
 export function toRepo (github: GithubRepo): Repo {
-  return Object.assign(new Repo(), {
+  return new Repo({
     source: 'github',
     name: github.full_name.replace('/', '~'),
     url: github.html_url,
@@ -66,7 +66,7 @@ export function toRepo (github: GithubRepo): Repo {
 
 export function toCommits (github: GithubCommit, repo?: Repo): RepoCommit[] {
   return github.parents.map((parent) => {
-    return Object.assign(new RepoCommit(), {
+    return new RepoCommit({
       repo,
       ref: github.sha,
       parent: parent.sha,
