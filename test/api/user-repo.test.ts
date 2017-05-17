@@ -1,5 +1,5 @@
 import { expect, sinon, authRequest, db, factory, stubService, HttpStatus } from 'test/support'
-import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'src/entity'
+import { Repo, RepoCommit, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'src/entity'
 
 describe('API /user/repo', () => {
   db.setup()
@@ -30,6 +30,20 @@ describe('API /user/repo', () => {
       expect(response.body.data).to.deep.equal({
         source: 'github', name: 'shelfgauge~shelfgauge', url: "https://github.com/shelfgauge/shelfgauge"
       })
+    })
+
+    it('generates commits', async function () {
+      stubService.github(this.sandbox)
+
+      const agent = await authRequest()
+      const response = await agent.post('/user/repo/github')
+                             .send({ name: 'shelfgauge~shelfgauge' })
+
+      const commits = await this.conn!.entityManager.find(RepoCommit)
+      expect(commits).to.containSubset([
+        { "ref": "e81fe5082112520e9757132d03ab3c16fbfc612b", "parent": "d91c23a1500f8d9ddc8b6c900b44ec34e598acfd" },
+        { "ref": "d91c23a1500f8d9ddc8b6c900b44ec34e598acfd", "parent": "39142589cfce622cdcbaf7079f3e6d9898d56d1c" },
+      ])
     })
   })
 

@@ -1,5 +1,5 @@
 import * as Typeorm from 'typeorm'
-import { RepoSecret, User } from '.'
+import { RepoCommit, RepoSecret, User } from '.'
 
 export type RepoSource = 'github' | 'manual'
 
@@ -20,6 +20,9 @@ export default class Repo {
 
   @Typeorm.OneToMany(type => RepoSecret, secret => secret.repo)
   secrets: RepoSecret[]
+
+  @Typeorm.OneToMany(type => RepoCommit, commit => commit.repo)
+  commits: RepoCommit[]
 
   @Typeorm.ManyToMany(type => User, user => user.repos, { cascadeInsert: true })
   users: User[]

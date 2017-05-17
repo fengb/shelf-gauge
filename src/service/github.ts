@@ -1,5 +1,5 @@
 import * as Github from 'github'
-import { Repo } from 'src/entity'
+import { Repo, RepoCommit } from 'src/entity'
 
 export const API = new Github()
 
@@ -61,6 +61,16 @@ export function toRepo (github: GithubRepo): Repo {
     source: 'github',
     name: github.full_name.replace('/', '~'),
     url: github.html_url,
+  })
+}
+
+export function toCommits (github: GithubCommit, repo?: Repo): RepoCommit[] {
+  return github.parents.map((parent) => {
+    return Object.assign(new RepoCommit(), {
+      repo,
+      ref: github.sha,
+      parent: parent.sha,
+    })
   })
 }
 

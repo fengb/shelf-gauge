@@ -17,4 +17,9 @@ export default function stub (sinon: { stub: sinon.SinonStubStatic }) {
     .callsFake(({ owner, repo }) => ({
       data: REPOS[`${owner}/${repo}`]
     }))
+
+  sinon.stub(API.repos, 'getCommits')
+    .callsFake(({ owner, repo }) => ({
+      data: REPOS[`${owner}/${repo}/commits`]
+    }))
 }

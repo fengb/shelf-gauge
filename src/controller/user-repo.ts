@@ -1,4 +1,4 @@
-import { chain, some } from 'lodash'
+import { chain, flatMap, some } from 'lodash'
 
 import * as github from 'src/service/github'
 import repoSerializer from 'src/serializer/repo'
@@ -25,16 +25,22 @@ export async function githubCreate (ctx: Context) {
   if (!ctx.state.user) {
     return ctx.redirect('/')
   }
-  const githubRepo = await github.fetchRepo(ctx.state.user.githubToken, ctx.request.body.name)
+  const responses: any = await Promise.props({
+    repo: github.fetchRepo(ctx.state.user.githubToken, ctx.request.body.name),
+    commits: github.fetchCommits(ctx.state.user.githubToken, ctx.request.body.name),
+  })
 
-  if (!githubRepo.data.permissions.admin) {
+  if (!responses.repo.data.permissions.admin) {
     return ctx.renderError('UnprocessableEntity')
   }
 
-  const repo = github.toRepo(githubRepo.data)
+  const repo = github.toRepo(responses.repo.data)
   repo.users = [ctx.state.user]
 
   await ctx.conn.entityManager.persist(repo)
+  await ctx.conn.entityManager.persist(
+    flatMap(responses.commits.data, (resp) => github.toCommits(resp, repo))
+  )
 
   ctx.renderSuccess('Created', repoSerializer.serialize(repo))
 }
