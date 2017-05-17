@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "clobber": "git ls-files -z -i -x '*.ts' | xargs -0 rm",
+    "clobber": "find . -name node_modules -prune -o -name '*.ts' -print0 | xargs -0 rm",
     "start": "node index.js",
     "start-cluster": "node cluster.js",
     "start-watch": "nodemon index.ts",
