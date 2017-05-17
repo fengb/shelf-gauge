@@ -6,6 +6,7 @@ import { API } from 'src/service/github'
 const REPOS: { [key: string]: any } = {
   'octocat/Hello-World': require('./octocat~Hello-World.json'),
   'shelfgauge/shelfgauge': require('./shelfgauge~shelfgauge.json'),
+  'shelfgauge/shelfgauge/commits': require('./shelfgauge~shelfgauge~commits.json'),
 }
 
 export default function stub (sinon: { stub: sinon.SinonStubStatic }) {
