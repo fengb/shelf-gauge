@@ -10,7 +10,10 @@ const REPOS: { [key: string]: any } = {
 
 export default function stub (sinon: { stub: sinon.SinonStubStatic }) {
   sinon.stub(API.repos, 'getAll')
-       .returns(Promise.resolve({ data: values(REPOS) }))
+    .returns(Promise.resolve({ data: values(REPOS) }))
+
   sinon.stub(API.repos, 'get')
-       .callsFake((owner: string, repo: string) => REPOS[`${owner}/${repo}`])
+    .callsFake(({ owner, repo }) => ({
+      data: REPOS[`${owner}/${repo}`]
+    }))
 }

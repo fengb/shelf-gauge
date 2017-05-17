@@ -25,7 +25,7 @@ export async function githubCreate (ctx: Context) {
   if (!ctx.state.user) {
     return ctx.redirect('/')
   }
-  const githubRepo = await github.fetchRepo(ctx.state.user.githubToken, ctx.params.name)
+  const githubRepo = await github.fetchRepo(ctx.state.user.githubToken, ctx.request.body.name)
 
   if (!githubRepo.data.permissions.admin) {
     return ctx.renderError('UnprocessableEntity')
@@ -36,7 +36,7 @@ export async function githubCreate (ctx: Context) {
 
   await ctx.conn.entityManager.persist(repo)
 
-  ctx.renderSuccess('Ok', repoSerializer.serialize(repo))
+  ctx.renderSuccess('Created', repoSerializer.serialize(repo))
 }
 
 export async function createSecret (ctx: Context) {

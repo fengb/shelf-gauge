@@ -12,10 +12,23 @@ describe('API /user/repo', () => {
       const response = await agent.get('/user/repo/github')
 
       expect(response.status).to.equal(HttpStatus.Success.Ok)
-      expect(response.body).to.deep.equal({
-        data: [
-          { source: 'github', name: 'shelfgauge~shelfgauge', url: "https://github.com/shelfgauge/shelfgauge" }
-        ]
+      expect(response.body.data).to.deep.equal([
+        { source: 'github', name: 'shelfgauge~shelfgauge', url: "https://github.com/shelfgauge/shelfgauge" }
+      ])
+    })
+  })
+
+  describe('/github POST', () => {
+    it('creates a new repo', async function () {
+      stubService.github(this.sandbox)
+
+      const agent = await authRequest()
+      const response = await agent.post('/user/repo/github')
+                             .send({ name: 'shelfgauge~shelfgauge' })
+
+      expect(response.status).to.equal(HttpStatus.Success.Created)
+      expect(response.body.data).to.deep.equal({
+        source: 'github', name: 'shelfgauge~shelfgauge', url: "https://github.com/shelfgauge/shelfgauge"
       })
     })
   })
