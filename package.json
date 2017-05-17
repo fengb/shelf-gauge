@@ -15,7 +15,8 @@
     "start-cluster": "node cluster.js",
     "start-watch": "nodemon index.ts",
     "test": "mocha",
-    "test-watch": "mocha --watch"
+    "test-watch": "mocha --watch",
+    "heroku-postbuild": "yarn build && yarn clobber && yarn install --production"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.0",
