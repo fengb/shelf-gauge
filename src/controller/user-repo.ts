@@ -3,7 +3,7 @@ import { chain, flatMap, some } from 'lodash'
 import * as github from 'src/service/github'
 import repoSerializer from 'src/serializer/repo'
 import { Context } from 'src/server'
-import { Repo, RepoSecret } from 'src/entity'
+import { Repo, RepoAuth } from 'src/entity'
 import * as secureRandom from 'src/util/secure-random'
 
 export async function githubShowAll (ctx: Context) {
@@ -45,7 +45,7 @@ export async function githubCreate (ctx: Context) {
   ctx.renderSuccess('Created', repoSerializer.serialize(repo))
 }
 
-export async function createSecret (ctx: Context) {
+export async function createAuth (ctx: Context) {
   if (!ctx.state.user) {
     return ctx.redirect('/')
   }
@@ -67,12 +67,12 @@ export async function createSecret (ctx: Context) {
     return ctx.renderError('Forbidden')
   }
 
-  const secret = new RepoSecret({
+  const auth = new RepoAuth({
     key: await secureRandom.base64(40),
     repo: repo,
   })
 
-  await ctx.conn.entityManager.persist(secret)
+  await ctx.conn.entityManager.persist(auth)
 
-  ctx.renderSuccess('Created', { secret: secret.key })
+  ctx.renderSuccess('Created', { authorization: auth.key })
 }

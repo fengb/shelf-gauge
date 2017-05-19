@@ -1,5 +1,5 @@
 import { expect, request, db, factory, HttpStatus } from 'test/support'
-import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'src/entity'
+import { Repo, RepoAuth, Suite, SuiteEnv, SuiteTest } from 'src/entity'
 
 function asJson (obj: any): any {
   return JSON.parse(JSON.stringify(obj))
@@ -32,26 +32,26 @@ describe('API /repo', () => {
       ]
     }
 
-    it('returns 403 on missing secret', async function () {
-      const secret = await factory.repoSecret.create()
+    it('returns 403 on missing auth', async function () {
+      const auth = await factory.repoAuth.create()
 
       const response =
         await request()
-              .post(`/repo/${secret.repo.source}/${secret.repo.name}/suite`)
+              .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
               .send({ data })
 
       expect(response.status).to.equal(HttpStatus.Error.Forbidden)
     })
 
     it('returns the suite data', async function () {
-      const secret = await factory.repoSecret.create()
+      const auth = await factory.repoAuth.create()
 
       const response =
         await request()
-              .post(`/repo/${secret.repo.source}/${secret.repo.name}/suite`)
+              .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
               .send({
                 data,
-                secret: secret.key,
+                authorization: auth.key,
               })
 
       expect(response.status).to.equal(HttpStatus.Success.Created)
@@ -59,14 +59,14 @@ describe('API /repo', () => {
     })
 
     it('saves the objects', async function () {
-      const secret = await factory.repoSecret.create()
+      const auth = await factory.repoAuth.create()
 
       const response =
         await request()
-              .post(`/repo/${secret.repo.source}/${secret.repo.name}/suite`)
+              .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
               .send({
                 data,
-                secret: secret.key,
+                authorization: auth.key,
               })
 
       const suite = await this.conn!.entityManager.findOne(Suite)

@@ -1,6 +1,6 @@
 import { find } from 'lodash'
 import { Context } from 'src/server'
-import { Repo, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'src/entity'
+import { Repo, RepoAuth, Suite, SuiteEnv, SuiteTest } from 'src/entity'
 
 import Serializer from 'src/util/serializer'
 
@@ -33,8 +33,8 @@ export async function showAll (ctx: Context) {
 
   const suites = await ctx.conn.entityManager
                        .createQueryBuilder(Suite, 'suite')
-                       .innerJoin(RepoSecret, 'secret')
-                       .where('secret.repo=:repo', { repo: repo.id })
+                       .innerJoin(RepoAuth, 'auth')
+                       .where('auth.repo=:repo', { repo: repo.id })
                        .getMany()
 
   ctx.renderSuccess('Ok', suiteSerializer.serializeMany(suites))
@@ -43,7 +43,7 @@ export async function showAll (ctx: Context) {
 export async function create (ctx: Context) {
   const repo = await ctx.conn.entityManager
                .createQueryBuilder(Repo, 'repo')
-               .leftJoinAndSelect('repo.secrets', 'secret')
+               .leftJoinAndSelect('repo.auths', 'auth')
                .where('repo.source=:source AND repo.name=:name', {
                  source: ctx.params.source,
                  name: ctx.params.name,
@@ -54,16 +54,16 @@ export async function create (ctx: Context) {
     return ctx.renderError('NotFound')
   }
 
-  const requestSecret = String(ctx.request.body.secret)
-  const secret = find(repo.secrets, (secret) => secret.matches(requestSecret))
+  const requestAuth = String(ctx.request.body.authorization)
+  const auth = find(repo.auths, (auth) => auth.matches(requestAuth))
 
-  if (!secret) {
+  if (!auth) {
     return ctx.renderError('Forbidden')
   }
 
   const suite = suiteSerializer.deserialize(ctx.request.body.data)
   suite.createdAt = new Date()
-  suite.repoSecret = secret
+  suite.repoAuth = auth
   await ctx.conn.entityManager.persist(suite)
 
   ctx.renderSuccess('Created', suiteSerializer.serialize(suite))

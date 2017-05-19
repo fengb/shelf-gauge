@@ -1,5 +1,5 @@
 import * as Typeorm from 'typeorm'
-import { RepoSecret, SuiteEnv, SuiteTest, User } from '.'
+import { RepoAuth, SuiteEnv, SuiteTest, User } from '.'
 
 @Typeorm.Entity()
 export default class Suite {
@@ -10,8 +10,8 @@ export default class Suite {
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 
-  @Typeorm.ManyToOne(type => RepoSecret, {nullable: false})
-  repoSecret: RepoSecret
+  @Typeorm.ManyToOne(type => RepoAuth, {nullable: false})
+  repoAuth: RepoAuth
 
   @Typeorm.Column()
   ref: string

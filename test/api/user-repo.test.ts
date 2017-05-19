@@ -1,5 +1,5 @@
 import { expect, sinon, authRequest, db, factory, stubService, HttpStatus } from 'test/support'
-import { Repo, RepoCommit, RepoSecret, Suite, SuiteEnv, SuiteTest } from 'src/entity'
+import { Repo, RepoCommit, RepoAuth, Suite, SuiteEnv, SuiteTest } from 'src/entity'
 
 describe('API /user/repo', () => {
   db.setup()
@@ -47,29 +47,29 @@ describe('API /user/repo', () => {
     })
   })
 
-  describe('/:source/:name/secret POST', () => {
+  describe('/:source/:name/auth POST', () => {
     it('rejects unaffiliated user', async function () {
       const agent = await authRequest()
 
       const repo = await factory.repo.create()
 
-      const response = await agent.post(`/user/repo/${repo.source}/${repo.name}/secret`)
+      const response = await agent.post(`/user/repo/${repo.source}/${repo.name}/auth`)
 
       expect(response.status).to.equal(HttpStatus.Error.Forbidden)
     })
 
-    it('returns a new secret', async function () {
+    it('returns a new auth', async function () {
       const agent = await authRequest()
 
       const repo = await factory.repo.create({ users: [agent.user] })
 
-      const response = await agent.post(`/user/repo/${repo.source}/${repo.name}/secret`)
+      const response = await agent.post(`/user/repo/${repo.source}/${repo.name}/auth`)
 
       expect(response.status).to.equal(HttpStatus.Success.Created)
 
-      const secret = await this.conn!.entityManager.findOne(RepoSecret)
-      expect(response.body.data).to.have.property('secret')
-      expect(secret!.matches(response.body.data.secret)).to.be.true
+      const auth = await this.conn!.entityManager.findOne(RepoAuth)
+      expect(response.body.data).to.have.property('authorization')
+      expect(auth!.matches(response.body.data.authorization)).to.be.true
     })
   })
 })

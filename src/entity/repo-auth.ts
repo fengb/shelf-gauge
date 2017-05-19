@@ -4,11 +4,11 @@ import * as bcrypt from 'bcryptjs'
 import ENV from 'config/env'
 import { Repo, User } from '.'
 
-const KEY_PREFIX_LENGTH = 4
+const PREFIX_LENGTH = 4
 
 @Typeorm.Entity()
-export default class RepoSecret {
-  constructor (attrs: Partial<RepoSecret> = {}) {
+export default class RepoAuth {
+  constructor (attrs: Partial<RepoAuth> = {}) {
     Object.assign(this, attrs)
   }
 
@@ -16,15 +16,15 @@ export default class RepoSecret {
   id: number
 
   // Default nullable: false
-  @Typeorm.ManyToOne(type => Repo, repo => repo.secrets, { nullable: false, cascadeAll: true })
+  @Typeorm.ManyToOne(type => Repo, repo => repo.auths, { nullable: false, cascadeAll: true })
   repo: Repo
 
   @Typeorm.Column()
   @Typeorm.Index()
-  keyPrefix: string
+  prefix: string
 
   @Typeorm.Column()
-  encryptedKey: string
+  encrypted: string
 
   private _key: string
 
@@ -32,14 +32,14 @@ export default class RepoSecret {
     return this._key
   }
   set key (value: string) {
-    this.keyPrefix = value.substr(0, KEY_PREFIX_LENGTH)
-    this.encryptedKey = bcrypt.hashSync(value, ENV.server.bcryptRounds)
+    this.prefix = value.substr(0, PREFIX_LENGTH)
+    this.encrypted = bcrypt.hashSync(value, ENV.server.bcryptRounds)
     this._key = value
   }
 
   matches (value: string) {
-    return value.startsWith(this.keyPrefix)
-        && bcrypt.compareSync(value, this.encryptedKey)
+    return value.startsWith(this.prefix)
+        && bcrypt.compareSync(value, this.encrypted)
   }
 
   @Typeorm.Column({ nullable: true })

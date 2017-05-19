@@ -14,7 +14,7 @@ const router =
 
     .get( '/user/repo/github',               C.UserRepo.githubShowAll)
     .post('/user/repo/github',               C.UserRepo.githubCreate)
-    .post('/user/repo/:source/:name/secret', C.UserRepo.createSecret)
+    .post('/user/repo/:source/:name/auth',   C.UserRepo.createAuth)
 
 if (ENV.test) {
   router.get(ENV.test.auth.callback, C.Auth.oauthFor('mock'))

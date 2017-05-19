@@ -1,5 +1,5 @@
 export { default as repo } from './repo'
-export { default as repoSecret } from './repo-secret'
+export { default as repoAuth } from './repo-auth'
 export { default as suite } from './suite'
 export { default as suiteEnv } from './suite-env'
 export { default as suiteTest } from './suite-test'

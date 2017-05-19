@@ -1,8 +1,8 @@
 import { build, define, sequence, faker } from './helper'
-import { RepoSecret, Suite, SuiteEnv, SuiteTest, User } from 'src/entity'
+import { RepoAuth, Suite, SuiteEnv, SuiteTest, User } from 'src/entity'
 
 export default define(Suite, (suite: Suite) => ({
-  repoSecret: () => build(RepoSecret),
+  repoAuth: () => build(RepoAuth),
   ref: faker.random.uuid,
   name: faker.lorem.slug,
   createdAt: faker.date.recent,
