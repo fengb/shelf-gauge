@@ -36,11 +36,10 @@ export async function githubCreate (ctx: Context) {
 
   const repo = github.toRepo(responses.repo.data)
   repo.users = [ctx.state.user]
+  repo.commits = flatMap(responses.commits.data, github.toCommits) as any
+  console.log(repo.commits)
 
   await ctx.conn.entityManager.persist(repo)
-  await ctx.conn.entityManager.persist(
-    flatMap(responses.commits.data, (resp) => github.toCommits(resp, repo))
-  )
 
   ctx.renderSuccess('Created', repoSerializer.serialize(repo))
 }

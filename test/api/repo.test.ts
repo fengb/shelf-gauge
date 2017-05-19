@@ -69,17 +69,19 @@ describe('API /repo', () => {
                 authorization: auth.key,
               })
 
-      const suite = await this.conn!.entityManager.findOne(Suite)
+      const suite = await this.conn!.entityManager
+                          .createQueryBuilder(Suite, 'suite')
+                          .leftJoinAndSelect('suite.env', 'env')
+                          .leftJoinAndSelect('suite.tests', 'test')
+                          .getOne()
+
       expect(suite!).to.containSubset({
         ref: data.ref,
         name: data.name,
       })
 
-      const env = await this.conn!.entityManager.findOne(SuiteEnv)
-      expect(env!).to.containSubset(data.env)
-
-      const tests = await this.conn!.entityManager.find(SuiteTest)
-      expect(tests).to.containSubset(data.tests)
+      expect(suite!.env).to.containSubset(data.env)
+      expect(suite!.tests).to.containSubset(data.tests)
     })
   })
 })

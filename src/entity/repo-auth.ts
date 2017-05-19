@@ -15,8 +15,7 @@ export default class RepoAuth {
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 
-  // Default nullable: false
-  @Typeorm.ManyToOne(type => Repo, repo => repo.auths, { nullable: false, cascadeAll: true })
+  @Typeorm.ManyToOne(type => Repo, repo => repo.auths, { cascadeAll: true })
   repo: Repo
 
   @Typeorm.Column()

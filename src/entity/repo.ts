@@ -25,7 +25,7 @@ export default class Repo {
   @Typeorm.OneToMany(type => RepoAuth, auth => auth.repo)
   auths: RepoAuth[]
 
-  @Typeorm.OneToMany(type => RepoCommit, commit => commit.repo)
+  @Typeorm.OneToMany(type => RepoCommit, commit => commit.repo, { cascadeInsert: true })
   commits: RepoCommit[]
 
   @Typeorm.ManyToMany(type => User, user => user.repos, { cascadeInsert: true })

@@ -20,6 +20,6 @@ export default class RepoCommit {
   @Typeorm.Index()
   parent: string
 
-  @Typeorm.ManyToOne(type => Repo, repo => repo.commits, { nullable: false })
+  @Typeorm.ManyToOne(type => Repo, repo => repo.commits)
   repo: Repo
 }
