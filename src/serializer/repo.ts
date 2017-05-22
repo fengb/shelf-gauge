@@ -1,8 +1,8 @@
 import { Repo } from 'src/entity'
-import Serializer from 'src/util/serializer'
+import * as Serializer from 'src/util/serializer'
 
-export default new Serializer(Repo, {
-  url: Serializer.String,
-  source: Serializer.String as Serializer<Repo.Source>,
-  name: Serializer.String,
+export default Serializer.object(Repo, {
+  url: Serializer.string(),
+  source: Serializer.string<Repo.Source>(),
+  name: Serializer.string(),
 })

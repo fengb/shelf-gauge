@@ -1,8 +1,8 @@
 export interface Json {
-  [key: string]: null | string | boolean | number | Array<Json> | Json
+  [key: string]: null | string | boolean | number | Json | Json[]
 }
 
-export type JsonField = null | string | boolean | number | Array<Json> | Json
+export type JsonField = null | string | boolean | number | Json | Json[]
 
 interface Constructor<T> {
   new (): T
@@ -17,49 +17,52 @@ export interface Serializer<T> {
   deserialize (json: JsonField): T
 }
 
-export const STRING: Serializer<string> = {
-  serialize: String,
-  deserialize: String,
-}
-
-export const BOOLEAN: Serializer<boolean> = {
-  serialize: Boolean,
-  deserialize: Boolean,
-}
-
-export const NUMBER: Serializer<number> = {
-  serialize: Number,
-  deserialize: Number,
-}
-
-export const DATE: Serializer<Date> = {
-  serialize: (value) => value.toISOString(),
-  deserialize: (json) => new Date(json as string),
-}
-
-class ArraySerializer<T> implements Serializer<Array<T>> {
-  private serializer: ObjectSerializer<T>
-
-  constructor (type: Constructor<T>, transforms: ObjectTransform<T>) {
-    this.serializer = new ObjectSerializer(type, transforms)
-  }
-
-  serialize(instances: Array<T>): JsonField {
-    return instances.map((inst) => this.serializer.serialize(inst))
-  }
-
-  deserialize(json: JsonField): Array<T> {
-    return (json as Array<JsonField>).map((field) => this.serializer.deserialize(field as any))
+export function string<T extends string>(): Serializer<T> {
+  return {
+    serialize: String,
+    deserialize: String as any,
   }
 }
 
-export default class ObjectSerializer<T> implements Serializer<T> {
-  static Array = ArraySerializer
-  static String = STRING
-  static Boolean = BOOLEAN
-  static Number = NUMBER
-  static Date = DATE
+export function boolean<T extends boolean>(): Serializer<T> {
+  return {
+    serialize: Boolean,
+    deserialize: Boolean as any,
+  }
+}
 
+export function number<T extends number>(): Serializer<T> {
+  return {
+    serialize: Number,
+    deserialize: Number as any,
+  }
+}
+
+export function date(): Serializer<Date> {
+  return {
+    serialize: (value) => value.toISOString(),
+    deserialize: (json) => new Date(json as string),
+  }
+}
+
+export function object<T>(constructor: Constructor<T>, transforms: ObjectTransform<T>): ObjectSerializer<T> {
+  return new ObjectSerializer(constructor, transforms)
+}
+
+export function objectArray<T>(constructor: Constructor<T>, transforms: ObjectTransform<T>): Serializer<T[]> {
+  const serializer = object(constructor, transforms)
+  return {
+    serialize (instances: T[]) {
+      return serializer.serializeMany(instances)
+    },
+
+    deserialize (json: JsonField): T[] {
+      return serializer.deserializeMany(json as Json[])
+    }
+  }
+}
+
+class ObjectSerializer<T> implements Serializer<T> {
   constructor (private type: Constructor<T>, private transforms: ObjectTransform<T>) {
   }
 

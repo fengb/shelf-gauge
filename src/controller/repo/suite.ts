@@ -2,22 +2,22 @@ import { find } from 'lodash'
 import { Context } from 'src/server'
 import { Repo, RepoAuth, Suite, SuiteEnv, SuiteTest } from 'src/entity'
 
-import Serializer from 'src/util/serializer'
+import * as Serializer from 'src/util/serializer'
 
-const suiteSerializer = new Serializer(Suite, {
-  ref: Serializer.String,
-  name: Serializer.String,
-  ranAt: Serializer.Date,
-  createdAt: Serializer.Date,
+const suiteSerializer = Serializer.object(Suite, {
+  ref: Serializer.string(),
+  name: Serializer.string(),
+  ranAt: Serializer.date(),
+  createdAt: Serializer.date(),
 
-  env: new Serializer(SuiteEnv, {
-    source: Serializer.String as Serializer<SuiteEnv.Source>,
-    info: Serializer.String,
+  env: Serializer.object(SuiteEnv, {
+    source: Serializer.string<SuiteEnv.Source>(),
+    info: Serializer.string(),
   }),
 
-  tests: new Serializer.Array(SuiteTest, {
-    name: Serializer.String,
-    value: Serializer.Number,
+  tests: Serializer.objectArray(SuiteTest, {
+    name: Serializer.string(),
+    value: Serializer.number(),
   })
 })
 
