@@ -11,7 +11,7 @@ const suiteSerializer = new Serializer(Suite, {
   createdAt: Serializer.Date,
 
   env: new Serializer(SuiteEnv, {
-    source: <Serializer<any>>Serializer.String,
+    source: Serializer.String as Serializer<SuiteEnv.Source>,
     info: Serializer.String,
   }),
 

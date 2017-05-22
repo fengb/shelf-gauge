@@ -4,7 +4,7 @@ import { Suite } from '.'
 export type EnvSource = 'travis' | 'circle' | 'misc'
 
 @Typeorm.Entity()
-export default class SuiteEnv {
+class SuiteEnv {
   constructor (attrs: Partial<SuiteEnv> = {}) {
     Object.assign(this, attrs)
   }
@@ -23,3 +23,9 @@ export default class SuiteEnv {
   @Typeorm.Column('text')
   info: string
 }
+
+declare namespace SuiteEnv {
+  export type Source = EnvSource
+}
+
+export default SuiteEnv

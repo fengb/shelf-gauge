@@ -4,7 +4,7 @@ import { RepoCommit, RepoAuth, User } from '.'
 export type RepoSource = 'github' | 'manual'
 
 @Typeorm.Entity()
-export default class Repo {
+class Repo {
   constructor (attrs: Partial<Repo> = {}) {
     Object.assign(this, attrs)
   }
@@ -31,3 +31,9 @@ export default class Repo {
   @Typeorm.ManyToMany(type => User, user => user.repos, { cascadeInsert: true })
   users: User[]
 }
+
+declare namespace Repo {
+  export type Source = RepoSource
+}
+
+export default Repo

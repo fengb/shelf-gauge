@@ -1,6 +1,5 @@
 import * as Typeorm from 'typeorm'
 
-import ENV from 'config/env'
 import { Repo } from '.'
 
 @Typeorm.Entity()
