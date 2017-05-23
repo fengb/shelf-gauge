@@ -7,11 +7,11 @@ import * as Serializer from 'src/util/serializer'
 const suiteSerializer = Serializer.object(Suite, {
   ref: Serializer.string(),
   name: Serializer.string(),
-  ranAt: Serializer.date(),
-  createdAt: Serializer.date(),
+  ranAt: Serializer.isoDateTime(),
+  createdAt: Serializer.isoDateTime(),
 
   env: Serializer.object(SuiteEnv, {
-    source: Serializer.string<SuiteEnv.Source>(),
+    source: Serializer.string({ only: SuiteEnv.SOURCES }),
     info: Serializer.string(),
   }),
 

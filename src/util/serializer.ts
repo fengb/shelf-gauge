@@ -8,6 +8,10 @@ interface Constructor<T> {
   new (): T
 }
 
+interface AtomParams<T> {
+  only?: T[]
+}
+
 type ObjectTransform<T> = {
   [P in keyof T]?: Serializer<T[P]>
 }
@@ -17,28 +21,28 @@ export interface Serializer<T> {
   deserialize (json: JsonField): T
 }
 
-export function string<T extends string>(): Serializer<T> {
+export function string<T extends string>(params: AtomParams<T> = {}): Serializer<T> {
   return {
     serialize: String,
     deserialize: String as any,
   }
 }
 
-export function boolean<T extends boolean>(): Serializer<T> {
+export function boolean<T extends boolean>(params: AtomParams<T> = {}): Serializer<T> {
   return {
     serialize: Boolean,
     deserialize: Boolean as any,
   }
 }
 
-export function number<T extends number>(): Serializer<T> {
+export function number<T extends number>(params: AtomParams<T> = {}): Serializer<T> {
   return {
     serialize: Number,
     deserialize: Number as any,
   }
 }
 
-export function date(): Serializer<Date> {
+export function isoDateTime(): Serializer<Date> {
   return {
     serialize: (value) => value.toISOString(),
     deserialize: (json) => new Date(json as string),

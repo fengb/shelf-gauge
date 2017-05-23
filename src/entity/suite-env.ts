@@ -5,6 +5,8 @@ export type EnvSource = 'travis' | 'circle' | 'misc'
 
 @Typeorm.Entity()
 class SuiteEnv {
+  static SOURCES = ['travis', 'circle', 'misc'] as EnvSource[]
+
   constructor (attrs: Partial<SuiteEnv> = {}) {
     Object.assign(this, attrs)
   }

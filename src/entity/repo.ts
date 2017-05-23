@@ -5,6 +5,8 @@ export type RepoSource = 'github' | 'manual'
 
 @Typeorm.Entity()
 class Repo {
+  static SOURCES = ['github', 'manual'] as RepoSource[]
+
   constructor (attrs: Partial<Repo> = {}) {
     Object.assign(this, attrs)
   }
