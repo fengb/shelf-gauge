@@ -95,8 +95,8 @@ export function fetchRepo (oauthToken: string, name: string): Promise<Response<G
   return API.repos.get({ owner, repo })
 }
 
-export function fetchCommits (name: string): Promise<Response<GithubCommit[]>> {
+export function fetchCommits (name: string, sha?: string): Promise<Response<GithubCommit[]>> {
   const [owner, repo] = name.split('~')
   API.authenticate({ type: 'oauth', key: ENV.oauth.github.id, secret: ENV.oauth.github.secret })
-  return API.repos.getCommits({ owner, repo, per_page: MAX_PER_PAGE })
+  return API.repos.getCommits({ owner, repo, sha, per_page: MAX_PER_PAGE })
 }

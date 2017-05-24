@@ -1,4 +1,4 @@
-import { expect, request, db, factory, HttpStatus } from 'test/support'
+import { expect, request, db, stub, factory, HttpStatus } from 'test/support'
 import { Repo, RepoAuth, Suite, SuiteEnv, SuiteTest } from 'src/entity'
 
 function asJson (obj: any): any {
@@ -82,6 +82,20 @@ describe('API /repo', () => {
 
       expect(suite!.env).to.containSubset(data.env)
       expect(suite!.tests).to.containSubset(data.tests)
+    })
+
+    it('attempts to load commits', async function () {
+      const auth = await factory.repoAuth.create()
+
+      const response =
+        await request()
+              .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
+              .send({
+                data,
+                authorization: auth.key,
+              })
+
+      expect(stub.job.loadCommits).to.be.calledWithMatch({ name: auth.repo.name }, data.ref)
     })
   })
 })

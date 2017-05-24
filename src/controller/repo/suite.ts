@@ -3,6 +3,7 @@ import { Context } from 'src/server'
 import { Repo, RepoAuth, Suite, SuiteEnv, SuiteTest } from 'src/entity'
 
 import * as Serializer from 'src/util/serializer'
+import loadCommits from 'src/job/load-commits'
 
 const suiteSerializer = Serializer.object(Suite, {
   ref: Serializer.string(),
@@ -65,6 +66,8 @@ export async function create (ctx: Context) {
   suite.createdAt = new Date()
   suite.repoAuth = auth
   await ctx.conn.entityManager.persist(suite)
+
+  loadCommits(repo, suite.ref)
 
   ctx.renderSuccess('Created', suiteSerializer.serialize(suite))
 }
