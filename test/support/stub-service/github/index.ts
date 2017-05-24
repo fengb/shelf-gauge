@@ -1,25 +1,25 @@
 import * as sinon from 'sinon'
 import { values } from 'lodash'
 
-import { API } from 'src/service/github'
+import * as service from 'src/service/github'
 
 const REPOS: { [key: string]: any } = {
-  'octocat/Hello-World': require('./octocat~Hello-World.json'),
-  'shelfgauge/shelfgauge': require('./shelfgauge~shelfgauge.json'),
-  'shelfgauge/shelfgauge/commits': require('./shelfgauge~shelfgauge~commits.json'),
+  'octocat~Hello-World': require('./octocat~Hello-World.json'),
+  'shelfgauge~shelfgauge': require('./shelfgauge~shelfgauge.json'),
+}
+
+const COMMITS: { [key: string]: any } = {
+  'shelfgauge~shelfgauge': require('./shelfgauge~shelfgauge~commits.json'),
 }
 
 export default function stub (sinon: { stub: sinon.SinonStubStatic }) {
-  sinon.stub(API.repos, 'getAll')
-    .returns(Promise.resolve({ data: values(REPOS) }))
-
-  sinon.stub(API.repos, 'get')
-    .callsFake(({ owner, repo }) => ({
-      data: REPOS[`${owner}/${repo}`]
-    }))
-
-  sinon.stub(API.repos, 'getCommits')
-    .callsFake(({ owner, repo }) => ({
-      data: REPOS[`${owner}/${repo}/commits`]
-    }))
+  return {
+    fetchRepos: sinon.stub(service, 'fetchRepos').resolves({ data: values(REPOS) }),
+    fetchRepo: sinon.stub(service, 'fetchRepo').callsFake((token, name) => {
+      return Promise.resolve({ data: REPOS[name] })
+    }),
+    fetchCommits: sinon.stub(service, 'fetchCommits').callsFake((name) => {
+      return Promise.resolve({ data: COMMITS[name] })
+    })
+  }
 }
