@@ -1,9 +1,11 @@
 import { sinon } from 'test/support'
 
+import jobStub from './job'
 import serviceStub from './service'
 
 export function stub (sinon: sinon.SinonSandbox) {
   return {
+    job: jobStub(sinon),
     service: serviceStub(sinon),
   }
 }

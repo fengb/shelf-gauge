@@ -30,13 +30,11 @@ describe('API /user/repo', () => {
     })
 
     it('loads commits', async function () {
-      const spy = this.sandbox.spy(loadCommits, "default")
-
       const agent = await authRequest()
       const response = await agent.post('/user/repo/github')
                              .send({ name: 'shelfgauge~shelfgauge' })
 
-      expect(spy).to.have.been.calledWithMatch({ name: 'shelfgauge~shelfgauge' })
+      expect(stub.job.loadCommits).to.have.been.calledWithMatch({ name: 'shelfgauge~shelfgauge' })
     })
   })
 
