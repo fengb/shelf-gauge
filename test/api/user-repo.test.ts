@@ -1,4 +1,4 @@
-import { expect, sinon, authRequest, db, factory, stubService, HttpStatus } from 'test/support'
+import { expect, sinon, authRequest, db, factory, stub, HttpStatus } from 'test/support'
 import { Repo, RepoCommit, RepoAuth, Suite, SuiteEnv, SuiteTest } from 'src/entity'
 import * as loadCommits from 'src/job/load-commits'
 
@@ -7,8 +7,6 @@ describe('API /user/repo', () => {
 
   describe('/github GET', () => {
     it('returns repo data from github', async function () {
-      stubService.github(this.sandbox)
-
       const agent = await authRequest()
       const response = await agent.get('/user/repo/github')
 
@@ -21,8 +19,6 @@ describe('API /user/repo', () => {
 
   describe('/github POST', () => {
     it('creates a new repo', async function () {
-      stubService.github(this.sandbox)
-
       const agent = await authRequest()
       const response = await agent.post('/user/repo/github')
                              .send({ name: 'shelfgauge~shelfgauge' })
@@ -34,7 +30,6 @@ describe('API /user/repo', () => {
     })
 
     it('loads commits', async function () {
-      stubService.github(this.sandbox)
       const spy = this.sandbox.spy(loadCommits, "default")
 
       const agent = await authRequest()

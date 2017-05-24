@@ -12,7 +12,7 @@ const COMMITS: { [key: string]: any } = {
   'shelfgauge~shelfgauge': require('./shelfgauge~shelfgauge~commits.json'),
 }
 
-export default function stub (sinon: { stub: sinon.SinonStubStatic }) {
+export default function stub (sinon: sinon.SinonSandbox) {
   return {
     fetchRepos: sinon.stub(service, 'fetchRepos').resolves({ data: values(REPOS) }),
     fetchRepo: sinon.stub(service, 'fetchRepo').callsFake((token, name) => {
