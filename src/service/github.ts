@@ -1,5 +1,7 @@
 import ENV from 'config/env'
+
 import * as Github from 'github'
+
 import { Repo, RepoCommit } from 'src/entity'
 
 export const API = new Github()
@@ -65,14 +67,18 @@ export function toRepo (github: GithubRepo): Repo {
   })
 }
 
-export function toCommits (github: GithubCommit, repo?: Repo): RepoCommit[] {
-  return github.parents.map((parent) => {
-    return new RepoCommit({
-      repo,
-      ref: github.sha,
-      parent: parent.sha,
-    })
-  })
+export function toCommits (github: GithubCommit[], repo?: Repo): RepoCommit[] {
+  const commits = [] as RepoCommit[]
+  for (const element of github) {
+    for (const parent of element.parents) {
+      commits.push(new RepoCommit({
+        repo,
+        ref: element.sha,
+        parent: parent.sha,
+      }))
+    }
+  }
+  return commits
 }
 
 export function fetchRepos (oauthToken: string): Promise<Response<GithubRepo[]>> {
