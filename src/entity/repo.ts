@@ -4,6 +4,7 @@ import { RepoCommit, RepoAuth, User } from '.'
 export type RepoSource = 'github' | 'manual'
 
 @Typeorm.Entity()
+@Typeorm.Index(['source', 'name'], { unique: true })
 class Repo {
   static SOURCES = ['github', 'manual'] as RepoSource[]
 
