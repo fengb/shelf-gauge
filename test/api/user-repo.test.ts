@@ -1,4 +1,4 @@
-import { expect, sinon, authRequest, db, factory, stub, HttpStatus } from 'test/support'
+import { expect, sinon, db, factory, server, stub, HttpStatus } from 'test/support'
 import { Repo, RepoCommit, RepoAuth, Suite, SuiteEnv, SuiteTest } from 'src/entity'
 import * as loadCommits from 'src/job/load-commits'
 
@@ -7,7 +7,7 @@ describe('API /user/repo', () => {
 
   describe('/github GET', () => {
     it('returns repo data from github', async function () {
-      const agent = await authRequest()
+      const agent = await server.authRequest()
       const response = await agent.get('/user/repo/github')
 
       expect(response.status).to.equal(HttpStatus.Success.Ok)
@@ -19,7 +19,7 @@ describe('API /user/repo', () => {
 
   describe('/github POST', () => {
     it('creates a new repo', async function () {
-      const agent = await authRequest()
+      const agent = await server.authRequest()
       const response = await agent.post('/user/repo/github')
                              .send({ name: 'shelfgauge~shelfgauge' })
 
@@ -30,7 +30,7 @@ describe('API /user/repo', () => {
     })
 
     it('loads commits', async function () {
-      const agent = await authRequest()
+      const agent = await server.authRequest()
       const response = await agent.post('/user/repo/github')
                              .send({ name: 'shelfgauge~shelfgauge' })
 
@@ -40,7 +40,7 @@ describe('API /user/repo', () => {
 
   describe('/:source/:name/auth POST', () => {
     it('rejects unaffiliated user', async function () {
-      const agent = await authRequest()
+      const agent = await server.authRequest()
 
       const repo = await factory.repo.create()
 
@@ -50,7 +50,7 @@ describe('API /user/repo', () => {
     })
 
     it('returns a new auth', async function () {
-      const agent = await authRequest()
+      const agent = await server.authRequest()
 
       const repo = await factory.repo.create({ users: [agent.user] })
 

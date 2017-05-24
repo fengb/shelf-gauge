@@ -1,4 +1,4 @@
-import { expect, request, db, stub, factory, HttpStatus } from 'test/support'
+import { expect, db, stub, factory, server, HttpStatus } from 'test/support'
 import { Repo, RepoAuth, Suite, SuiteEnv, SuiteTest } from 'src/entity'
 
 function asJson (obj: any): any {
@@ -12,7 +12,7 @@ describe('API /repo', () => {
     it('returns the repo data', async function () {
       const repo = await factory.repo.create()
       const response =
-        await request()
+        await server.request()
               .get(`/repo/${repo.source}/${repo.name}`)
 
       expect(response.status).to.equal(HttpStatus.Success.Ok)
@@ -36,7 +36,7 @@ describe('API /repo', () => {
       const auth = await factory.repoAuth.create()
 
       const response =
-        await request()
+        await server.request()
               .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
               .send({ data })
 
@@ -47,7 +47,7 @@ describe('API /repo', () => {
       const auth = await factory.repoAuth.create()
 
       const response =
-        await request()
+        await server.request()
               .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
               .send({
                 data,
@@ -62,7 +62,7 @@ describe('API /repo', () => {
       const auth = await factory.repoAuth.create()
 
       const response =
-        await request()
+        await server.request()
               .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
               .send({
                 data,
@@ -88,7 +88,7 @@ describe('API /repo', () => {
       const auth = await factory.repoAuth.create()
 
       const response =
-        await request()
+        await server.request()
               .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
               .send({
                 data,

@@ -7,9 +7,6 @@ import server from 'src/server'
 
 import { chai, db } from '.'
 
-import * as HttpStatus from 'src/util/http-status'
-export { HttpStatus }
-
 export const app = once(() => server.callback())
 
 export function request (): ChaiHttp.Agent {
