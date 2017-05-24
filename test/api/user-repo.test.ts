@@ -1,5 +1,6 @@
 import { expect, sinon, authRequest, db, factory, stubService, HttpStatus } from 'test/support'
 import { Repo, RepoCommit, RepoAuth, Suite, SuiteEnv, SuiteTest } from 'src/entity'
+import * as loadCommits from 'src/job/load-commits'
 
 describe('API /user/repo', () => {
   db.setup()
@@ -32,18 +33,15 @@ describe('API /user/repo', () => {
       })
     })
 
-    it('generates commits', async function () {
+    it('loads commits', async function () {
       stubService.github(this.sandbox)
+      const spy = this.sandbox.spy(loadCommits, "fromGithub")
 
       const agent = await authRequest()
       const response = await agent.post('/user/repo/github')
                              .send({ name: 'shelfgauge~shelfgauge' })
 
-      const commits = await this.conn!.entityManager.find(RepoCommit)
-      expect(commits).to.containSubset([
-        { "ref": "e81fe5082112520e9757132d03ab3c16fbfc612b", "parent": "d91c23a1500f8d9ddc8b6c900b44ec34e598acfd" },
-        { "ref": "d91c23a1500f8d9ddc8b6c900b44ec34e598acfd", "parent": "39142589cfce622cdcbaf7079f3e6d9898d56d1c" },
-      ])
+      expect(spy).to.have.been.calledWithMatch({ name: 'shelfgauge~shelfgauge' })
     })
   })
 

@@ -1,10 +1,12 @@
 import * as chai from 'chai'
 
 import subset = require('chai-subset')
-chai.use(subset)
-
 import chaiHttp = require('chai-http')
-chai.use(chaiHttp)
+import sinon = require('sinon-chai')
 
 export default chai
+               .use(subset)
+               .use(chaiHttp)
+               .use(sinon)
+
 export const { expect } = chai
