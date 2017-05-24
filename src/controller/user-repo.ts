@@ -1,6 +1,6 @@
 import { chain, flatMap, some } from 'lodash'
 
-import * as loadCommits from 'src/job/load-commits'
+import loadCommits from 'src/job/load-commits'
 import * as github from 'src/service/github'
 import repoSerializer from 'src/serializer/repo'
 import { Context } from 'src/server'
@@ -36,7 +36,7 @@ export async function githubCreate (ctx: Context) {
   repo.users = [ctx.state.user]
 
   await ctx.conn.entityManager.persist(repo)
-  loadCommits.fromGithub(repo)
+  loadCommits(repo)
 
   ctx.renderSuccess('Created', repoSerializer.serialize(repo))
 }

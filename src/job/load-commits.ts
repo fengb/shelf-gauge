@@ -15,3 +15,11 @@ export async function fromGithub (repo: Repo) {
   await prom.conn.entityManager.persist(commits)
   return commits
 }
+
+export default function (repo: Repo) {
+  if (repo.source === 'github') {
+    return fromGithub(repo)
+  } else {
+    return Promise.reject(new Error(`Cannot load commits for Repo<${repo.name}>`))
+  }
+}

@@ -35,7 +35,7 @@ describe('API /user/repo', () => {
 
     it('loads commits', async function () {
       stubService.github(this.sandbox)
-      const spy = this.sandbox.spy(loadCommits, "fromGithub")
+      const spy = this.sandbox.spy(loadCommits, "default")
 
       const agent = await authRequest()
       const response = await agent.post('/user/repo/github')
