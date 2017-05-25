@@ -19,7 +19,7 @@ interface AuthAgent extends ChaiHttp.Agent {
 
 export async function authRequest (): Promise<AuthAgent> {
   const agent = request() as AuthAgent
-  await agent.get(ENV.test!.auth.callback)
+  await agent.get('/auth/mock')
   // TODO: get the real user
   const conn = await db.connect()
   agent.user = await conn.entityManager.findOne(User) as User

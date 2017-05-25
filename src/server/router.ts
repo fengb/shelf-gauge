@@ -16,8 +16,8 @@ const router =
     .post('/user/repo/github',               C.UserRepo.githubCreate)
     .post('/user/repo/:source/:name/auth',   C.UserRepo.createAuth)
 
-if (ENV.test) {
-  router.get(ENV.test.auth.callback, C.Auth.oauthFor('mock'))
+if (ENV.oauth.mock) {
+  router.get('/auth/mock',                    C.Auth.oauthFor('mock'))
 }
 
 export default router

@@ -8,7 +8,7 @@ function create (): Strategy {
     name: 'mock',
     authenticate (this: any, req, options) {
       if (!req.query.__mock_strategy_callback) {
-        return this.redirect(ENV.test!.auth.callback + '?__mock_strategy_callback=true')
+        return this.redirect('/auth/mock?__mock_strategy_callback=true')
       }
 
       if (this._error) {
@@ -17,7 +17,7 @@ function create (): Strategy {
 
       fetch({ githubId: '12345' }, {
         username: 'test',
-        githubToken: ENV.test!.auth.github,
+        githubToken: 'abcde',
       }).then((user) => {
         this.success(user)
       })
@@ -25,4 +25,4 @@ function create (): Strategy {
   }
 }
 
-export default ENV.test ? create() : undefined
+export default ENV.oauth.mock ? create() : undefined
