@@ -12,11 +12,11 @@ export async function githubShowAll (ctx: Context) {
     return ctx.redirect('/')
   }
 
-  const githubRepos = await github.fetchRepos(ctx.state.user.githubToken)
+  const githubRepos = await github.fetchUserRepos(ctx.state.user.githubToken)
 
   const repos = chain(githubRepos.data)
                 .filter('permissions.admin')
-                .map(github.toRepo)
+                .map((g) => github.toRepo(g))
                 .value()
 
   ctx.renderSuccess('Ok', repoSerializer.serializeMany(repos))
@@ -26,14 +26,15 @@ export async function githubCreate (ctx: Context) {
   if (!ctx.state.user) {
     return ctx.redirect('/')
   }
-  const response = await github.fetchRepo(ctx.state.user.githubToken, ctx.request.body.name)
+  const response = await github.fetchUserRepo(ctx.state.user.githubToken, ctx.request.body.name)
 
   if (!response.data.permissions.admin) {
     return ctx.renderError('UnprocessableEntity')
   }
 
-  const repo = github.toRepo(response.data)
-  repo.users = [ctx.state.user]
+  const repo = github.toRepo(response.data, {
+    users: [ctx.state.user],
+  })
 
   await ctx.conn.entityManager.persist(repo)
   loadCommits(repo)

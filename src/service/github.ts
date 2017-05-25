@@ -59,39 +59,40 @@ interface GithubCommit extends GithubCommitSummary {
   }
 }
 
-export function toRepo (github: GithubRepo): Repo {
+export function toRepo (github: GithubRepo, attrs: Partial<Repo> = {}): Repo {
   return new Repo({
     source: 'github',
     name: github.full_name.replace('/', '~'),
     url: github.html_url,
+    ...attrs,
   })
 }
 
-export function toCommits (github: GithubCommit[], repo?: Repo): RepoCommit[] {
+export function toCommits (github: GithubCommit[], attrs: Partial<RepoCommit> = {}): RepoCommit[] {
   const commits = [] as RepoCommit[]
   for (const element of github) {
     for (const parent of element.parents) {
       commits.push(new RepoCommit({
-        repo,
         ref: element.sha,
         parent: parent.sha,
+        ...attrs,
       }))
     }
   }
   return commits
 }
 
-export function fetchRepos (oauthToken: string): Promise<Response<GithubRepo[]>> {
-  API.authenticate({ type: 'oauth', token: oauthToken })
+export function fetchUserRepos (userToken: string): Promise<Response<GithubRepo[]>> {
+  API.authenticate({ type: 'oauth', token: userToken })
   return API.repos.getAll({
     sort: "updated",
     per_page: MAX_PER_PAGE,
   })
 }
 
-export function fetchRepo (oauthToken: string, name: string): Promise<Response<GithubRepo>> {
+export function fetchUserRepo (userToken: string, name: string): Promise<Response<GithubRepo>> {
   const [owner, repo] = name.split('~')
-  API.authenticate({ type: 'oauth', token: oauthToken })
+  API.authenticate({ type: 'oauth', token: userToken })
   return API.repos.get({ owner, repo })
 }
 

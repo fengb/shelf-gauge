@@ -14,8 +14,8 @@ const COMMITS: { [key: string]: any } = {
 
 export default function stub (sinon: sinon.SinonSandbox) {
   return {
-    fetchRepos: sinon.stub(service, 'fetchRepos').resolves({ data: values(REPOS) }),
-    fetchRepo: sinon.stub(service, 'fetchRepo').callsFake((token, name) => {
+    fetchUserRepos: sinon.stub(service, 'fetchUserRepos').resolves({ data: values(REPOS) }),
+    fetchUserRepo: sinon.stub(service, 'fetchUserRepo').callsFake((token, name) => {
       return Promise.resolve({ data: REPOS[name] })
     }),
     fetchCommits: sinon.stub(service, 'fetchCommits').callsFake((name) => {

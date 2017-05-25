@@ -1,5 +1,5 @@
 export interface Json {
-  [key: string]: null | string | boolean | number | Json | Json[]
+  [key: string]: JsonField
 }
 
 export type JsonField = null | string | boolean | number | Json | Json[]
