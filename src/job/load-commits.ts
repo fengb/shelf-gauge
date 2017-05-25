@@ -1,6 +1,6 @@
 import ENV from 'config/env'
 
-import { map, keyBy, filter } from 'lodash'
+import { map, keyBy, partition } from 'lodash'
 
 import * as github from 'src/service/github'
 import { Repo, RepoCommit } from 'src/entity'
@@ -12,37 +12,25 @@ export async function fromGithub (repo: Repo, ref?: string) {
   return upsert(commits)
 }
 
-function hashify (commit: RepoCommit) {
-  return `${commit.ref}~${commit.parent}`
-}
-
 export async function upsert (commits: RepoCommit[]) {
   const conn = await connect()
   const dbCommits = await conn.entityManager
                     .createQueryBuilder(RepoCommit, 'commit')
-                    .where('commit.ref IN (:refs)', {
-                      refs: map(commits, 'ref'),
-                    })
+                    .where('commit.lookup IN (:lookups)', { lookups: map(commits, 'lookup') })
                     .getMany()
 
-  const lookup = keyBy(dbCommits, hashify)
-  const needSaving = []
-  for (const commit of commits) {
-    const fromDb = lookup[hashify(commit)]
-    if (fromDb) {
-      commit.id = fromDb.id
-    } else {
-      needSaving.push(commit)
-    }
+  const lookup = keyBy(dbCommits, 'lookup')
+  const [existing, needSaving] = partition(commits, (commit) => lookup[commit.lookup])
+  for (const commit of existing) {
+    commit.id = lookup[commit.lookup].id
   }
   await conn.entityManager.persist(needSaving)
   return commits
 }
 
 export default function (repo: Repo, ref?: string) {
-  if (repo.source === 'github') {
-    return fromGithub(repo, ref)
-  } else {
-    return Promise.reject(new Error(`Cannot load commits for Repo<${repo.name}>`))
+  switch (repo.source) {
+    case 'github': return fromGithub(repo, ref)
+    default: return Promise.reject(new Error(`Cannot load commits for Repo<${repo.name}>`))
   }
 }
