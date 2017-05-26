@@ -1,5 +1,6 @@
 import * as Koa from 'koa'
 import * as bodyParser from 'koa-bodyparser'
+const logger = require('koa-logger')
 const error = require('koa-error')
 const session = require('koa-session')
 
@@ -14,6 +15,7 @@ app.keys = ENV.server.secretKeys
 
 export default app
     .use(error())
+    .use(logger())
     .use(bodyParser())
     .use(session(app))
     .use(passport.initialize())
