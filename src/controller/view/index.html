@@ -58,7 +58,7 @@ axios.get('/user/repo/github')
 
 var $repo = $('#repo')
 function selectRepo (name) {
-  axios.post('/user/repo/github', { name: name })
+  axios.get('/user/repo/github/' + name)
     .then(function (response) {
       var repo = response.data.data
       $repo.empty()

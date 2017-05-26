@@ -24,24 +24,33 @@ export async function githubShowAll (ctx: Context) {
   ctx.renderSuccess('Ok', repoSerializer.serializeMany(repos))
 }
 
-export async function githubCreate (ctx: Context) {
+export async function githubShow (ctx: Context) {
   if (!ctx.state.user) {
     return ctx.redirect('/auth')
   }
-  const response = await github.fetchUserRepo(ctx.state.user.githubToken, ctx.request.body.name)
 
-  if (!response.data.permissions.admin) {
-    return ctx.renderError('UnprocessableEntity')
-  }
-
-  const repo = github.toRepo(response.data, {
-    users: [ctx.state.user],
+  let repo = await ctx.conn.entityManager.findOne(Repo, {
+    source: 'github',
+    name: ctx.params.name,
   })
 
-  await ctx.conn.entityManager.persist(repo)
-  loadCommits(repo)
+  if (!repo) {
+    const response = await github.fetchUserRepo(ctx.state.user.githubToken, ctx.params.name)
 
-  ctx.renderSuccess('Created', repoSerializer.serialize(repo))
+    if (!response.data.permissions.admin) {
+      return ctx.renderError('UnprocessableEntity')
+    }
+
+    repo = github.toRepo(response.data, {
+      users: [ctx.state.user],
+    })
+
+    await ctx.conn.entityManager.persist(repo)
+
+    loadCommits(repo)
+  }
+
+  ctx.renderSuccess('Ok', repoSerializer.serialize(repo))
 }
 
 export async function createAuth (ctx: Context) {

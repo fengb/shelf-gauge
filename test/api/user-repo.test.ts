@@ -17,24 +17,35 @@ describe('API /user/repo', () => {
     })
   })
 
-  describe('/github POST', () => {
-    it('creates a new repo', async function () {
+  describe('/github/:name GET', () => {
+    it('fetches an existing repo', async function () {
       const agent = await server.authRequest()
-      const response = await agent.post('/user/repo/github')
-                             .send({ name: 'shelfgauge~shelfgauge' })
+      const existing = await factory.repo.create()
+      const response = await agent.get(`/user/repo/github/${existing.name}`)
 
-      expect(response.status).to.equal(HttpStatus.Success.Created)
+      expect(response.status).to.equal(HttpStatus.Success.Ok)
       expect(response.body.data).to.deep.equal({
-        source: 'github', name: 'shelfgauge~shelfgauge', url: "https://github.com/shelfgauge/shelfgauge"
+        source: existing.source, name: existing.name, url: existing.url
       })
     })
 
-    it('loads commits', async function () {
-      const agent = await server.authRequest()
-      const response = await agent.post('/user/repo/github')
-                             .send({ name: 'shelfgauge~shelfgauge' })
+    describe('missing repo', () => {
+      it('creates a new repo', async function () {
+        const agent = await server.authRequest()
+        const response = await agent.get('/user/repo/github/shelfgauge~shelfgauge')
 
-      expect(stub.job.loadCommits).to.have.been.calledWithMatch({ name: 'shelfgauge~shelfgauge' })
+        expect(response.status).to.equal(HttpStatus.Success.Ok)
+        expect(response.body.data).to.deep.equal({
+          source: 'github', name: 'shelfgauge~shelfgauge', url: "https://github.com/shelfgauge/shelfgauge"
+        })
+      })
+
+      it('loads commits', async function () {
+        const agent = await server.authRequest()
+        const response = await agent.get('/user/repo/github/shelfgauge~shelfgauge')
+
+        expect(stub.job.loadCommits).to.have.been.calledWithMatch({ name: 'shelfgauge~shelfgauge' })
+      })
     })
   })
 
