@@ -58,10 +58,11 @@ axios.get('/user/repo/github')
 
 var $repo = $('#repo')
 function selectRepo (name) {
+  $repo.empty()
+  $auth.empty()
   axios.get('/user/repo/github/' + name)
     .then(function (response) {
       var repo = response.data.data
-      $repo.empty()
       $('<h2></h2>')
         .text(repo.name)
         .appendTo($repo)
@@ -91,10 +92,10 @@ var SAMPLE_REQUEST = `{
 
 var $auth = $('#auth')
 function generateAuth (name) {
+  $auth.empty()
   axios.post('/user/repo/github/' + name + '/auth')
     .then(function (response) {
       var data = response.data.data
-      $auth.empty()
       $('<h3>Sample request</h3>')
         .appendTo($auth)
 
