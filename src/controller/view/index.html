@@ -1,8 +1,95 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <style>
+body {
+  display: flex;
+}
+
+.body-item {
+  flex: 0 0 auto;
+}
+
+code {
+  margin: 8px 0;
+  display: block;
+  white-space: pre;
+}
+
+    </style>
+  </head>
   <body>
+    <div class='body-item' id='repos'></div>
+    <div class='body-item'>
+      <div id='repo'></div>
+      <div id='auth'></div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
+var $repos = $('#repos')
+axios.get('/user/repo/github')
+  .then(function (response) {
+    $repos.empty()
+    response.data.data.forEach(function (repo) {
+      $('<div></div>')
+        .text(repo.name)
+        .click(function () { selectRepo(repo.name) })
+        .appendTo($repos)
+    })
+  })
+
+var $repo = $('#repo')
+function selectRepo (name) {
+  axios.post('/user/repo/github', { name: name })
+    .then(function (response) {
+      var repo = response.data.data
+      $repo.empty()
+      $('<h2></h2>')
+        .text(repo.name)
+        .appendTo($repo)
+
+      $('<button>CREATE AUTH</button>')
+        .click(function () { generateAuth(repo.name) })
+        .appendTo($repo)
+    })
+}
+
+var SAMPLE_REQUEST = `{
+  "authorization": "$auth",
+  "data": {
+    "ref": "[sha]",
+    "name": "[branch]",
+    "ranAt": "[ISO date]",
+    "env": {
+      "source": "<travis or circle>",
+      "info": "[exec env]"
+    },
+    "tests": [
+      { "name": "time", "value": 100 },
+      { "name": "filesize", "value": 200 }
+    ]
+  }
+}`
+
+var $auth = $('#auth')
+function generateAuth (name) {
+  axios.post('/user/repo/github/' + name + '/auth')
+    .then(function (response) {
+      var auth = response.data.data.authorization
+      $auth.empty()
+      $('<h3>Sample request</h3>')
+        .appendTo($auth)
+
+      $('<code/>')
+        .text('POST http://shelfgauge.herokuapp.com/repo/github/' + name)
+        .appendTo($auth)
+
+      $('<code/>')
+        .text(SAMPLE_REQUEST.replace('$auth', auth))
+        .appendTo($auth)
+    })
+}
     </script>
   </body>
 </html>
