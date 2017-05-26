@@ -35,6 +35,7 @@ function bool (key: string, defawlt?: boolean): boolean {
 
 export default {
   server: {
+    baseUrl:            str('BASE_URL'),
     port:               num('PORT', 12345),
     secretKeys:         str('SECRET_KEY').split(' '),
     bcryptRounds:       num('BCRYPT_ROUNDS'),
@@ -47,7 +48,6 @@ export default {
   },
 
   oauth: {
-    serverCallback:     str('OAUTH_SERVER_CALLBACK'),
     mock:               bool('OAUTH_MOCK', false),
     github: {
       id:               str('OAUTH_GITHUB_ID'),

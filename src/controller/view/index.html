@@ -10,6 +10,18 @@ body {
   flex: 0 0 auto;
 }
 
+.repo-menuitem {
+  cursor: pointer;
+}
+
+.repo-menuitem.active {
+  background-color: #cccccc;
+}
+
+.repo-menuitem:hover {
+  background-color: #aaaaaa;
+}
+
 code {
   margin: 8px 0;
   display: block;
@@ -28,13 +40,18 @@ code {
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
 var $repos = $('#repos')
+$repos.click('.repo-menuitem', function (evt) {
+  var $repoMenuitem = $(evt.target)
+  $('.repo-menuitem').removeClass('active')
+  $repoMenuitem.addClass('active')
+  selectRepo($repoMenuitem.text())
+})
 axios.get('/user/repo/github')
   .then(function (response) {
     $repos.empty()
     response.data.data.forEach(function (repo) {
-      $('<div></div>')
+      $('<div class="repo-menuitem"></div>')
         .text(repo.name)
-        .click(function () { selectRepo(repo.name) })
         .appendTo($repos)
     })
   })
@@ -62,12 +79,12 @@ var SAMPLE_REQUEST = `{
     "name": "[branch]",
     "ranAt": "[ISO date]",
     "env": {
-      "source": "<travis or circle>",
+      "source": "<travis | circle>",
       "info": "[exec env]"
     },
     "tests": [
-      { "name": "time", "value": 100 },
-      { "name": "filesize", "value": 200 }
+      { "name": "[test name]", "value": [number] },
+      { "name": "[test name]", "value": [number] }
     ]
   }
 }`
@@ -76,17 +93,17 @@ var $auth = $('#auth')
 function generateAuth (name) {
   axios.post('/user/repo/github/' + name + '/auth')
     .then(function (response) {
-      var auth = response.data.data.authorization
+      var data = response.data.data
       $auth.empty()
       $('<h3>Sample request</h3>')
         .appendTo($auth)
 
       $('<code/>')
-        .text('POST http://shelfgauge.herokuapp.com/repo/github/' + name)
+        .text(data.method + ' ' + data.url)
         .appendTo($auth)
 
       $('<code/>')
-        .text(SAMPLE_REQUEST.replace('$auth', auth))
+        .text(SAMPLE_REQUEST.replace('$auth', data.authorization))
         .appendTo($auth)
     })
 }

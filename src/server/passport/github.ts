@@ -6,7 +6,7 @@ import { fetch } from './user'
 const OPTIONS: StrategyOption = {
   clientID: ENV.oauth.github.id,
   clientSecret: ENV.oauth.github.secret,
-  callbackURL: ENV.oauth.serverCallback + '/auth/github'
+  callbackURL: ENV.server.baseUrl + '/auth/github'
 }
 
 export default new Strategy(OPTIONS, (accessToken, refreshToken, profile, done) => {

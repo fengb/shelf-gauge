@@ -1,5 +1,7 @@
 import { chain, flatMap, some } from 'lodash'
 
+import ENV from 'config/env'
+
 import loadCommits from 'src/job/load-commits'
 import * as github from 'src/service/github'
 import repoSerializer from 'src/serializer/repo'
@@ -71,5 +73,9 @@ export async function createAuth (ctx: Context) {
 
   await ctx.conn.entityManager.persist(auth)
 
-  ctx.renderSuccess('Created', { authorization: auth.key })
+  ctx.renderSuccess('Created', {
+    authorization: auth.key,
+    method: 'POST',
+    url: `${ENV.server.baseUrl}/repo/${repo.source}/${repo.name}/suite`,
+  })
 }
