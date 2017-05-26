@@ -9,7 +9,7 @@ import * as secureRandom from 'src/util/secure-random'
 
 export async function githubShowAll (ctx: Context) {
   if (!ctx.state.user) {
-    return ctx.redirect('/')
+    return ctx.redirect('/auth')
   }
 
   const githubRepos = await github.fetchUserRepos(ctx.state.user.githubToken)
@@ -24,7 +24,7 @@ export async function githubShowAll (ctx: Context) {
 
 export async function githubCreate (ctx: Context) {
   if (!ctx.state.user) {
-    return ctx.redirect('/')
+    return ctx.redirect('/auth')
   }
   const response = await github.fetchUserRepo(ctx.state.user.githubToken, ctx.request.body.name)
 
@@ -44,7 +44,7 @@ export async function githubCreate (ctx: Context) {
 
 export async function createAuth (ctx: Context) {
   if (!ctx.state.user) {
-    return ctx.redirect('/')
+    return ctx.redirect('/auth')
   }
 
   const repo = await ctx.conn.entityManager

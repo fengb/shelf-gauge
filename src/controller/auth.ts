@@ -2,8 +2,8 @@ import { Context, Middleware, passport } from 'src/server'
 import { AuthenticateOptions } from 'passport'
 
 const CALLBACK_REDIRECTS: AuthenticateOptions = {
-  successRedirect: '/user',
-  failureRedirect: '/',
+  successRedirect: '/',
+  failureRedirect: '/auth',
 }
 
 export async function signOut (ctx: Context) {

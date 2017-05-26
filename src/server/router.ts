@@ -5,6 +5,8 @@ import ENV from 'config/env'
 
 const router =
   new Router()
+    .get( '/',                               C.View.index)
+    .redirect('/auth', '/auth/github')
     .get( '/auth/github',                    C.Auth.oauthFor('github'))
 
     .get( '/repo/:source/:name',             C.Repo.show)
