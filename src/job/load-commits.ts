@@ -8,7 +8,7 @@ import { connect } from 'src/server/connection'
 
 export async function fromGithub (repo: Repo, ref?: string) {
   const response = await github.fetchCommits(repo.name, ref)
-  const commits = github.toCommits(response.data, repo)
+  const commits = github.toCommits(response.data, { repo })
   return upsert(commits)
 }
 
