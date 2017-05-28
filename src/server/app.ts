@@ -5,6 +5,7 @@ const error = require('koa-error')
 const session = require('koa-session')
 
 import ENV from 'config/env'
+import monitor from './monitor'
 import passport from './passport'
 import connection from './connection'
 import router from './router'
@@ -14,6 +15,7 @@ const app = new Koa()
 app.keys = ENV.server.secretKeys
 
 export default app
+    .use(monitor(app))
     .use(error())
     .use(logger())
     .use(bodyParser())

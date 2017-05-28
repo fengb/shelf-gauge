@@ -34,11 +34,17 @@ function bool (key: string, defawlt?: boolean): boolean {
 }
 
 export default {
+  nodeEnv:              str('NODE_ENV'),
+
   server: {
     baseUrl:            str('BASE_URL'),
     port:               num('PORT', 12345),
     secretKeys:         str('SECRET_KEY').split(' '),
     bcryptRounds:       num('BCRYPT_ROUNDS'),
+  },
+
+  monitor: {
+    rollbarToken:       str('MONITOR_ROLLBAR_TOKEN', ''),
   },
 
   database: {

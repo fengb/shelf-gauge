@@ -67,6 +67,7 @@
     "passport-github": "^1.1.0",
     "pg": "^6.1.5",
     "reflect-metadata": "^0.1.10",
+    "rollbar": "^2.0.2",
     "strong-cluster-control": "^2.2.3",
     "typeorm": "^0.0.11"
   }
