@@ -28,6 +28,7 @@
     "@types/faker": "^4.1.0",
     "@types/koa": "^2.0.39",
     "@types/koa-bodyparser": "^3.0.23",
+    "@types/koa-logger": "^2.0.2",
     "@types/koa-passport": "^2.0.4",
     "@types/koa-router": "^7.0.22",
     "@types/lodash": "^4.14.64",
@@ -51,7 +52,6 @@
     "typescript": "^2.2.2"
   },
   "dependencies": {
-    "@types/koa-logger": "^2.0.2",
     "app-module-path": "^2.2.0",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.0",
