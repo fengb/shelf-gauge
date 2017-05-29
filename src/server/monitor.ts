@@ -4,10 +4,6 @@ const Rollbar = require('rollbar')
 import ENV from 'config/env'
 import { Context } from '.'
 
-async function noopMiddleware (ctx: Context, next: () => Promise<any>) {
-  return next()
-}
-
 function rollbar(app: Koa, accessToken: string) {
   const rollbar = new Rollbar({
     accessToken: accessToken,
@@ -29,10 +25,8 @@ function rollbar(app: Koa, accessToken: string) {
   }
 }
 
-export default (app: Koa): Koa.Middleware => {
+export default (app: Koa): Koa.Middleware | undefined => {
   if (ENV.monitor.rollbarToken) {
     return rollbar(app, ENV.monitor.rollbarToken)
   }
-
-  return noopMiddleware
 }

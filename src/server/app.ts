@@ -1,4 +1,6 @@
 import * as Koa from 'koa'
+import { filter } from 'lodash'
+
 import * as bodyParser from 'koa-bodyparser'
 const logger = require('koa-logger')
 const error = require('koa-error')
@@ -14,15 +16,22 @@ import render from './render'
 const app = new Koa()
 app.keys = ENV.server.secretKeys
 
+const middlewares: Koa.Middleware[] = filter([
+  monitor(app),
+  error(),
+  ENV.server.useLogger && logger(),
+  bodyParser(),
+  session(app),
+  passport.initialize(),
+  passport.session(),
+  connection,
+  render,
+  router.routes(),
+  router.allowedMethods(),
+])
+
+for (const middleware of middlewares) {
+  app.use(middleware)
+}
+
 export default app
-    .use(monitor(app))
-    .use(error())
-    .use(logger())
-    .use(bodyParser())
-    .use(session(app))
-    .use(passport.initialize())
-    .use(passport.session())
-    .use(connection)
-    .use(render)
-    .use(router.routes())
-    .use(router.allowedMethods())
