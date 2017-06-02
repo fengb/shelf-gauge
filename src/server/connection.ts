@@ -18,7 +18,7 @@ function driverType (url: string): DriverType {
   throw new Error(`DB type cannot be found: ${url}`)
 }
 
-const OPTIONS = {
+const OPTIONS: ConnectionOptions = {
   driver: {
     url: ENV.database.url,
     type: driverType(ENV.database.url),

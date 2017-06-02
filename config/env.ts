@@ -38,6 +38,7 @@ export default {
 
   server: {
     baseUrl:            str('BASE_URL'),
+    clusterSize:        num('CLUSTER_SIZE', 2),
     port:               num('PORT', 12345),
     secretKeys:         str('SECRET_KEY').split(' '),
     bcryptRounds:       num('BCRYPT_ROUNDS'),
