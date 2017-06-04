@@ -1,6 +1,7 @@
 import ENV from 'config/env'
 
 import * as Github from 'github'
+import * as winston from 'winston'
 
 import { Repo, RepoCommit } from 'src/entity'
 
@@ -59,6 +60,11 @@ interface GithubCommit extends GithubCommitSummary {
   }
 }
 
+function log<T> (context: string, response: Response<T>): Response<T> {
+  winston.info('Github (%s): %j', context, response)
+  return response
+}
+
 export function toRepo (github: GithubRepo, attrs: Partial<Repo> = {}): Repo {
   return new Repo({
     source: 'github',
@@ -84,24 +90,24 @@ export function toCommits (github: GithubCommit[], attrs: Partial<RepoCommit> = 
 
 export function fetchUserRepos (userToken: string): Promise<Response<GithubRepo[]>> {
   API.authenticate({ type: 'oauth', token: userToken })
-  return API.repos.getAll({
-    sort: "updated",
-    per_page: MAX_PER_PAGE,
-  })
+  return API.repos.getAll({ sort: "updated", per_page: MAX_PER_PAGE })
+         .then((res) => log('fetchUserRepos', res))
 }
 
 export function fetchUserRepo (userToken: string, name: string): Promise<Response<GithubRepo>> {
   const [owner, repo] = name.split('~')
   API.authenticate({ type: 'oauth', token: userToken })
   return API.repos.get({ owner, repo })
+         .then((res) => log('fetchUserRepo', res))
 }
 
 export function fetchCommits (name: string, sha?: string): Promise<Response<GithubCommit[]>> {
   const [owner, repo] = name.split('~')
   API.authenticate({ type: 'oauth', key: ENV.oauth.github.id, secret: ENV.oauth.github.secret })
-  if (sha) {
-    return API.repos.getCommits({ owner, repo, sha, per_page: MAX_PER_PAGE })
-  } else {
-    return API.repos.getCommits({ owner, repo, per_page: MAX_PER_PAGE })
+  const options = { owner, repo, sha, per_page: MAX_PER_PAGE }
+  if (!sha) {
+    delete options.sha
   }
+  return API.repos.getCommits(options)
+         .then((res) => log('fetchCommits', res))
 }

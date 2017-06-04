@@ -38,6 +38,7 @@
     "@types/sinon": "^2.2.1",
     "@types/sinon-chai": "^2.7.27",
     "@types/strong-cluster-control": "^2.2.2",
+    "@types/winston": "^2.3.3",
     "chai": "^3.5.0",
     "chai-http": "https://github.com/chaijs/chai-http#3ea4524",
     "chai-subset": "^1.5.0",
@@ -69,6 +70,7 @@
     "reflect-metadata": "^0.1.10",
     "rollbar": "^2.0.2",
     "strong-cluster-control": "^2.2.3",
-    "typeorm": "^0.0.11"
+    "typeorm": "^0.0.11",
+    "winston": "^2.3.1"
   }
 }
