@@ -10,7 +10,7 @@ export default class Suite {
   @Typeorm.PrimaryGeneratedColumn()
   id: number
 
-  @Typeorm.ManyToOne(type => RepoAuth)
+  @Typeorm.ManyToOne(type => RepoAuth, { cascadeAll: true })
   repoAuth: RepoAuth
 
   @Typeorm.Column()

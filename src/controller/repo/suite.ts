@@ -34,7 +34,9 @@ export async function showAll (ctx: Context) {
 
   const suites = await ctx.conn.entityManager
                        .createQueryBuilder(Suite, 'suite')
-                       .innerJoin(RepoAuth, 'auth')
+                       .innerJoin('suite.repoAuth', 'auth')
+                       .leftJoinAndSelect('suite.env', 'env')
+                       .leftJoinAndSelect('suite.tests', 'test')
                        .where('auth.repo=:repo', { repo: repo.id })
                        .getMany()
 

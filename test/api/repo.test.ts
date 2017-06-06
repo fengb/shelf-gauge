@@ -20,6 +20,38 @@ describe('API /repo', () => {
     })
   })
 
+  describe('/:source/:name/suite GET', () => {
+    it('shows empty data', async function () {
+      const repo = await factory.repo.create()
+      const response =
+        await server.request()
+              .get(`/repo/${repo.source}/${repo.name}/suite`)
+
+      expect(response.status).to.equal(HttpStatus.Success.Ok)
+      expect(response.body.data).to.deep.equal([])
+    })
+
+    it.only('shows existing suite', async function () {
+      const suite = await factory.suite.create()
+      const repo = suite.repoAuth.repo
+      const response =
+        await server.request()
+              .get(`/repo/${repo.source}/${repo.name}/suite`)
+
+      expect(response.status).to.equal(HttpStatus.Success.Ok)
+      expect(response.body.data).to.containSubset([
+        {
+          ref: suite.ref,
+          name: suite.name,
+          env: { source: suite.env.source },
+          tests: suite.tests.map((t) => {
+            return { name: t.name,  value: t.value }
+          })
+        }
+      ])
+    })
+  })
+
   describe('/:source/:name/suite POST', () => {
     const data = {
       ref: 'abc123',
