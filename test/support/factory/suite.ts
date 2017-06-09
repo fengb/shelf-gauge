@@ -1,5 +1,5 @@
-import { build, define, sequence, faker } from './helper'
-import { RepoAuth, Suite, SuiteEnv, SuiteTest, User } from 'src/entity'
+import { build, define, sequence, faker } from "./helper";
+import { RepoAuth, Suite, SuiteEnv, SuiteTest, User } from "src/entity";
 
 export default define(Suite, (suite: Suite) => ({
   repoAuth: () => build(RepoAuth),
@@ -8,8 +8,5 @@ export default define(Suite, (suite: Suite) => ({
   createdAt: faker.date.recent,
   ranAt: () => suite.createdAt,
   env: () => build(SuiteEnv, { suite }),
-  tests: () => [
-    build(SuiteTest, { suite }),
-    build(SuiteTest, { suite }),
-  ],
-}))
+  tests: () => [build(SuiteTest, { suite }), build(SuiteTest, { suite })]
+}));

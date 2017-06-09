@@ -1,20 +1,20 @@
-import * as Koa from 'koa'
-import { filter } from 'lodash'
+import * as Koa from "koa";
+import { filter } from "lodash";
 
-import * as bodyParser from 'koa-bodyparser'
-const logger = require('koa-logger')
-const error = require('koa-error')
-const session = require('koa-session')
+import * as bodyParser from "koa-bodyparser";
+const logger = require("koa-logger");
+const error = require("koa-error");
+const session = require("koa-session");
 
-import ENV from 'config/env'
-import monitor from './monitor'
-import passport from './passport'
-import connection from './connection'
-import router from './router'
-import render from './render'
+import ENV from "config/env";
+import monitor from "./monitor";
+import passport from "./passport";
+import connection from "./connection";
+import router from "./router";
+import render from "./render";
 
-const app = new Koa()
-app.keys = ENV.server.secretKeys
+const app = new Koa();
+app.keys = ENV.server.secretKeys;
 
 const middlewares: Koa.Middleware[] = filter([
   monitor(app),
@@ -27,11 +27,11 @@ const middlewares: Koa.Middleware[] = filter([
   connection,
   render,
   router.routes(),
-  router.allowedMethods(),
-])
+  router.allowedMethods()
+]);
 
 for (const middleware of middlewares) {
-  app.use(middleware)
+  app.use(middleware);
 }
 
-export default app
+export default app;

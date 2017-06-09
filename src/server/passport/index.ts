@@ -1,14 +1,14 @@
-import * as passport from 'koa-passport'
+import * as passport from "koa-passport";
 
-import github from './github'
-import mock from './mock'
-import { toSession, fromSession } from './user'
+import github from "./github";
+import mock from "./mock";
+import { toSession, fromSession } from "./user";
 
-passport.use(github)
+passport.use(github);
 if (mock) {
-  passport.use(mock!)
+  passport.use(mock!);
 }
-passport.serializeUser(toSession)
-passport.deserializeUser(fromSession)
+passport.serializeUser(toSession);
+passport.deserializeUser(fromSession);
 
-export default passport
+export default passport;

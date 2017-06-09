@@ -11,6 +11,7 @@
   "scripts": {
     "build": "tsc",
     "clobber": "find . -name node_modules -prune -o -name '*.ts' -print0 | xargs -0 rm",
+    "prettier": "prettier --write '**/*.ts'",
     "start": "node index.js",
     "start-cluster": "node cluster.js",
     "start-watch": "nodemon index.ts",
@@ -46,6 +47,7 @@
     "lodash": "^4.17.4",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
+    "prettier": "^1.4.4",
     "sinon": "^2.2.0",
     "sinon-chai": "^2.10.0",
     "ts-node": "^3.0.2",

@@ -1,7 +1,7 @@
 export enum Info {
   Continue = 100,
   SwitchingProtocols = 101,
-  Processing = 102,
+  Processing = 102
 }
 
 export enum Success {
@@ -14,7 +14,7 @@ export enum Success {
   PartialContent = 206,
   MultiStatus = 207,
   AlreadyReported = 208,
-  ImUsed = 226,
+  ImUsed = 226
 }
 
 export enum Redirect {
@@ -26,7 +26,7 @@ export enum Redirect {
   UseProxy = 305,
   SwitchProxy = 306,
   TemporaryRedirect = 307,
-  PermanentRedirect = 308,
+  PermanentRedirect = 308
 }
 
 export enum Error {
@@ -57,7 +57,7 @@ export enum Error {
   PreconditionRequired = 428,
   TooManyRequests = 429,
   RequestHeaderFieldsTooLarge = 431,
-  UnavailableForLegalReasons = 451,
+  UnavailableForLegalReasons = 451
 }
 
 export enum Fatal {
@@ -71,7 +71,7 @@ export enum Fatal {
   InsufficientStorage = 507,
   LoopDetected = 508,
   NotExtended = 510,
-  NetworkAuthenticationRequired = 511,
+  NetworkAuthenticationRequired = 511
 }
 
-export type Any = Info | Success | Redirect | Error | Fatal
+export type Any = Info | Success | Redirect | Error | Fatal;

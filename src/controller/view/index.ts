@@ -1,13 +1,13 @@
-import { Context } from 'src/server'
-import * as fs from 'fs'
+import { Context } from "src/server";
+import * as fs from "fs";
 
-const readFile = Promise.promisify(fs.readFile)
+const readFile = Promise.promisify(fs.readFile);
 
-export async function index (ctx: Context) {
+export async function index(ctx: Context) {
   if (!ctx.state.user) {
-    return ctx.redirect('/auth')
+    return ctx.redirect("/auth");
   }
 
-  ctx.type = 'text/html'
-  ctx.body = await readFile(__dirname + '/index.html')
+  ctx.type = "text/html";
+  ctx.body = await readFile(__dirname + "/index.html");
 }

@@ -1,42 +1,41 @@
-import * as Typeorm from 'typeorm'
-import { RepoCommit, RepoAuth, User } from '.'
+import * as Typeorm from "typeorm";
+import { RepoCommit, RepoAuth, User } from ".";
 
-export type RepoSource = 'github' | 'manual'
+export type RepoSource = "github" | "manual";
 
 @Typeorm.Entity()
-@Typeorm.Index(['source', 'name'], { unique: true })
+@Typeorm.Index(["source", "name"], { unique: true })
 class Repo {
-  static SOURCES = ['github', 'manual'] as RepoSource[]
+  static SOURCES = ["github", "manual"] as RepoSource[];
 
-  constructor (attrs: Partial<Repo> = {}) {
-    Object.assign(this, attrs)
+  constructor(attrs: Partial<Repo> = {}) {
+    Object.assign(this, attrs);
   }
 
-  @Typeorm.PrimaryGeneratedColumn()
-  id: number
+  @Typeorm.PrimaryGeneratedColumn() id: number;
 
   @Typeorm.Column()
   @Typeorm.Index({ unique: true })
-  url: string
+  url: string;
 
-  @Typeorm.Column()
-  source: RepoSource
+  @Typeorm.Column() source: RepoSource;
 
-  @Typeorm.Column()
-  name: string
+  @Typeorm.Column() name: string;
 
   @Typeorm.OneToMany(type => RepoAuth, auth => auth.repo)
-  auths: RepoAuth[]
+  auths: RepoAuth[];
 
-  @Typeorm.OneToMany(type => RepoCommit, commit => commit.repo, { cascadeInsert: true })
-  commits: RepoCommit[]
+  @Typeorm.OneToMany(type => RepoCommit, commit => commit.repo, {
+    cascadeInsert: true
+  })
+  commits: RepoCommit[];
 
   @Typeorm.ManyToMany(type => User, user => user.repos, { cascadeInsert: true })
-  users: User[]
+  users: User[];
 }
 
 declare namespace Repo {
-  export type Source = RepoSource
+  export type Source = RepoSource;
 }
 
-export default Repo
+export default Repo;

@@ -1,11 +1,11 @@
-import 'reflect-metadata'
-import * as Bluebird from 'bluebird'
+import "reflect-metadata";
+import * as Bluebird from "bluebird";
 
-import ENV from './env'
+import ENV from "./env";
 
-require('app-module-path').addPath(__dirname + '/..')
+require("app-module-path").addPath(__dirname + "/..");
 
-global.Promise = Bluebird
+global.Promise = Bluebird;
 Bluebird.config({
-  longStackTraces: ENV.promise.stacktrace,
-})
+  longStackTraces: ENV.promise.stacktrace
+});

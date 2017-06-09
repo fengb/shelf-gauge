@@ -1,28 +1,31 @@
-import { Strategy } from 'passport'
+import { Strategy } from "passport";
 
-import ENV from 'config/env'
-import { fetch } from './user'
+import ENV from "config/env";
+import { fetch } from "./user";
 
-function create (): Strategy {
+function create(): Strategy {
   return {
-    name: 'mock',
-    authenticate (this: any, req, options) {
+    name: "mock",
+    authenticate(this: any, req, options) {
       if (!req.query.__mock_strategy_callback) {
-        return this.redirect('/auth/mock?__mock_strategy_callback=true')
+        return this.redirect("/auth/mock?__mock_strategy_callback=true");
       }
 
       if (this._error) {
-        return this.fail(this._error, 401)
+        return this.fail(this._error, 401);
       }
 
-      fetch({ githubId: '12345' }, {
-        username: 'test',
-        githubToken: 'abcde',
-      }).then((user) => {
-        this.success(user)
-      })
+      fetch(
+        { githubId: "12345" },
+        {
+          username: "test",
+          githubToken: "abcde"
+        }
+      ).then(user => {
+        this.success(user);
+      });
     }
-  }
+  };
 }
 
-export default ENV.oauth.mock ? create() : undefined
+export default (ENV.oauth.mock ? create() : undefined);

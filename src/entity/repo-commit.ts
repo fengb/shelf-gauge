@@ -1,33 +1,32 @@
-import * as Typeorm from 'typeorm'
+import * as Typeorm from "typeorm";
 
-import { Repo } from '.'
+import { Repo } from ".";
 
 @Typeorm.Entity()
 export default class RepoCommit {
-  constructor (attrs: Partial<RepoCommit> = {}) {
-    Object.assign(this, attrs)
+  constructor(attrs: Partial<RepoCommit> = {}) {
+    Object.assign(this, attrs);
   }
 
-  @Typeorm.PrimaryGeneratedColumn()
-  id: number
+  @Typeorm.PrimaryGeneratedColumn() id: number;
 
   @Typeorm.Column()
   @Typeorm.Index()
-  ref: string
+  ref: string;
 
   @Typeorm.Column()
   @Typeorm.Index()
-  parent: string
+  parent: string;
 
   @Typeorm.Column()
   @Typeorm.Index({ unique: true })
-  get lookup (): string {
-    return `${this.ref}~${this.parent}`
+  get lookup(): string {
+    return `${this.ref}~${this.parent}`;
   }
-  set lookup (value: string) {
+  set lookup(value: string) {
     // Ignore: defined by ref~parent
   }
 
   @Typeorm.ManyToOne(type => Repo, repo => repo.commits)
-  repo: Repo
+  repo: Repo;
 }
