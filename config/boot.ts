@@ -7,5 +7,5 @@ require("app-module-path").addPath(__dirname + "/..");
 
 global.Promise = Bluebird;
 Bluebird.config({
-  longStackTraces: ENV.promise.stacktrace
+  longStackTraces: ENV.debug.promiseStacktrace
 });

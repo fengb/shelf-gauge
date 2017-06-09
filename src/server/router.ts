@@ -14,7 +14,7 @@ const router = new Router()
   .get("/user/repo/github/:name", C.UserRepo.githubShow)
   .post("/user/repo/:source/:name/auth", C.UserRepo.createAuth);
 
-if (ENV.oauth.mock) {
+if (ENV.debug.oauthMock) {
   router.get("/auth/mock", C.Auth.oauthFor("mock"));
 }
 

@@ -60,19 +60,14 @@ export default {
   },
 
   github: {
-    botToken: str("GITHUB_BOT_TOKEN")
+    botToken: str("GITHUB_BOT_TOKEN"),
+    oauthId: str("GITHUB_OAUTH_ID"),
+    oauthSecret: str("GITHUB_OAUTH_SECRET")
   },
 
-  oauth: {
-    mock: bool("OAUTH_MOCK", false),
-    github: {
-      id: str("OAUTH_GITHUB_ID"),
-      secret: str("OAUTH_GITHUB_SECRET")
-    }
-  },
-
-  promise: {
-    stacktrace: bool("PROMISE_STACKTRACE", false)
+  debug: {
+    oauthMock: bool("DEBUG_OAUTH_MOCK", false),
+    promiseStacktrace: bool("DEBUG_PROMISE_STACKTRACE", false)
   }
 };
 

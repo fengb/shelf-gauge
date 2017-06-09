@@ -69,8 +69,8 @@ function authenticateForUser(userToken: string) {
 function authenticateBackend() {
   API.authenticate({
     type: "oauth",
-    key: ENV.oauth.github.id,
-    secret: ENV.oauth.github.secret
+    key: ENV.github.oauthId,
+    secret: ENV.github.oauthSecret
   });
 }
 

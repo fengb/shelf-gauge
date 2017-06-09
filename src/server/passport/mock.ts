@@ -28,4 +28,4 @@ function create(): Strategy {
   };
 }
 
-export default (ENV.oauth.mock ? create() : undefined);
+export default (ENV.debug.oauthMock ? create() : undefined);
