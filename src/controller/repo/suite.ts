@@ -74,6 +74,7 @@ export async function create(ctx: Context) {
   loadCommits(repo, suite.ref);
 
   if (suite.pullRequest) {
+    commentPullRequest(suite);
   }
 
   ctx.renderSuccess("Created", suiteSerializer.serialize(suite));
