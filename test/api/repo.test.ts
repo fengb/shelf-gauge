@@ -129,7 +129,7 @@ describe("API /repo", () => {
         });
 
       expect(stub.job.loadCommits).to.be.calledWithMatch(
-        { name: auth.repo.name },
+        auth.repo.id,
         data.ref
       );
     });

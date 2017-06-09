@@ -71,10 +71,10 @@ export async function create(ctx: Context) {
   suite.repoAuth = auth;
   await ctx.conn.entityManager.persist(suite);
 
-  loadCommits(repo, suite.ref);
+  loadCommits(repo.id, suite.ref);
 
   if (suite.pullRequest) {
-    commentPullRequest(suite);
+    commentPullRequest(suite.id);
   }
 
   ctx.renderSuccess("Created", suiteSerializer.serialize(suite));

@@ -71,9 +71,9 @@ describe("API /user/repo", () => {
           "/user/repo/github/shelfgauge~shelfgauge"
         );
 
-        expect(stub.job.loadCommits).to.have.been.calledWithMatch({
-          name: "shelfgauge~shelfgauge"
-        });
+        expect(stub.job.loadCommits).to.have.been.calledWithMatch(
+          sinon.match.number
+        );
       });
     });
   });

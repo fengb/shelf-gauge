@@ -31,13 +31,20 @@ export async function upsert(commits: RepoCommit[]) {
   return commits;
 }
 
-export default function(repo: Repo, ref?: string) {
+export default async function(repoId: number, ref?: string) {
+  const conn = await connect();
+  const repo = await conn.entityManager.findOneById(Repo, repoId);
+
+  if (!repo) {
+    return Promise.reject(new Error(`Cannot find Repo<id: ${repoId}>`));
+  }
+
   switch (repo.source) {
     case "github":
       return fromGithub(repo, ref);
     default:
       return Promise.reject(
-        new Error(`Cannot load commits for Repo<${repo.name}>`)
+        new Error(`Cannot load commits for Repo<name: ${repo.name}>`)
       );
   }
 }

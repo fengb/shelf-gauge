@@ -1,17 +1,22 @@
 import { Suite } from "src/entity";
 
 import * as github from "src/service/github";
-import { connect } from "src/server/connection";
+import { connect, Connection } from "src/server/connection";
 import { chain, map } from "lodash";
+
+function suiteBuilder(conn: Connection) {
+  return conn.entityManager
+    .createQueryBuilder(Suite, "suite")
+    .innerJoinAndSelect("suite.repoAuth", "repoAuth")
+    .innerJoinAndSelect("repoAuth.repo", "repo")
+    .leftJoinAndSelect("suite.env", "env")
+    .leftJoinAndSelect("suite.tests", "tests");
+}
 
 export async function generateReport(suite: Suite): Promise<string> {
   const conn = await connect();
-  const masterSuite = await conn.entityManager
-    .createQueryBuilder(Suite, "suite")
-    .innerJoinAndSelect("suite.repoAuth", "repoAuth")
-    .leftJoinAndSelect("suite.env", "env")
-    .leftJoinAndSelect("suite.tests", "tests")
-    .where("suite.name=:name AND repoAuth.repo=:repo", {
+  const masterSuite = await suiteBuilder(conn)
+    .where("suite.name=:name AND repo.id=:repo", {
       name: "master",
       repo: suite.repo.id
     })
@@ -33,11 +38,22 @@ export async function doGithub(suite: Suite) {
   );
 }
 
-export default function(suite: Suite) {
+export default async function(suiteId: number) {
+  const conn = await connect();
+  const suite = await suiteBuilder(conn)
+    .where("suite.id=:id", { id: suiteId })
+    .getOne();
+
+  if (!suite) {
+    return Promise.reject(new Error(`Cannot find Suite<id: ${suiteId}>`));
+  }
+
   switch (suite.repo.source) {
     case "github":
       return doGithub(suite);
     default:
-      return Promise.reject(new Error(`Cannot comment for Suite<${suite.id}>`));
+      return Promise.reject(
+        new Error(`Cannot comment for Suite<id: ${suite.id}>`)
+      );
   }
 }

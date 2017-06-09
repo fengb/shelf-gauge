@@ -50,7 +50,7 @@ export async function githubShow(ctx: Context) {
 
     await ctx.conn.entityManager.persist(repo);
 
-    loadCommits(repo);
+    loadCommits(repo.id);
   }
 
   ctx.renderSuccess("Ok", repoSerializer.serialize(repo));
