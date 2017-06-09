@@ -7,18 +7,26 @@ export default class Suite {
     Object.assign(this, attrs);
   }
 
-  @Typeorm.PrimaryGeneratedColumn() id: number;
+  @Typeorm.PrimaryGeneratedColumn({})
+  id: number;
 
   @Typeorm.ManyToOne(type => RepoAuth, { cascadeAll: true })
   repoAuth: RepoAuth;
 
-  @Typeorm.Column() ref: string;
+  @Typeorm.Column({})
+  ref: string;
 
-  @Typeorm.Column() name: string;
+  @Typeorm.Column({})
+  name: string;
 
-  @Typeorm.Column(Date) ranAt: Date;
+  @Typeorm.Column({ nullable: true })
+  pullRequest: string;
 
-  @Typeorm.Column(Date) createdAt: Date;
+  @Typeorm.Column({})
+  ranAt: Date;
+
+  @Typeorm.Column({})
+  createdAt: Date;
 
   @Typeorm.OneToOne(type => SuiteEnv, env => env.suite, { cascadeAll: true })
   env: SuiteEnv;
@@ -27,4 +35,8 @@ export default class Suite {
     cascadeInsert: true
   })
   tests: SuiteTest[];
+
+  get repo() {
+    return this.repoAuth.repo;
+  }
 }

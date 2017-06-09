@@ -3,11 +3,13 @@ import { Context } from "src/server";
 import { Repo, RepoAuth, Suite, SuiteEnv, SuiteTest } from "src/entity";
 
 import * as Serializer from "src/util/serializer";
+import commentPullRequest from "src/job/comment-pull-request";
 import loadCommits from "src/job/load-commits";
 
 const suiteSerializer = Serializer.object(Suite, {
   ref: Serializer.string(),
   name: Serializer.string(),
+  pullRequest: Serializer.string(),
   ranAt: Serializer.isoDateTime(),
   createdAt: Serializer.isoDateTime(),
 
@@ -70,6 +72,9 @@ export async function create(ctx: Context) {
   await ctx.conn.entityManager.persist(suite);
 
   loadCommits(repo, suite.ref);
+
+  if (suite.pullRequest) {
+  }
 
   ctx.renderSuccess("Created", suiteSerializer.serialize(suite));
 }

@@ -122,3 +122,18 @@ export function fetchCommits(
     return API.repos.getCommits({ owner, repo, per_page: MAX_PER_PAGE });
   }
 }
+
+export function postComment(name: string, issueNumber: number, body: string) {
+  const [owner, repo] = name.split("~");
+  API.authenticate({
+    type: "oauth",
+    key: ENV.oauth.github.id,
+    secret: ENV.oauth.github.secret
+  });
+  API.issues.createComment({
+    owner,
+    repo,
+    number: issueNumber,
+    body
+  });
+}
