@@ -59,6 +59,10 @@ export default {
     autoSync: bool("DATABASE_AUTOSYNC", false)
   },
 
+  github: {
+    botToken: str("GITHUB_BOT_TOKEN")
+  },
+
   oauth: {
     mock: bool("OAUTH_MOCK", false),
     github: {

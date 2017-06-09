@@ -59,6 +59,28 @@ interface GithubCommit extends GithubCommitSummary {
   };
 }
 
+function authenticateForUser(userToken: string) {
+  API.authenticate({
+    type: "oauth",
+    token: userToken
+  });
+}
+
+function authenticateBackend() {
+  API.authenticate({
+    type: "oauth",
+    key: ENV.oauth.github.id,
+    secret: ENV.oauth.github.secret
+  });
+}
+
+function authenticateBot() {
+  API.authenticate({
+    type: "token",
+    token: ENV.github.botToken
+  });
+}
+
 export function toRepo(github: GithubRepo, attrs: Partial<Repo> = {}): Repo {
   return new Repo({
     source: "github",
@@ -90,7 +112,7 @@ export function toCommits(
 export function fetchUserRepos(
   userToken: string
 ): Promise<Response<GithubRepo[]>> {
-  API.authenticate({ type: "oauth", token: userToken });
+  authenticateForUser(userToken);
   return API.repos.getAll({
     sort: "updated",
     per_page: MAX_PER_PAGE
@@ -111,11 +133,7 @@ export function fetchCommits(
   sha?: string
 ): Promise<Response<GithubCommit[]>> {
   const [owner, repo] = name.split("~");
-  API.authenticate({
-    type: "oauth",
-    key: ENV.oauth.github.id,
-    secret: ENV.oauth.github.secret
-  });
+  authenticateBackend();
   if (sha) {
     return API.repos.getCommits({ owner, repo, sha, per_page: MAX_PER_PAGE });
   } else {
@@ -125,12 +143,8 @@ export function fetchCommits(
 
 export function postComment(name: string, issueNumber: number, body: string) {
   const [owner, repo] = name.split("~");
-  API.authenticate({
-    type: "oauth",
-    key: ENV.oauth.github.id,
-    secret: ENV.oauth.github.secret
-  });
-  API.issues.createComment({
+  authenticateBot();
+  return API.issues.createComment({
     owner,
     repo,
     number: issueNumber,
