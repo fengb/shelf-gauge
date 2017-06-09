@@ -31,7 +31,7 @@ describe('API /repo', () => {
       expect(response.body.data).to.deep.equal([])
     })
 
-    it.only('shows existing suite', async function () {
+    it('shows existing suite', async function () {
       const suite = await factory.suite.create()
       const repo = suite.repoAuth.repo
       const response =
