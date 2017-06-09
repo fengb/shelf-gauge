@@ -4,6 +4,7 @@ node_js:
   - 7
 before_script:
   - 'createdb -O postgres shelfgauge'
+script: 'yarn lint && yarn test'
 env:
   - 'DATABASE_URL=postgresql://postgres@localhost:5432/shelfgauge'
 addons:
