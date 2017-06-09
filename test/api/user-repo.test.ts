@@ -1,20 +1,5 @@
-import {
-  expect,
-  sinon,
-  db,
-  factory,
-  server,
-  stub,
-  HttpStatus
-} from "test/support";
-import {
-  Repo,
-  RepoCommit,
-  RepoAuth,
-  Suite,
-  SuiteEnv,
-  SuiteTest
-} from "src/entity";
+import { expect, db, factory, server, stub, HttpStatus } from "test/support";
+import { Repo, RepoAuth, Suite } from "src/entity";
 import * as loadCommits from "src/job/load-commits";
 
 describe("API /user/repo", () => {
@@ -51,7 +36,7 @@ describe("API /user/repo", () => {
     });
 
     describe("missing repo", () => {
-      it("creates a new repo", async function() {
+      it("returns data from github", async function() {
         const agent = await server.authRequest();
         const response = await agent.get(
           "/user/repo/github/shelfgauge~shelfgauge"
@@ -63,17 +48,37 @@ describe("API /user/repo", () => {
           name: "shelfgauge~shelfgauge",
           url: "https://github.com/shelfgauge/shelfgauge"
         });
+
+        expect(stub.service.github.fetchUserRepo).to.have.been.calledWith(
+          agent.user.githubToken,
+          "shelfgauge~shelfgauge"
+        );
       });
 
-      it("loads commits", async function() {
+      it("saves the repo", async function() {
         const agent = await server.authRequest();
         const response = await agent.get(
           "/user/repo/github/shelfgauge~shelfgauge"
         );
 
-        expect(stub.job.loadCommits).to.have.been.calledWithMatch(
-          sinon.match.number
+        const repo = await this.conn!.entityManager.findOne(Repo, {
+          name: "shelfgauge~shelfgauge"
+        });
+
+        expect(repo).to.be.ok;
+      });
+
+      it("invokes the job loadCommits", async function() {
+        const agent = await server.authRequest();
+        const response = await agent.get(
+          "/user/repo/github/shelfgauge~shelfgauge"
         );
+
+        const repo = await this.conn!.entityManager.findOne(Repo, {
+          name: "shelfgauge~shelfgauge"
+        });
+
+        expect(stub.job.loadCommits).to.have.been.calledWith(repo!.id);
       });
     });
   });

@@ -1,5 +1,5 @@
 import { expect, db, stub, factory, server, HttpStatus } from "test/support";
-import { Repo, RepoAuth, Suite, SuiteEnv, SuiteTest } from "src/entity";
+import { Repo, RepoAuth, Suite } from "src/entity";
 
 function asJson(obj: any): any {
   return JSON.parse(JSON.stringify(obj));
