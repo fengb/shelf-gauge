@@ -1,4 +1,4 @@
-import { expect, db, factory, server, stub, HttpStatus } from "test/support";
+import { expect, db, factory, request, stub } from "test/support";
 import { Repo, RepoAuth, Suite } from "src/entity";
 import * as loadCommits from "src/job/load-commits";
 
@@ -7,10 +7,10 @@ describe("API /user/repo", () => {
 
   describe("/github GET", () => {
     it("returns repo data from github", async function() {
-      const agent = await server.authRequest();
+      const agent = await request.withAuth();
       const response = await agent.get("/user/repo/github");
 
-      expect(response.status).to.equal(HttpStatus.Success.Ok);
+      expect(response.status).to.equal(request.HttpStatus.Success.Ok);
       expect(response.body.data).to.deep.equal([
         {
           source: "github",
@@ -23,11 +23,11 @@ describe("API /user/repo", () => {
 
   describe("/github/:name GET", () => {
     it("fetches an existing repo", async function() {
-      const agent = await server.authRequest();
+      const agent = await request.withAuth();
       const existing = await factory.repo.create();
       const response = await agent.get(`/user/repo/github/${existing.name}`);
 
-      expect(response.status).to.equal(HttpStatus.Success.Ok);
+      expect(response.status).to.equal(request.HttpStatus.Success.Ok);
       expect(response.body.data).to.deep.equal({
         source: existing.source,
         name: existing.name,
@@ -37,12 +37,12 @@ describe("API /user/repo", () => {
 
     describe("missing repo", () => {
       it("returns data from github", async function() {
-        const agent = await server.authRequest();
+        const agent = await request.withAuth();
         const response = await agent.get(
           "/user/repo/github/shelfgauge~shelfgauge"
         );
 
-        expect(response.status).to.equal(HttpStatus.Success.Ok);
+        expect(response.status).to.equal(request.HttpStatus.Success.Ok);
         expect(response.body.data).to.deep.equal({
           source: "github",
           name: "shelfgauge~shelfgauge",
@@ -56,7 +56,7 @@ describe("API /user/repo", () => {
       });
 
       it("saves the repo", async function() {
-        const agent = await server.authRequest();
+        const agent = await request.withAuth();
         const response = await agent.get(
           "/user/repo/github/shelfgauge~shelfgauge"
         );
@@ -69,7 +69,7 @@ describe("API /user/repo", () => {
       });
 
       it("invokes the job loadCommits", async function() {
-        const agent = await server.authRequest();
+        const agent = await request.withAuth();
         const response = await agent.get(
           "/user/repo/github/shelfgauge~shelfgauge"
         );
@@ -85,19 +85,18 @@ describe("API /user/repo", () => {
 
   describe("/:source/:name/auth POST", () => {
     it("rejects unaffiliated user", async function() {
-      const agent = await server.authRequest();
-
       const repo = await factory.repo.create();
 
+      const agent = await request.withAuth();
       const response = await agent.post(
         `/user/repo/${repo.source}/${repo.name}/auth`
       );
 
-      expect(response.status).to.equal(HttpStatus.Error.Forbidden);
+      expect(response.status).to.equal(request.HttpStatus.Error.Forbidden);
     });
 
     it("returns a new auth", async function() {
-      const agent = await server.authRequest();
+      const agent = await request.withAuth();
 
       const repo = await factory.repo.create({ users: [agent.user] });
 
@@ -105,7 +104,7 @@ describe("API /user/repo", () => {
         `/user/repo/${repo.source}/${repo.name}/auth`
       );
 
-      expect(response.status).to.equal(HttpStatus.Success.Created);
+      expect(response.status).to.equal(request.HttpStatus.Success.Created);
 
       const auth = await this.conn!.entityManager.findOne(RepoAuth);
       expect(response.body.data).to.have.property("authorization");

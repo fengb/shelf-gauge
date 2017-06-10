@@ -1,4 +1,4 @@
-import { expect, db, stub, factory, server, HttpStatus } from "test/support";
+import { expect, db, stub, factory, request } from "test/support";
 import { Repo, RepoAuth, Suite } from "src/entity";
 
 function asJson(obj: any): any {
@@ -11,11 +11,9 @@ describe("API /repo", () => {
   describe("/:source/:name GET", () => {
     it("returns the repo data", async function() {
       const repo = await factory.repo.create();
-      const response = await server
-        .request()
-        .get(`/repo/${repo.source}/${repo.name}`);
+      const response = await request().get(`/repo/${repo.source}/${repo.name}`);
 
-      expect(response.status).to.equal(HttpStatus.Success.Ok);
+      expect(response.status).to.equal(request.HttpStatus.Success.Ok);
       expect(response.body.data).to.deep.equal({
         url: repo.url,
         source: repo.source,
@@ -27,22 +25,22 @@ describe("API /repo", () => {
   describe("/:source/:name/suite GET", () => {
     it("shows empty data", async function() {
       const repo = await factory.repo.create();
-      const response = await server
-        .request()
-        .get(`/repo/${repo.source}/${repo.name}/suite`);
+      const response = await request().get(
+        `/repo/${repo.source}/${repo.name}/suite`
+      );
 
-      expect(response.status).to.equal(HttpStatus.Success.Ok);
+      expect(response.status).to.equal(request.HttpStatus.Success.Ok);
       expect(response.body.data).to.deep.equal([]);
     });
 
     it("shows existing suite", async function() {
       const suite = await factory.suite.create();
       const repo = suite.repoAuth.repo;
-      const response = await server
-        .request()
-        .get(`/repo/${repo.source}/${repo.name}/suite`);
+      const response = await request().get(
+        `/repo/${repo.source}/${repo.name}/suite`
+      );
 
-      expect(response.status).to.equal(HttpStatus.Success.Ok);
+      expect(response.status).to.equal(request.HttpStatus.Success.Ok);
       expect(response.body.data).to.containSubset([
         {
           ref: suite.ref,
@@ -73,31 +71,28 @@ describe("API /repo", () => {
     it("returns 403 on missing auth", async function() {
       const auth = await factory.repoAuth.create();
 
-      const response = await server
-        .request()
+      const response = await request()
         .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
         .send({ data });
 
-      expect(response.status).to.equal(HttpStatus.Error.Forbidden);
+      expect(response.status).to.equal(request.HttpStatus.Error.Forbidden);
     });
 
     it("returns the suite data", async function() {
       const auth = await factory.repoAuth.create();
 
-      const response = await server
-        .request()
+      const response = await request()
         .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
         .send({ data, authorization: auth.key });
 
-      expect(response.status).to.equal(HttpStatus.Success.Created);
+      expect(response.status).to.equal(request.HttpStatus.Success.Created);
       expect(response.body.data).to.containSubset(asJson(data));
     });
 
     it("saves the objects", async function() {
       const auth = await factory.repoAuth.create();
 
-      const response = await server
-        .request()
+      const response = await request()
         .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
         .send({ data, authorization: auth.key });
 
@@ -118,8 +113,7 @@ describe("API /repo", () => {
     it("attempts to load commits", async function() {
       const auth = await factory.repoAuth.create();
 
-      const response = await server
-        .request()
+      const response = await request()
         .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
         .send({ data, authorization: auth.key });
 
@@ -132,8 +126,7 @@ describe("API /repo", () => {
     it("ignores commentPullRequest with no pullRequest", async function() {
       const auth = await factory.repoAuth.create();
 
-      await server
-        .request()
+      await request()
         .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
         .send({ data, authorization: auth.key });
 
@@ -143,8 +136,7 @@ describe("API /repo", () => {
     it("triggers commentPullRequest with pullRequest", async function() {
       const auth = await factory.repoAuth.create();
 
-      const response = await server
-        .request()
+      const response = await request()
         .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
         .send({
           authorization: auth.key,
