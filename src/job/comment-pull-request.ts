@@ -20,7 +20,7 @@ export async function generateReport(suite: Suite): Promise<string> {
       name: "master",
       repo: suite.repo.id
     })
-    .orderBy("createdAt", "DESC")
+    .orderBy('"createdAt"', "DESC")
     .getOne();
 
   const lines = [
