@@ -48,9 +48,10 @@ describe("API /repo", () => {
           ref: suite.ref,
           name: suite.name,
           env: { source: suite.env.source },
-          tests: suite.tests.map(t => {
-            return { name: t.name, value: t.value };
-          })
+          tests: suite.tests.map(t => ({
+            name: t.name,
+            value: t.value
+          }))
         }
       ]);
     });
@@ -62,7 +63,11 @@ describe("API /repo", () => {
       name: "master",
       ranAt: new Date(),
       env: { source: "travis", info: "nooooooo" },
-      tests: [{ name: "index", value: 13.5 }, { name: "haste", value: 0.125 }]
+      tests: [
+        { name: "index", value: 13.5 },
+        { name: "haste", value: 0.125 },
+        { name: "slow", value: 1000.75 }
+      ]
     };
 
     it("returns 403 on missing auth", async function() {
@@ -82,10 +87,7 @@ describe("API /repo", () => {
       const response = await server
         .request()
         .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
-        .send({
-          data,
-          authorization: auth.key
-        });
+        .send({ data, authorization: auth.key });
 
       expect(response.status).to.equal(HttpStatus.Success.Created);
       expect(response.body.data).to.containSubset(asJson(data));
@@ -97,10 +99,7 @@ describe("API /repo", () => {
       const response = await server
         .request()
         .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
-        .send({
-          data,
-          authorization: auth.key
-        });
+        .send({ data, authorization: auth.key });
 
       const suite = await this.conn!.entityManager
         .createQueryBuilder(Suite, "suite")
@@ -110,11 +109,10 @@ describe("API /repo", () => {
 
       expect(suite!).to.containSubset({
         ref: data.ref,
-        name: data.name
+        name: data.name,
+        env: data.env,
+        tests: data.tests
       });
-
-      expect(suite!.env).to.containSubset(data.env);
-      expect(suite!.tests).to.containSubset(data.tests);
     });
 
     it("attempts to load commits", async function() {
@@ -123,15 +121,38 @@ describe("API /repo", () => {
       const response = await server
         .request()
         .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
-        .send({
-          data,
-          authorization: auth.key
-        });
+        .send({ data, authorization: auth.key });
 
       expect(stub.job.loadCommits).to.be.calledWithMatch(
         auth.repo.id,
         data.ref
       );
+    });
+
+    it("ignores commentPullRequest with no pullRequest", async function() {
+      const auth = await factory.repoAuth.create();
+
+      await server
+        .request()
+        .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
+        .send({ data, authorization: auth.key });
+
+      expect(stub.job.commentPullRequest).not.to.be.called;
+    });
+
+    it("triggers commentPullRequest with pullRequest", async function() {
+      const auth = await factory.repoAuth.create();
+
+      const response = await server
+        .request()
+        .post(`/repo/${auth.repo.source}/${auth.repo.name}/suite`)
+        .send({
+          authorization: auth.key,
+          data: { ...data, pullRequest: "1" }
+        });
+
+      const suite = await this.conn!.entityManager.findOne(Suite);
+      expect(stub.job.commentPullRequest).to.be.calledWith(suite!.id);
     });
   });
 });
