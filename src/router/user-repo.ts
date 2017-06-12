@@ -1,3 +1,4 @@
+import * as Router from "koa-router";
 import { chain, flatMap, some } from "lodash";
 
 import ENV from "config/env";
@@ -91,3 +92,8 @@ export async function createAuth(ctx: Context) {
     url: `${ENV.server.baseUrl}/repo/${repo.source}/${repo.name}/suite`
   });
 }
+
+export default new Router()
+  .get("/github", githubShowAll)
+  .get("/github/:name", githubShow)
+  .post("/:source/:name/auth", createAuth);

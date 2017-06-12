@@ -10,7 +10,7 @@ import ENV from "config/env";
 import monitor from "./monitor";
 import passport from "./passport";
 import connection from "./connection";
-import router from "./router";
+import router from "../router";
 import render from "./render";
 
 const app = new Koa();
