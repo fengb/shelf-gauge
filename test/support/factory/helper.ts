@@ -12,7 +12,7 @@ import { connect } from "../db";
 export { build, faker };
 
 export function randomize<T>(...values: T[]) {
-  return () => sample(values);
+  return () => sample(values) as T;
 }
 
 export function sequence(val = 0) {
