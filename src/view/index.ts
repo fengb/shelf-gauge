@@ -1,4 +1,4 @@
-import { Context } from "src/server";
+import { Context } from "koa";
 import * as fs from "fs";
 
 const readFile = Promise.promisify(fs.readFile);

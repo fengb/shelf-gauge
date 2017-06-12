@@ -1,3 +1,4 @@
+import { Context } from "koa";
 import * as Router from "koa-router";
 import { chain, flatMap, some } from "lodash";
 
@@ -6,7 +7,6 @@ import ENV from "config/env";
 import loadCommits from "src/job/load-commits";
 import * as github from "src/service/github";
 import repoSerializer from "src/serializer/repo";
-import { Context } from "src/server";
 import { Repo, RepoAuth } from "src/entity";
 import * as secureRandom from "src/util/secure-random";
 

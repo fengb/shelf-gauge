@@ -1,5 +1,6 @@
+import { Context } from "koa";
 import * as Router from "koa-router";
-import { Context } from "src/server";
+
 import { Repo } from "src/entity";
 import repoSerializer from "src/serializer/repo";
 

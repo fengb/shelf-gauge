@@ -1,4 +1,4 @@
-import { Context } from ".";
+import { Context } from "koa";
 import * as HttpStatus from "src/util/http-status";
 import { JsonField } from "src/util/serializer";
 

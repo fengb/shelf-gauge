@@ -1,10 +1,10 @@
+import { Context } from "koa";
 import * as Router from "koa-router";
-import { AuthenticateOptions } from "passport";
+import * as passport from "koa-passport";
 
-import { Context, Middleware, passport } from "src/server";
 import ENV from "config/env";
 
-const CALLBACK_REDIRECTS: AuthenticateOptions = {
+const CALLBACK_REDIRECTS = {
   successRedirect: "/",
   failureRedirect: "/auth"
 };
@@ -14,7 +14,7 @@ export async function signOut(ctx: Context) {
   ctx.redirect("/");
 }
 
-export function oauthFor(strategy: string): Middleware {
+export function oauthFor(strategy: string) {
   return passport.authenticate(strategy, CALLBACK_REDIRECTS);
 }
 

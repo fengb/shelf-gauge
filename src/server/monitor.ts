@@ -2,7 +2,6 @@ import * as Koa from "koa";
 const Rollbar = require("rollbar");
 
 import ENV from "config/env";
-import { Context } from ".";
 
 function rollbar(app: Koa, accessToken: string) {
   const rollbar = new Rollbar({
@@ -12,11 +11,11 @@ function rollbar(app: Koa, accessToken: string) {
     handleUnhandledRejections: true
   });
 
-  app.on("error", (err: Error, ctx: Context) => {
+  app.on("error", (err: Error, ctx: Koa.Context) => {
     rollbar.error(err, ctx.request);
   });
 
-  return async function(ctx: Context, next: () => Promise<any>) {
+  return async function(ctx: Koa.Context, next: () => Promise<any>) {
     try {
       return await next();
     } catch (err) {
