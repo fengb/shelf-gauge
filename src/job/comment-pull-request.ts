@@ -1,8 +1,10 @@
-import { Suite } from "src/entity";
+import { keyBy, map } from "lodash";
+
+import * as format from "src/util/format";
+import { Suite, SuiteTest } from "src/entity";
 
 import * as github from "src/service/github";
 import { connect, Connection } from "src/server/connection";
-import { chain, map } from "lodash";
 
 function suiteBuilder(conn: Connection) {
   return conn.entityManager
@@ -13,29 +15,29 @@ function suiteBuilder(conn: Connection) {
     .leftJoinAndSelect("suite.tests", "tests");
 }
 
-export async function generateReport(suite: Suite): Promise<string> {
-  const conn = await connect();
-  const masterSuite = await suiteBuilder(conn)
-    .where("suite.name=:name AND repo.id=:repo", {
-      name: "master",
-      repo: suite.repo.id
-    })
-    .orderBy('"createdAt"', "DESC")
-    .getOne();
-
-  const lines = [
-    "Test suite:",
-    ...map(suite.tests, t => `${t.name}: ${t.value}`)
-  ];
-  return lines.join("\n");
+export function suiteReport(suite: Suite, oldSuite?: Suite): string {
+  const oldTestLookup = oldSuite ? keyBy(oldSuite.tests, "name") : {};
+  return [
+    "*Suite:*",
+    "",
+    format.markdownTable(
+      ["Name", "Value", "Change"],
+      ["----", "-----", "------"],
+      ...map(suite.tests, t => testReport(t, oldTestLookup[t.name]))
+    )
+  ].join("\n");
 }
 
-export async function doGithub(suite: Suite) {
-  return github.postComment(
-    suite.repo.name,
-    Number(suite.pullRequest),
-    await generateReport(suite)
-  );
+export function testReport(test: SuiteTest, oldTest?: SuiteTest) {
+  const change = oldTest
+    ? format.percent((test.value - oldTest.value) / oldTest.value)
+    : "_new_";
+
+  return [test.name, String(test.value), change];
+}
+
+export function doGithub(suite: Suite, report: string): Promise<any> {
+  return github.postComment(suite.repo.name, Number(suite.pullRequest), report);
 }
 
 export default async function(suiteId: number) {
@@ -48,9 +50,19 @@ export default async function(suiteId: number) {
     return Promise.reject(new Error(`Cannot find Suite<id: ${suiteId}>`));
   }
 
+  const masterSuite = await suiteBuilder(conn)
+    .where("suite.name=:name AND repo.id=:repo", {
+      name: "master",
+      repo: suite.repo.id
+    })
+    .orderBy('"createdAt"', "DESC")
+    .getOne();
+
+  const report = suiteReport(suite, masterSuite);
+
   switch (suite.repo.source) {
     case "github":
-      return doGithub(suite);
+      return doGithub(suite, report);
     default:
       return Promise.reject(
         new Error(`Cannot comment for Suite<id: ${suite.id}>`)
