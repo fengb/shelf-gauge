@@ -11,5 +11,21 @@ describe("job/comment-post-request", () => {
         expect(report).to.contain("new");
       });
     });
+
+    describe("with oldTest", () => {
+      it("shows reductions", function() {
+        const oldSuite = factory.suiteTest.build();
+        const suite = factory.suiteTest.build({ value: 0.9 * oldSuite.value });
+        const report = commentPullRequest.testReport(suite, oldSuite);
+        expect(report).to.contain("-10.00%");
+      });
+
+      it("shows increases", function() {
+        const oldSuite = factory.suiteTest.build();
+        const suite = factory.suiteTest.build({ value: 1.05 * oldSuite.value });
+        const report = commentPullRequest.testReport(suite, oldSuite);
+        expect(report).to.contain("+5.00%");
+      });
+    });
   });
 });

@@ -1,8 +1,10 @@
+import { keyBy, map } from "lodash";
+
+import * as format from "src/util/format";
 import { Suite, SuiteTest } from "src/entity";
 
 import * as github from "src/service/github";
 import { connect, Connection } from "src/server/connection";
-import { keyBy, map } from "lodash";
 
 function suiteBuilder(conn: Connection) {
   return conn.entityManager
@@ -23,7 +25,11 @@ export function suiteReport(suite: Suite, oldSuite?: Suite): string {
 }
 
 export function testReport(test: SuiteTest, oldTest?: SuiteTest): string {
-  const suffix = oldTest ? "old" : "new";
+  const suffix = oldTest
+    ? format.percent((test.value - oldTest.value) / oldTest.value, {
+        sign: true
+      })
+    : "new";
   return `${test.name}: ${test.value} — ${suffix}`;
 }
 
