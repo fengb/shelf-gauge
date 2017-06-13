@@ -1,4 +1,4 @@
-import { once } from "lodash";
+import { once, assign } from "lodash";
 
 import ENV from "config/env";
 
@@ -14,17 +14,14 @@ export function request(): ChaiHttp.Agent {
   return chai.request.agent(app());
 }
 
-interface AuthAgent extends ChaiHttp.Agent {
-  user: User;
-}
-
-export async function withAuth(): Promise<AuthAgent> {
-  const agent = request() as AuthAgent;
+export async function withAuth() {
+  const agent = request();
   await agent.get("/auth/mock");
   // TODO: get the real user
   const conn = await db.connect();
-  agent.user = (await conn.entityManager.findOne(User)) as User;
-  return agent;
+  return assign(agent, {
+    user: (await conn.entityManager.findOne(User)) as User
+  });
 }
 
-export default Object.assign(request, { app, withAuth, HttpStatus });
+export default assign(request, { app, withAuth, HttpStatus });
