@@ -1,10 +1,10 @@
+import { Context } from "koa";
 import { createConnection, Connection, ConnectionOptions } from "typeorm";
 import { DriverType } from "typeorm/driver/DriverOptions";
 import { once } from "lodash";
 
 import ENV from "config/env";
 import { Entities } from "src/entity";
-import { Context } from ".";
 
 const TYPES: DriverType[] = [
   "mysql",

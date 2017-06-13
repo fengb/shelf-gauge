@@ -1,5 +1,6 @@
+import { Context } from "koa";
 import { find } from "lodash";
-import { Context } from "src/server";
+
 import { Repo, RepoAuth, Suite, SuiteEnv, SuiteTest } from "src/entity";
 
 import * as Serializer from "src/util/serializer";
