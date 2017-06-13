@@ -17,20 +17,23 @@ function suiteBuilder(conn: Connection) {
 
 export function suiteReport(suite: Suite, oldSuite?: Suite): string {
   const oldTestLookup = oldSuite ? keyBy(oldSuite.tests, "name") : {};
-  const lines = [
-    "Test suite:",
-    ...map(suite.tests, t => testReport(t, oldTestLookup[t.name]))
-  ];
-  return lines.join("\n");
+  return [
+    "*Suite:*",
+    "",
+    format.markdownTable(
+      ["Name", "Value", "Change"],
+      ["----", "-----", "------"],
+      ...map(suite.tests, t => testReport(t, oldTestLookup[t.name]))
+    )
+  ].join("\n");
 }
 
-export function testReport(test: SuiteTest, oldTest?: SuiteTest): string {
-  const suffix = oldTest
-    ? format.percent((test.value - oldTest.value) / oldTest.value, {
-        sign: true
-      })
-    : "new";
-  return `${test.name}: ${test.value} — ${suffix}`;
+export function testReport(test: SuiteTest, oldTest?: SuiteTest) {
+  const change = oldTest
+    ? format.percent((test.value - oldTest.value) / oldTest.value)
+    : "_new_";
+
+  return [test.name, String(test.value), change];
 }
 
 export function doGithub(suite: Suite, report: string): Promise<any> {

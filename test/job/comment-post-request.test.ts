@@ -8,7 +8,11 @@ describe("job/comment-post-request", () => {
       it('attaches "new"', function() {
         const suite = factory.suiteTest.build();
         const report = commentPullRequest.testReport(suite);
-        expect(report).to.contain("new");
+        expect(report).to.deep.equal([
+          suite.name,
+          String(suite.value),
+          "_new_"
+        ]);
       });
     });
 
@@ -17,14 +21,22 @@ describe("job/comment-post-request", () => {
         const oldSuite = factory.suiteTest.build();
         const suite = factory.suiteTest.build({ value: 0.9 * oldSuite.value });
         const report = commentPullRequest.testReport(suite, oldSuite);
-        expect(report).to.contain("-10.00%");
+        expect(report).to.deep.equal([
+          suite.name,
+          String(suite.value),
+          "-10.00%"
+        ]);
       });
 
       it("shows increases", function() {
         const oldSuite = factory.suiteTest.build();
         const suite = factory.suiteTest.build({ value: 1.05 * oldSuite.value });
         const report = commentPullRequest.testReport(suite, oldSuite);
-        expect(report).to.contain("+5.00%");
+        expect(report).to.deep.equal([
+          suite.name,
+          String(suite.value),
+          "+5.00%"
+        ]);
       });
     });
   });
