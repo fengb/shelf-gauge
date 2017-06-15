@@ -1,3 +1,5 @@
+import { Context } from "koa";
+import "src/server/render"; // TODO: fix the context
 import * as Router from "koa-router";
 import * as passport from "koa-passport";
 import { chain, flatMap, some } from "lodash";
@@ -10,7 +12,7 @@ import repoSerializer from "src/serializer/repo";
 import { Repo, RepoAuth } from "src/entity";
 import * as secureRandom from "src/util/secure-random";
 
-export async function githubShowAll(ctx: any) {
+export async function githubShowAll(ctx: Context) {
   const githubRepos = await github.fetchUserRepos(ctx.state.user.githubToken);
 
   const repos = chain(githubRepos.data)
@@ -21,7 +23,7 @@ export async function githubShowAll(ctx: any) {
   ctx.renderSuccess("Ok", repoSerializer.serializeMany(repos));
 }
 
-export async function githubShow(ctx: any) {
+export async function githubShow(ctx: Context) {
   let repo = await ctx.conn.entityManager.findOne(Repo, {
     source: "github",
     name: ctx.params.name
@@ -49,7 +51,7 @@ export async function githubShow(ctx: any) {
   ctx.renderSuccess("Ok", repoSerializer.serialize(repo));
 }
 
-export async function createAuth(ctx: any) {
+export async function createAuth(ctx: Context) {
   const repo = await ctx.conn.entityManager
     .createQueryBuilder(Repo, "repo")
     .leftJoinAndSelect("repo.users", "user")
