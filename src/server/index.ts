@@ -4,7 +4,6 @@ import { filter } from "lodash";
 import * as bodyParser from "koa-bodyparser";
 const logger = require("koa-logger");
 const error = require("koa-error");
-const session = require("koa-session");
 
 import ENV from "config/env";
 import monitor from "./monitor";
