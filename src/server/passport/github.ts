@@ -1,7 +1,7 @@
 import { Strategy, StrategyOption } from "passport-github";
 
 import ENV from "config/env";
-import { fetch } from "./user";
+import { findOrCreate } from "./user";
 
 const OPTIONS: StrategyOption = {
   clientID: ENV.github.oauthId,
@@ -13,12 +13,10 @@ const OPTIONS: StrategyOption = {
 export default new Strategy(
   OPTIONS,
   (accessToken, refreshToken, profile, done) => {
-    fetch(
-      { githubId: profile.id },
-      {
-        username: profile.username,
-        githubToken: accessToken
-      }
-    ).asCallback(done);
+    const search = { githubId: profile.id };
+    findOrCreate(search, {
+      username: profile.username,
+      githubToken: accessToken
+    }).asCallback(done);
   }
 );

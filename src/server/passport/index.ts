@@ -1,11 +1,7 @@
 import * as passport from "koa-passport";
 
 import github from "./github";
+import bearer from "./bearer";
 import mock from "./mock";
 
-passport.use(github);
-if (mock) {
-  passport.use(mock!);
-}
-
-export default passport;
+export default passport.use(github).use(bearer);

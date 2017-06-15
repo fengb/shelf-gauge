@@ -1,7 +1,7 @@
 import { Strategy } from "passport";
 
 import ENV from "config/env";
-import { fetch } from "./user";
+import { findOrCreate } from "./user";
 
 function create(): Strategy {
   return {
@@ -15,7 +15,7 @@ function create(): Strategy {
         return this.fail(this._error, 401);
       }
 
-      fetch(
+      findOrCreate(
         { githubId: "12345" },
         {
           username: "test",

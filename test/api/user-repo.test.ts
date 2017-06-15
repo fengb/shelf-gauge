@@ -6,9 +6,16 @@ describe("API /user/repo", () => {
   db.setup();
 
   describe("/github GET", () => {
+    it("rejects non-user", async function() {
+      const response = await request().get("/user/repo/github");
+      expect(response.status).to.equal(request.HttpStatus.Error.Unauthorized);
+    });
+
     it("returns repo data from github", async function() {
-      const agent = await request.withAuth();
-      const response = await agent.get("/user/repo/github");
+      const user = await factory.user.create();
+      const response = await request()
+        .get("/user/repo/github")
+        .set("Authorization", `Bearer ${user.githubToken}`);
 
       expect(response.status).to.equal(request.HttpStatus.Success.Ok);
       expect(response.body.data).to.deep.equal([
@@ -23,9 +30,12 @@ describe("API /user/repo", () => {
 
   describe("/github/:name GET", () => {
     it("fetches an existing repo", async function() {
-      const agent = await request.withAuth();
+      const user = await factory.user.create();
       const existing = await factory.repo.create();
-      const response = await agent.get(`/user/repo/github/${existing.name}`);
+
+      const response = await request()
+        .get(`/user/repo/github/${existing.name}`)
+        .set("Authorization", `Bearer ${user.githubToken}`);
 
       expect(response.status).to.equal(request.HttpStatus.Success.Ok);
       expect(response.body.data).to.deep.equal({
@@ -37,10 +47,11 @@ describe("API /user/repo", () => {
 
     describe("missing repo", () => {
       it("returns data from github", async function() {
-        const agent = await request.withAuth();
-        const response = await agent.get(
-          "/user/repo/github/shelfgauge~shelfgauge"
-        );
+        const user = await factory.user.create();
+
+        const response = await request()
+          .get("/user/repo/github/shelfgauge~shelfgauge")
+          .set("Authorization", `Bearer ${user.githubToken}`);
 
         expect(response.status).to.equal(request.HttpStatus.Success.Ok);
         expect(response.body.data).to.deep.equal({
@@ -50,16 +61,16 @@ describe("API /user/repo", () => {
         });
 
         expect(stub.service.github.fetchUserRepo).to.have.been.calledWith(
-          agent.user.githubToken,
+          user.githubToken,
           "shelfgauge~shelfgauge"
         );
       });
 
       it("saves the repo", async function() {
-        const agent = await request.withAuth();
-        const response = await agent.get(
-          "/user/repo/github/shelfgauge~shelfgauge"
-        );
+        const user = await factory.user.create();
+        const response = await request()
+          .get("/user/repo/github/shelfgauge~shelfgauge")
+          .set("Authorization", `Bearer ${user.githubToken}`);
 
         const repo = await this.conn!.entityManager.findOne(Repo, {
           name: "shelfgauge~shelfgauge"
@@ -69,10 +80,10 @@ describe("API /user/repo", () => {
       });
 
       it("invokes the job loadCommits", async function() {
-        const agent = await request.withAuth();
-        const response = await agent.get(
-          "/user/repo/github/shelfgauge~shelfgauge"
-        );
+        const user = await factory.user.create();
+        const response = await request()
+          .get("/user/repo/github/shelfgauge~shelfgauge")
+          .set("Authorization", `Bearer ${user.githubToken}`);
 
         const repo = await this.conn!.entityManager.findOne(Repo, {
           name: "shelfgauge~shelfgauge"
@@ -85,24 +96,23 @@ describe("API /user/repo", () => {
 
   describe("/:source/:name/auth POST", () => {
     it("rejects unaffiliated user", async function() {
+      const user = await factory.user.create();
       const repo = await factory.repo.create();
 
-      const agent = await request.withAuth();
-      const response = await agent.post(
-        `/user/repo/${repo.source}/${repo.name}/auth`
-      );
+      const response = await request()
+        .post(`/user/repo/${repo.source}/${repo.name}/auth`)
+        .set("Authorization", `Bearer ${user.githubToken}`);
 
       expect(response.status).to.equal(request.HttpStatus.Error.Forbidden);
     });
 
     it("returns a new auth", async function() {
-      const agent = await request.withAuth();
+      const user = await factory.user.create();
+      const repo = await factory.repo.create({ users: [user] });
 
-      const repo = await factory.repo.create({ users: [agent.user] });
-
-      const response = await agent.post(
-        `/user/repo/${repo.source}/${repo.name}/auth`
-      );
+      const response = await request()
+        .post(`/user/repo/${repo.source}/${repo.name}/auth`)
+        .set("Authorization", `Bearer ${user.githubToken}`);
 
       expect(response.status).to.equal(request.HttpStatus.Success.Created);
 

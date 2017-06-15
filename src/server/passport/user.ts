@@ -3,19 +3,22 @@ import { needsAssign } from "src/util/iter";
 import { User } from "src/entity";
 import { connect } from "../connection";
 
-export async function fetch(
-  identifier: Partial<User>,
+export async function findOrCreate(
+  search: Partial<User>,
   updates?: Partial<User>
 ): Promise<User> {
-  const connection = await connect();
-  const user =
-    (await connection.entityManager.findOne(User, identifier)) ||
-    connection.entityManager.create(User, identifier);
+  const conn = await connect();
+  const user = (await find(search)) || new User(search);
 
   if (updates && needsAssign(user, updates)) {
     assign(user, updates);
-    await connection.entityManager.persist(user);
+    await conn.entityManager.persist(user);
   }
 
   return user;
+}
+
+export async function find(search: Partial<User>): Promise<User | undefined> {
+  const conn = await connect();
+  return conn.entityManager.findOne(User, search);
 }

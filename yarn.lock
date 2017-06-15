@@ -138,6 +138,13 @@
     "@types/express" "*"
     "@types/passport" "*"
 
+"@types/passport-http-bearer@^1.0.30":
+  version "1.0.30"
+  resolved "https://registry.yarnpkg.com/@types/passport-http-bearer/-/passport-http-bearer-1.0.30.tgz#1e7121c84bb90d704d573081fba85abd0ba0baaa"
+  dependencies:
+    "@types/express" "*"
+    "@types/passport" "*"
+
 "@types/passport@*":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@types/passport/-/passport-0.3.3.tgz#463455c4245ed232d6ce43615580c1001ade8234"
@@ -1718,6 +1725,12 @@ passport-github@^1.1.0:
   resolved "https://registry.yarnpkg.com/passport-github/-/passport-github-1.1.0.tgz#8ce1e3fcd61ad7578eb1df595839e4aea12355d4"
   dependencies:
     passport-oauth2 "1.x.x"
+
+passport-http-bearer@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/passport-http-bearer/-/passport-http-bearer-1.0.1.tgz#147469ea3669e2a84c6167ef99dbb77e1f0098a8"
+  dependencies:
+    passport-strategy "1.x.x"
 
 passport-oauth2@1.x.x:
   version "1.4.0"

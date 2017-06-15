@@ -1,5 +1,5 @@
-import { Context } from "koa";
 import * as Router from "koa-router";
+import * as passport from "koa-passport";
 import { chain, flatMap, some } from "lodash";
 
 import ENV from "config/env";
@@ -10,11 +10,7 @@ import repoSerializer from "src/serializer/repo";
 import { Repo, RepoAuth } from "src/entity";
 import * as secureRandom from "src/util/secure-random";
 
-export async function githubShowAll(ctx: Context) {
-  if (!ctx.state.user) {
-    return ctx.redirect("/auth");
-  }
-
+export async function githubShowAll(ctx: any) {
   const githubRepos = await github.fetchUserRepos(ctx.state.user.githubToken);
 
   const repos = chain(githubRepos.data)
@@ -25,11 +21,7 @@ export async function githubShowAll(ctx: Context) {
   ctx.renderSuccess("Ok", repoSerializer.serializeMany(repos));
 }
 
-export async function githubShow(ctx: Context) {
-  if (!ctx.state.user) {
-    return ctx.redirect("/auth");
-  }
-
+export async function githubShow(ctx: any) {
   let repo = await ctx.conn.entityManager.findOne(Repo, {
     source: "github",
     name: ctx.params.name
@@ -57,11 +49,7 @@ export async function githubShow(ctx: Context) {
   ctx.renderSuccess("Ok", repoSerializer.serialize(repo));
 }
 
-export async function createAuth(ctx: Context) {
-  if (!ctx.state.user) {
-    return ctx.redirect("/auth");
-  }
-
+export async function createAuth(ctx: any) {
   const repo = await ctx.conn.entityManager
     .createQueryBuilder(Repo, "repo")
     .leftJoinAndSelect("repo.users", "user")
@@ -94,6 +82,7 @@ export async function createAuth(ctx: Context) {
 }
 
 export default new Router()
+  .use(passport.authenticate("bearer", { session: false }))
   .get("/github", githubShowAll)
   .get("/github/:name", githubShow)
   .post("/:source/:name/auth", createAuth);
