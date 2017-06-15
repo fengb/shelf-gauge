@@ -19,14 +19,3 @@ export async function fetch(
 
   return user;
 }
-
-export function toSession(user: User, done: (err: any, id: number) => void) {
-  done(null, user.id);
-}
-
-export function fromSession(id: number, done: (err: any, user?: User) => void) {
-  connect()
-    .then(conn => conn.entityManager.findOne(User, { id }))
-    .then(user => done(null, user))
-    .catch(done);
-}
