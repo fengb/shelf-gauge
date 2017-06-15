@@ -3,12 +3,15 @@ import "src/server/render"; // TODO: fix the context
 import * as Router from "koa-router";
 import * as passport from "koa-passport";
 
-import ENV from "config/env";
+import { User } from "src/entity";
 
 export function oauthFor(strategy: string) {
   return [
     passport.authenticate(strategy, { session: false }),
-    (ctx: Context) => ctx.renderSuccess("Ok", ctx.state.user)
+    (ctx: Context) => {
+      const user = ctx.state.user as User;
+      ctx.renderSuccess("Ok", { authorization: user.githubToken });
+    }
   ];
 }
 

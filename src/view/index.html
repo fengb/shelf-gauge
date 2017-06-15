@@ -31,6 +31,7 @@ code {
     </style>
   </head>
   <body>
+    <button id='login' type='button'>Login</button>
     <div class='body-item' id='repos'></div>
     <div class='body-item'>
       <div id='repo'></div>
@@ -39,6 +40,31 @@ code {
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
+$('#login').click(function() {
+  var authWindow = window.open('/auth')
+  var waitingForAuth = setInterval(function() {
+    try {
+      if (authWindow.document.contentType !== 'application/json' ||
+          authWindow.document.readyState !== 'complete') {
+        return
+      }
+    } catch(e) {
+      if (e instanceof DOMException) {
+        // On a different website
+        return
+      }
+      throw e
+    }
+
+    var response = JSON.parse(authWindow.document.documentElement.textContent)
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.authorization
+    clearInterval(waitingForAuth)
+    $('#login').hide()
+    authWindow.close()
+    loadRepos()
+  }, 100)
+})
+
 var $repos = $('#repos')
 $repos.click('.repo-menuitem', function (evt) {
   var $repoMenuitem = $(evt.target)
@@ -46,15 +72,17 @@ $repos.click('.repo-menuitem', function (evt) {
   $repoMenuitem.addClass('active')
   selectRepo($repoMenuitem.text())
 })
-axios.get('/user/repo/github')
-  .then(function (response) {
-    $repos.empty()
-    response.data.data.forEach(function (repo) {
-      $('<div class="repo-menuitem"></div>')
-        .text(repo.name)
-        .appendTo($repos)
+function loadRepos () {
+  axios.get('/user/repo/github')
+    .then(function (response) {
+      $repos.empty()
+      response.data.data.forEach(function (repo) {
+        $('<div class="repo-menuitem"></div>')
+          .text(repo.name)
+          .appendTo($repos)
+      })
     })
-  })
+}
 
 var $repo = $('#repo')
 function selectRepo (name) {
