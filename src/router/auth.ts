@@ -16,6 +16,11 @@ export function oauthFor(strategy: string) {
 }
 
 const router = new Router()
+  .post(
+    "/",
+    passport.authenticate("bearer", { session: false }),
+    (ctx: Context) => ctx.renderSuccess("Accepted", {})
+  )
   .redirect("/", "/auth/github")
   .get("/github", ...oauthFor("github"));
 

@@ -6,6 +6,10 @@ body {
   display: flex;
 }
 
+#login {
+  display: none;
+}
+
 .body-item {
   flex: 0 0 auto;
 }
@@ -40,7 +44,17 @@ code {
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-$('#login').click(function() {
+var $login = $('#login')
+if (localStorage.getItem('authorization')) {
+  setupAuth(localStorage.getItem('authorization'))
+  axios.post('/auth')
+    .then(loadRepos)
+    .catch(() => $login.show())
+} else {
+  $login.show()
+}
+
+$login.click(function() {
   var authWindow = window.open('/auth')
   var waitingForAuth = setInterval(function() {
     try {
@@ -57,13 +71,18 @@ $('#login').click(function() {
     }
 
     var response = JSON.parse(authWindow.document.documentElement.textContent)
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.authorization
+    setupAuth(response.data.authorization)
     clearInterval(waitingForAuth)
-    $('#login').hide()
+    $login.hide()
     authWindow.close()
     loadRepos()
   }, 100)
 })
+
+function setupAuth(token) {
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+  localStorage.setItem('authorization', token)
+}
 
 var $repos = $('#repos')
 $repos.click('.repo-menuitem', function (evt) {
