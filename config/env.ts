@@ -66,7 +66,6 @@ export default {
   },
 
   debug: {
-    oauthMock: bool("DEBUG_OAUTH_MOCK", false),
     promiseStacktrace: bool("DEBUG_PROMISE_STACKTRACE", false)
   }
 };
