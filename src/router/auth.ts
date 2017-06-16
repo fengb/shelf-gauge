@@ -13,29 +13,28 @@ export function userSuccess(ctx: Context) {
   ctx.body = `\
 <script>
 var data = ${JSON.stringify(data)}
-window.addEventListener("message", function(evt) {
-  switch (evt.data) {
-    case "acknowledged": return window.close()
-    case "requestCredentials": return evt.source.postMessage(data, "*")
-  }
-})
 if (window.opener) {
   window.opener.postMessage(data, "*")
+  window.close()
 }
+window.addEventListener("message", function(evt) {
+  if (evt.data === "requestCredentials") {
+    evt.source.postMessage(data, "*")
+    window.close()
+  }
+})
 </script>`;
 }
 
-export function oauthFor(strategy: string) {
-  return [passport.authenticate(strategy, { session: false }), userSuccess];
+export function authBy(strategy: string) {
+  return passport.authenticate(strategy, { session: false });
 }
 
 const router = new Router()
-  .post(
-    "/",
-    passport.authenticate("bearer", { session: false }),
-    (ctx: Context) => ctx.renderSuccess("Accepted", {})
+  .post("/", authBy("bearer"), (ctx: Context) =>
+    ctx.renderSuccess("Accepted", {})
   )
   .redirect("/", "/auth/github")
-  .get("/github", ...oauthFor("github"));
+  .get("/github", authBy("github"), userSuccess);
 
 export default router;

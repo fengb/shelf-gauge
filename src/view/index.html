@@ -56,7 +56,7 @@ if (localStorage.getItem('authorization')) {
 
 window.addEventListener("message", function(evt) {
   if (evt.data.authorization) {
-    evt.source.postMessage("acknowledged", "*")
+    evt.source && evt.source.close()
     setupAuth(evt.data.authorization)
     $login.hide()
     loadRepos()
