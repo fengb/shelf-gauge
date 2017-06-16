@@ -35,7 +35,7 @@ code {
     </style>
   </head>
   <body>
-    <button id='login' type='button'>Login</button>
+    <a id='login' href='/auth' target='_blank'>Login</a>
     <div class='body-item' id='repos'></div>
     <div class='body-item'>
       <div id='repo'></div>
@@ -54,34 +54,24 @@ if (localStorage.getItem('authorization')) {
   $login.show()
 }
 
-$login.click(function() {
-  var authWindow = window.open('/auth')
-  var waitingForAuth = setInterval(function() {
-    try {
-      if (authWindow.document.contentType !== 'application/json' ||
-          authWindow.document.readyState !== 'complete') {
-        return
-      }
-    } catch(e) {
-      if (e instanceof DOMException) {
-        // On a different website
-        return
-      }
-      throw e
-    }
-
-    var response = JSON.parse(authWindow.document.documentElement.textContent)
-    setupAuth(response.data.authorization)
-    clearInterval(waitingForAuth)
+window.addEventListener("message", function(evt) {
+  if (evt.data.authorization) {
+    evt.source.postMessage("acknowledged", "*")
+    setupAuth(evt.data.authorization)
     $login.hide()
-    authWindow.close()
     loadRepos()
-  }, 100)
+  }
 })
 
 function setupAuth(token) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
   localStorage.setItem('authorization', token)
+}
+
+function signOut() {
+  delete axios.defaults.headers.common['Authorization']
+  localStorage.removeItem('authorization')
+  $login.show()
 }
 
 var $repos = $('#repos')

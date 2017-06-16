@@ -5,14 +5,28 @@ import * as passport from "koa-passport";
 
 import { User } from "src/entity";
 
+export function userSuccess(ctx: Context) {
+  const user = ctx.state.user as User;
+  const data = { authorization: user.githubToken };
+
+  ctx.type = "html";
+  ctx.body = `\
+<script>
+var data = ${JSON.stringify(data)}
+window.addEventListener("message", function(evt) {
+  switch (evt.data) {
+    case "acknowledged": return window.close()
+    case "requestCredentials": return evt.source.postMessage(data, "*")
+  }
+})
+if (window.opener) {
+  window.opener.postMessage(data, "*")
+}
+</script>`;
+}
+
 export function oauthFor(strategy: string) {
-  return [
-    passport.authenticate(strategy, { session: false }),
-    (ctx: Context) => {
-      const user = ctx.state.user as User;
-      ctx.renderSuccess("Ok", { authorization: user.githubToken });
-    }
-  ];
+  return [passport.authenticate(strategy, { session: false }), userSuccess];
 }
 
 const router = new Router()
