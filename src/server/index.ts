@@ -2,6 +2,7 @@ import * as Koa from "koa";
 import { filter } from "lodash";
 
 import * as bodyParser from "koa-bodyparser";
+import * as cors from "kcors";
 const logger = require("koa-logger");
 const error = require("koa-error");
 
@@ -17,6 +18,7 @@ app.keys = ENV.server.secretKeys;
 
 const middlewares: Koa.Middleware[] = filter([
   monitor(app),
+  cors({ origin: ENV.server.corsOrigin }),
   error(),
   ENV.server.useLogger && logger(),
   bodyParser(),

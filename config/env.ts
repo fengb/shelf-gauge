@@ -46,6 +46,7 @@ export default {
     port: num("PORT", 12345),
     secretKeys: str("SECRET_KEY").split(" "),
     bcryptRounds: num("BCRYPT_ROUNDS"),
+    corsOrigin: str("CORS_ORIGIN"),
     useLogger: bool("USE_LOGGER", true)
   },
 
